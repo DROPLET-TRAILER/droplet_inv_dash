@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include droplet_inv_dash *.css
+recursive-include droplet_inv_dash *.csv
+recursive-include droplet_inv_dash *.html
+recursive-include droplet_inv_dash *.ico
+recursive-include droplet_inv_dash *.js
+recursive-include droplet_inv_dash *.json
+recursive-include droplet_inv_dash *.md
+recursive-include droplet_inv_dash *.png
+recursive-include droplet_inv_dash *.py
+recursive-include droplet_inv_dash *.svg
+recursive-include droplet_inv_dash *.txt
+recursive-exclude droplet_inv_dash *.pyc
