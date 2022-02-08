@@ -6,9 +6,13 @@ def get_data():
 	return [
 		{
 			"module_name": "Droplet Inv Dash",
-			"color": "grey",
-			"icon": "octicon octicon-file-directory",
+			"category": "Modules",
+			"label": _("DROPLET Dashboard"),
+			"color": "#1abc9c",
+			"icon": "fa fa-check-square-o",
 			"type": "module",
-			"label": _("Droplet Inv Dash")
-		}
+			"disable_after_onboard": 1,
+			"description": "Forecasting and configuration for DROPLET.",
+			"onboard_present": 1
+		},
 	]
