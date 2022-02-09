@@ -1,6 +1,6 @@
 {% extends "templates/web.html" %}
 
-{%- block title -%}{{_("Dashboard")}}{%- endblock -%}
+{%- block title -%}{{_("Not Found")}}{%- endblock -%}
 
 {% block page_content %}
 <style>
@@ -18,13 +18,12 @@ html, body {
 
 <div class='page-card'>
 	<div class='page-card-head'>
-		<span class='indicator darkgrey'>DROPLET Dashboard</span>
+		<span class='indicator darkgrey'>{{_("Page Missing or Moved")}}</span>
 	</div>
-	<p>{{_("Prototype Image.")}}</p>
-	<img src="prototype.png" alt="Dashboard" height="600">
-	<p>{{_("Page Creation Successful.")}}</p>
+	<p>{{_("this is a custom 404 from the droplet app for testing. The page you are looking for is missing. This could be because it is moved or there is a typo in the link.")}}</p>
 	<div><a href='/' class='btn btn-primary btn-sm'>{{ _("Home") }}</a></div>
 </div>
+<p class='text-muted text-center small' style='margin-top: -20px;'>{{ _("Error Code: {0}").format('404') }}</p>
 <style>
 .hero-and-content {
 	background-color: #f5f7fa;

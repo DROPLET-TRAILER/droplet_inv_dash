@@ -4,7 +4,7 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2022-02-08 16:23:56.085680",
+ "modified": "2022-02-08 18:09:21.515790",
  "modified_by": "Administrator",
  "module": "Droplet Inv Dash",
  "name": "dropletdashboard",
@@ -14,6 +14,6 @@
  "script": null,
  "standard": "Yes",
  "style": null,
- "system_page": 0,
+ "system_page": 1,
  "title": "Dashboard"
 }
