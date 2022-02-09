@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2022-02-08 16:23:37.532912",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2022-02-08 16:23:56.085680",
+ "modified_by": "Administrator",
+ "module": "Droplet Inv Dash",
+ "name": "dropletdashboard",
+ "owner": "Administrator",
+ "page_name": "dropletDashboard",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Dashboard"
+}
