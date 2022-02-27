@@ -18,22 +18,13 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Dashboard",
-   "link_to": "dropdash",
+   "link_to": "dropletdashboard",
    "link_type": "Page",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Doctype",
-   "link_to": "Droplet Doctype",
-   "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2022-02-27 13:41:42.359354",
+ "modified": "2022-02-27 15:56:30.985136",
  "modified_by": "Administrator",
  "module": "Droplet Inv Dash",
  "name": "DROPLET Dashboard",
