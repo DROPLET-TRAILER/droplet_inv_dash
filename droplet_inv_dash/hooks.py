@@ -45,6 +45,14 @@ app_license = "MIT"
 # Website user home page (by function)
 # get_website_user_home_page = "droplet_inv_dash.utils.get_home_page"
 
+# website_redirects = [
+#     {"source": "/app/dropdash", "target": "special"},
+# ]
+
+# website_route_rules = [
+#     {"from_route": "/app/dropdash", "to_route": "special"},
+# ]
+
 # Generators
 # ----------
 
