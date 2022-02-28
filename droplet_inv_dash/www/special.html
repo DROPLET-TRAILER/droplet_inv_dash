@@ -30,4 +30,23 @@ html, body {
 	background-color: #f5f7fa;
 }
 </style>
+<script>
+	frappe.ready(function() {
+		function getRequest(url) {
+    const xhttp = new XMLHttpRequest();
+    //const url = "";
+    xhttp.open("GET", url, true);
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status === 200) {
+                console.log(this.responseText);
+            }             
+        }
+    }
+}
+	getRequest("/api/resource/BOM");
+	getRequest("/api/resource/BOM/BOM-Trailer_Code-001");
+	});
+</script>
 {% endblock %}
