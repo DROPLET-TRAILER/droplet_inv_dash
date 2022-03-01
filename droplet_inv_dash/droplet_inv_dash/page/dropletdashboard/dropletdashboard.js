@@ -21,7 +21,6 @@ DropDash = Class.extend({
 		// Push DOM element to page
 		$(frappe.render_template(frappe.droplet_dash_page.body, this)).appendTo(this.page.main);
 		window.location.href = frappe.urllib.get_full_url("/special");
-
 	}
 	// End of Class
 })
