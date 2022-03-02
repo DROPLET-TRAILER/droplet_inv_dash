@@ -22,7 +22,7 @@ html, body {
 
 .overview {
   background-color: lightgray;
-  height: 15vh;
+  height: 10vh;
   width: 100%;
   margin-bottom: 2vh;
 }
@@ -31,7 +31,7 @@ html, body {
   background-color: lightgray;
   height: 35vh;
   width: 100%;
-  margin-bottom: 2vh;
+  margin-bottom: 1vh;
 }
 
 .monthly {

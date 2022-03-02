@@ -7,9 +7,6 @@
 <link rel="stylesheet" href="styles.css" type="text/css">
 
 <div class='page-card'>
-	<div class='page-card-head'>
-		<span class='indicator darkgrey'>DROPLET Dashboard</span>
-	</div>
 	<div class="container">
 		<div class="update">
 			<div id="current"></div>
@@ -24,7 +21,7 @@
 
 		</div>
 		<div class="monthly">
-			<div id="item">[Item #]:[Item Name]</div>
+			<div id="item">[Item]</div>
 			<div id="values">
 				<div class="month" id="jan"></div>
 				<div class="month" id="feb"></div>
@@ -58,32 +55,6 @@
 	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm, return'>Return to Dashboard</a></div>
 </div>
 
-<script>
-	get_todays_date();
-	frappe.ready(function() {
-		function getRequest(url) {
-    const xhttp = new XMLHttpRequest();
-    //const url = "";
-    xhttp.open("GET", url, true);
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4) {
-        if (this.status === 200) {
-          console.log(this.responseText);
-        }             
-      }
-    }
-	}
-	getRequest("/api/resource/BOM");
-	getRequest("/api/resource/BOM/BOM-Trailer_Code-001");
-	});
-	function get_todays_date() {
-		let current = document.getElementById("current");
-		let today = new Date();
-		const options = {weekday: 'long', year:'numeric', month: 'long', day: 'numeric'};
-		
-		current.innerHTML = "Today's Date: " + today.toLocaleDateString(undefined, options);
-	}
-</script>
+<script src="special.js"></script>
 
 {% endblock %}
