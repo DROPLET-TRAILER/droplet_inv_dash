@@ -8,14 +8,9 @@
 
 <div class='page-card'>
 	<div class="container">
-		<div class="update">
-			<div id="current"></div>
-			<div id="last_updated">Last Updated: </div>
-		</div>
+		<div id="current"></div>
 		<div>Overview</div>
-		<div class="overview">
-
-		</div>
+		<div class="overview"></div>
 		<div>Dashboard</div>
 		<div id="stockTable">
 			<table id="MainTable" class="table table-hover">
@@ -33,6 +28,8 @@
 		</div>
 		<div id="weekView" class="table-bordered"></div>
 	</div>
+	<!-- Add the getting values function in the onclick here -->
+	<div><button type="button" class='btn btn-primary btn-sm, return' onclick="window.location.reload()">Reload</button></div>
 	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm, return'>Return to Dashboard</a></div>
 </div>
 <style>
