@@ -1,13 +1,15 @@
 .hero-and-content {
-	background-color: #f5f7fa;
+  background-color: #f5f7fa;
 }
 
-header, footer {
-	display: none;
+header,
+footer {
+  display: none;
 }
 
-html, body {
-	background-color: #f5f7fa;
+html,
+body {
+  background-color: #f5f7fa;
 }
 
 .update {
@@ -20,18 +22,18 @@ html, body {
   margin-bottom: 2vh;
 }
 
+#stockTable {
+  height: 35vh;
+  width: 100%;
+  margin-bottom: 1vh;
+  overflow: auto;
+}
+
 .overview {
   background-color: lightgray;
   height: 10vh;
   width: 100%;
   margin-bottom: 2vh;
-}
-
-.itemTable {
-  background-color: lightgray;
-  height: 35vh;
-  width: 100%;
-  margin-bottom: 1vh;
 }
 
 .monthly {
@@ -52,7 +54,6 @@ html, body {
   height: 7vh;
   width: 100%;
   background-color: lightgray;
-  border: 2px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,4 +64,32 @@ html, body {
 
 .return {
   margin-top: 2vh;
+}
+
+.blue {
+  background-color: rgba(1, 1, 255, 0.445);
+}
+
+.green {
+  background-color: rgba(6, 221, 6, 0.486);
+}
+
+.red {
+  background-color: rgba(255, 0, 0, 0.397);
+}
+
+.grey {
+  background-color: grey;
+}
+
+table,
+th,
+td {
+  padding: 1.0em;
+}
+
+th {
+  background: #b3b3b3;
+  position: sticky;
+  top: 0;
 }

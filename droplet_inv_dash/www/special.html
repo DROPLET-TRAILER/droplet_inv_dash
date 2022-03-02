@@ -17,44 +17,27 @@
 
 		</div>
 		<div>Dashboard</div>
-		<div class="itemTable" id="stockTable">
-
+		<div id="stockTable">
+			<table id="MainTable" class="table table-hover">
+				<tr>
+					<th scope="col">Item</th>
+					<th scope="col">Total Req</th>
+					<th scope="col">Current Inv</th>
+					<th scope="col">Lead Time</th>
+					<th scope="col">Qty Required For Each Lead Time</th>
+					<th scope="col">Qty To Be Ordered</th>
+					<th scope="col">Latest Date of Order To Be Made</th>
+					<th scope="col">PO</th>
+				</tr>
+			</table>
 		</div>
-		<div class="monthly">
-			<div id="item">[Item]</div>
-			<div id="values">
-				<div class="month" id="jan">January</div>
-				<div class="month" id="feb">February</div>
-				<div class="month" id="mar">March</div>
-				<div class="month" id="apr">April</div>
-				<div class="month" id="may">May</div>
-				<div class="month" id="jun">June</div>
-				<div class="month" id="jul">July</div>
-				<div class="month" id="aug">August</div>
-				<div class="month" id="sep">September</div>
-				<div class="month" id="oct">October</div>
-				<div class="month" id="nov">November</div>
-				<div class="month" id="dec">December</div>
-			</div>
-			<div id="values">
-				<div class="month" id="month_1"></div>
-				<div class="month" id="month_2"></div>
-				<div class="month" id="month_3"></div>
-				<div class="month" id="month_4"></div>
-				<div class="month" id="month_5"></div>
-				<div class="month" id="month_6"></div>
-				<div class="month" id="month_7"></div>
-				<div class="month" id="month_8"></div>
-				<div class="month" id="month_9"></div>
-				<div class="month" id="month_10"></div>
-				<div class="month" id="month_11"></div>
-				<div class="month" id="month_12"></div>
-			</div>
-		</div>
+		<div id="weekView" class="table-bordered"></div>
 	</div>
 	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm, return'>Return to Dashboard</a></div>
 </div>
 
-<script src="special.js"></script>
+{% endblock %}
 
+{% block script %}
+<script type="text/javascript" src="special.js"></script>
 {% endblock %}
