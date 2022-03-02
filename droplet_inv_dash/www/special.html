@@ -4,25 +4,41 @@
 
 {% block page_content %}
 
-
 <link rel="stylesheet" href="styles.css" type="text/css">
 
 <div class='page-card'>
 	<div class='page-card-head'>
 		<span class='indicator darkgrey'>DROPLET Dashboard</span>
 	</div>
-	<!-- <p>{{_("Prototype Image.")}}</p>
-	<p>{{_("Page Creation Successful.")}}</p> -->
-	<!-- <img src="prototype.png" alt="Dashboard" height="600"> -->
 	<div class="container">
 		<div class="update">
 			<div id="current"></div>
 			<div id="last_updated">Last Updated: </div>
 		</div>
-		<div class="overview"	>
+		<div>Overview</div>
+		<div class="overview">
+
+		</div>
+		<div>Dashboard</div>
+		<div class="itemTable" id="stockTable">
+
 		</div>
 		<div class="monthly">
-			<div id="item">Item #</div>
+			<div id="item">[Item #]:[Item Name]</div>
+			<div id="values">
+				<div class="month" id="jan"></div>
+				<div class="month" id="feb"></div>
+				<div class="month" id="mar"></div>
+				<div class="month" id="apr"></div>
+				<div class="month" id="may"></div>
+				<div class="month" id="jun"></div>
+				<div class="month" id="jul"></div>
+				<div class="month" id="aug"></div>
+				<div class="month" id="sep"></div>
+				<div class="month" id="oct"></div>
+				<div class="month" id="nov"></div>
+				<div class="month" id="dec"></div>
+			</div>
 			<div id="values">
 				<div class="month" id="month_1"></div>
 				<div class="month" id="month_2"></div>
@@ -34,10 +50,12 @@
 				<div class="month" id="month_8"></div>
 				<div class="month" id="month_9"></div>
 				<div class="month" id="month_10"></div>
+				<div class="month" id="month_11"></div>
+				<div class="month" id="month_12"></div>
 			</div>
 		</div>
 	</div>
-	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm'>Return to Dashboard</a></div>
+	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm, return'>Return to Dashboard</a></div>
 </div>
 
 <script>
