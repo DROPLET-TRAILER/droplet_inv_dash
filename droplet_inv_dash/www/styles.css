@@ -53,6 +53,11 @@ html, body {
   width: 100%;
   background-color: rgb(149, 151, 151);
   border: 3px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
 }
 
 .return {
