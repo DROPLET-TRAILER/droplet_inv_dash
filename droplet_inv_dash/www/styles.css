@@ -1,0 +1,95 @@
+.hero-and-content {
+  background-color: #f5f7fa;
+}
+
+header,
+footer {
+  display: none;
+}
+
+html,
+body {
+  background-color: #f5f7fa;
+}
+
+.update {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#last_updated {
+  justify-self: end;
+  margin-bottom: 2vh;
+}
+
+#stockTable {
+  height: 35vh;
+  width: 100%;
+  margin-bottom: 1vh;
+  overflow: auto;
+}
+
+.overview {
+  background-color: lightgray;
+  height: 10vh;
+  width: 100%;
+  margin-bottom: 2vh;
+}
+
+.monthly {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+#item {
+  align-self: center;
+}
+
+#values {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.month {
+  height: 7vh;
+  width: 100%;
+  background-color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  font-size: 1.15em;
+}
+
+.return {
+  margin-top: 2vh;
+}
+
+.blue {
+  background-color: rgba(1, 1, 255, 0.445);
+}
+
+.green {
+  background-color: rgba(6, 221, 6, 0.486);
+}
+
+.red {
+  background-color: rgba(255, 0, 0, 0.397);
+}
+
+.grey {
+  background-color: grey;
+}
+
+table,
+th,
+td {
+  padding: 1.0em;
+}
+
+th {
+  background: #b3b3b3;
+  position: sticky;
+  top: 0;
+}

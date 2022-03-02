@@ -3,27 +3,37 @@
 {%- block title -%}{{_("Dashboard")}}{%- endblock -%}
 
 {% block page_content %}
-<style>
-.hero-and-content {
-	background-color: #f5f7fa;
-}
-header, footer {
-	display: none;
-}
-html, body {
-	background-color: #f5f7fa;
-}
-/*{% include "templates/styles/card_style.css" %}*/
-</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css">
 
 <div class='page-card'>
-	<div class='page-card-head'>
-		<span class='indicator darkgrey'>DROPLET Dashboard</span>
+	<div class="container">
+		<div class="update">
+			<div id="current"></div>
+			<div id="last_updated">Last Updated: </div>
+		</div>
+		<div>Overview</div>
+		<div class="overview">
+
+		</div>
+		<div>Dashboard</div>
+		<div id="stockTable">
+			<table id="MainTable" class="table table-hover">
+				<tr>
+					<th scope="col">Item</th>
+					<th scope="col">Total Req</th>
+					<th scope="col">Current Inv</th>
+					<th scope="col">Lead Time</th>
+					<th scope="col">Qty Required For Each Lead Time</th>
+					<th scope="col">Qty To Be Ordered</th>
+					<th scope="col">Latest Date of Order To Be Made</th>
+					<th scope="col">PO</th>
+				</tr>
+			</table>
+		</div>
+		<div id="weekView" class="table-bordered"></div>
 	</div>
-	<p>{{_("Prototype Image.")}}</p>
-	<img src="prototype.png" alt="Dashboard" height="600">
-	<p>{{_("Page Creation Successful.")}}</p>
-	<div><a href='/' class='btn btn-primary btn-sm'>{{ _("Home") }}</a></div>
+	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm, return'>Return to Dashboard</a></div>
 </div>
 <style>
 .hero-and-content {
@@ -32,6 +42,8 @@ html, body {
 </style>
 {% endblock %}
 
+
 {% block script %}
 <script type="text/javascript" src="getItemReport.js"></script>
+<script type="text/javascript" src="special.js"></script>
 {% endblock %}

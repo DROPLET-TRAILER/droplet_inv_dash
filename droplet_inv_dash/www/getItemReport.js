@@ -56,7 +56,6 @@ async function mainFunction(itemToManufacture) {
       //this.
       console.log("fill_item_report");
       console.log(item);
-      return;
     };
 
     count = function (amount) {
@@ -77,9 +76,11 @@ async function mainFunction(itemToManufacture) {
 
     fill_all = async function () {
       console.log("filling report list");
-      this.list.forEach(async (value, key, map) => {
+      for(const entry of this.list) {
+        let value = entry[1];
+        console.log(value)
         await value.fill_item_report();
-      });
+      }
       console.log("done filling report list");
     };
 

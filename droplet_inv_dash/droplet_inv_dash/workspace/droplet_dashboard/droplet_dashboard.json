@@ -1,5 +1,5 @@
 {
- "cards_label": "Dashboard",
+ "cards_label": "DROPLET Dashboard",
  "category": "Modules",
  "charts": [],
  "creation": "2022-02-26 19:24:56.403296",
@@ -17,14 +17,14 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Dashboard",
+   "label": "Start Dashboard",
    "link_to": "dropletdashboard",
    "link_type": "Page",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2022-02-27 15:56:30.985136",
+ "modified": "2022-02-28 19:48:14.206371",
  "modified_by": "Administrator",
  "module": "Droplet Inv Dash",
  "name": "DROPLET Dashboard",
