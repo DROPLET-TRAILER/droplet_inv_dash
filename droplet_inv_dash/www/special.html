@@ -3,34 +3,45 @@
 {%- block title -%}{{_("Dashboard")}}{%- endblock -%}
 
 {% block page_content %}
-<style>
-.hero-and-content {
-	background-color: #f5f7fa;
-}
-header, footer {
-	display: none;
-}
-html, body {
-	background-color: #f5f7fa;
-}
-/*{% include "templates/styles/card_style.css" %}*/
-</style>
+
+
+<link rel="stylesheet" href="styles.css" type="text/css">
 
 <div class='page-card'>
 	<div class='page-card-head'>
 		<span class='indicator darkgrey'>DROPLET Dashboard</span>
 	</div>
-	<p>{{_("Prototype Image.")}}</p>
-	<img src="prototype.png" alt="Dashboard" height="600">
-	<p>{{_("Page Creation Successful.")}}</p>
-	<div><a href='/' class='btn btn-primary btn-sm'>{{ _("Home") }}</a></div>
+	<!-- <p>{{_("Prototype Image.")}}</p>
+	<p>{{_("Page Creation Successful.")}}</p> -->
+	<!-- <img src="prototype.png" alt="Dashboard" height="600"> -->
+	<div class="container">
+		<div class="update">
+			<div id="current"></div>
+			<div id="last_updated">Last Updated: </div>
+		</div>
+		<div class="overview"	>
+		</div>
+		<div class="monthly">
+			<div id="item">Item #</div>
+			<div id="values">
+				<div class="month" id="month_1"></div>
+				<div class="month" id="month_2"></div>
+				<div class="month" id="month_3"></div>
+				<div class="month" id="month_4"></div>
+				<div class="month" id="month_5"></div>
+				<div class="month" id="month_6"></div>
+				<div class="month" id="month_7"></div>
+				<div class="month" id="month_8"></div>
+				<div class="month" id="month_9"></div>
+				<div class="month" id="month_10"></div>
+			</div>
+		</div>
+	</div>
+	<div><a href=/app/droplet-dashboard class='btn btn-primary btn-sm'>Return to Dashboard</a></div>
 </div>
-<style>
-.hero-and-content {
-	background-color: #f5f7fa;
-}
-</style>
+
 <script>
+	get_todays_date();
 	frappe.ready(function() {
 		function getRequest(url) {
     const xhttp = new XMLHttpRequest();
@@ -38,15 +49,23 @@ html, body {
     xhttp.open("GET", url, true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status === 200) {
-                console.log(this.responseText);
-            }             
-        }
+      if (this.readyState == 4) {
+        if (this.status === 200) {
+          console.log(this.responseText);
+        }             
+      }
     }
-}
+	}
 	getRequest("/api/resource/BOM");
 	getRequest("/api/resource/BOM/BOM-Trailer_Code-001");
 	});
+	function get_todays_date() {
+		let current = document.getElementById("current");
+		let today = new Date();
+		const options = {weekday: 'long', year:'numeric', month: 'long', day: 'numeric'};
+		
+		current.innerHTML = "Today's Date: " + today.toLocaleDateString(undefined, options);
+	}
 </script>
+
 {% endblock %}

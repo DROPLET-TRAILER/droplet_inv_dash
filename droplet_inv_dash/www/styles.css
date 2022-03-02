@@ -1,0 +1,49 @@
+.hero-and-content {
+	background-color: #f5f7fa;
+}
+
+header, footer {
+	display: none;
+}
+
+html, body {
+	background-color: #f5f7fa;
+}
+
+.update {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#last_updated {
+  justify-self: end;
+  margin-bottom: 5vh;
+}
+
+.overview {
+  background-color: lightgray;
+  height: 15vh;
+  width: 100%;
+  margin-bottom: 5vh;
+}
+
+.monthly {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+}
+
+#item {
+  align-self: center;
+}
+
+#values {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.month {
+  height: 5vh;
+  width: 100%;
+  background-color: darkslategrey;
+  border: 3px solid black;
+}
