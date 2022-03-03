@@ -17,9 +17,8 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-#last_updated {
-  justify-self: end;
-  margin-bottom: 2vh;
+#current {
+  float: right;
 }
 
 #stockTable {

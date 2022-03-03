@@ -230,7 +230,8 @@ function get_todays_date() {
         day: 'numeric'
     };
 
-    current.innerHTML = "Today's Date: " + today.toLocaleDateString(undefined, options);
+    current.innerHTML = "Last Updated: " + today.toLocaleDateString(undefined, options)
+    +  " at " + today.getHours() +":" + today.getMinutes();
 }
 
 function fillTable() {
