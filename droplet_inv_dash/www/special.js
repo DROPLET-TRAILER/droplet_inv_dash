@@ -613,22 +613,8 @@ function getWeekView(itemName) {
 
 }
 
-frappe.ready(function () {
-    function getRequest(url) {
-        const xhttp = new XMLHttpRequest();
-        //const url = "";
-        xhttp.open("GET", url, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                if (this.status === 200) {
-                    console.log(this.responseText);
-                }
-            }
-        }
-    }
+frappe.ready(async function () {
+    
     get_todays_date();
     fillTable();
-    getRequest("/api/resource/BOM");
-    getRequest("/api/resource/BOM/BOM-Trailer_Code-001");
 });
