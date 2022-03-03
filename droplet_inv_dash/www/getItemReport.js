@@ -35,16 +35,14 @@ async function mainFunction(itemToManufacture) {
       this.item_name = null;
       this.total_req = 0;
       this.current_inv = 0;
+      this.incomming_qty = 0;
       this.lead_time = 0;
       this.lead_time_qty = 0;
       this.order_qty = 0;
       this.order_date = null;
-      this.incomming_qty = 0;
-      this.po_list = new Array();
+      this.last_PO = null;
 
       this.req_parts = new Array();
-
-      
     }
 
     fill_item_report = async function () {
@@ -53,25 +51,41 @@ async function mainFunction(itemToManufacture) {
       this.item_name = item.item_name;
       this.lead_time = item.lead_time_days;
       //this.current_inv = 
-      //this.
+      //this.incomming_qty
       console.log("fill_item_report");
       console.log(item);
     };
 
-    count = function (amount) {
+    count = function (amount, needByDate) {
       this.total_req += parseInt(amount);
+      //let daysUntilNeeded;
     };
+
+    toJSON = function() {
+      let newJson = {}
+      newJson.item = this.item_code + " " + this.item_name
+      newJson.total_req = this.total_req;
+      newJson.current_inv = this.current_inv
+      newJson.incomming_qty = this.incomming_qty
+      newJson.lead_time = this.lead_time
+      newJson.lead_time_qty = this.lead_time_qty
+      newJson.order_qty = this.order_qty
+      newJson.order_date = this.order_date
+      newJson.PO = this.last_PO
+      newJson.parts_calendar = null;
+      return newJson;
+    }
   }
 
   class Item_report_list {
     constructor() {
       this.list = new Map();
     }
-    pushCount = function (item_code, required_amount) {
+    pushCount = function (item_code, required_amount, required_by_date) {
       if (!this.list.has(item_code)) {
         this.list.set(item_code, new Item_report(item_code));
       }
-      this.list.get(item_code).count(required_amount);
+      this.list.get(item_code).count(required_amount, required_by_date);
     };
 
     fill_all = async function () {
@@ -87,6 +101,18 @@ async function mainFunction(itemToManufacture) {
     getMap = () => {
       return this.list;
     };
+
+    getJSONArray = () => {
+      console.log("filling json array");
+      let newJSONArray = new Array()
+      for(const entry of this.list) {
+        let value = entry[1];
+        console.log(value)
+        newJSONArray.push(value.toJSON());
+      }
+      console.log("done filling report list");
+      return newJSONArray
+    }
   }
 
 
@@ -114,19 +140,21 @@ async function mainFunction(itemToManufacture) {
           console.log(item);
           console.log(`item: ${item.item_code} ${item.item_name} amount: ${item.amount}`)
           // push the required amount of items to the list, if the item doesnt exist it will be added
-          item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount));
+          item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), sales_order.delivery_date);
         }
     }
   }
   await item_report_list.fill_all();
-  let item_map = item_report_list.getMap()
-  console.log(item_map);
-  for(const key in item_map) {
+  console.log(item_report_list.list);
+  console.log(JSON.stringify(item_report_list.list));
+  for(const item_report of item_report_list.list) {
     console.log("test end")
     
-    console.log(item_map[key]);
+    console.log(item_report);
+    console.log(item_report[1].toJSON());
   }
-
+  console.log(item_report_list.getJSONArray());
+  console.log(JSON.stringify(item_report_list.getJSONArray()));
 }
 
 async function getFrappeJson(apiPath) {
