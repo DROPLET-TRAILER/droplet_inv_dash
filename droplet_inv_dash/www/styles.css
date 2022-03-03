@@ -12,27 +12,48 @@ body {
   background-color: #f5f7fa;
 }
 
-.update {
+#navigation {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-#current {
-  float: right;
+  grid-template-columns: fit-content(30%) fit-content(40%);
+  grid-template-rows: fit-content(3vh) fit-content(3vh) fit-content(10vh);
+  column-gap: 1%;
+  padding-bottom: 2vh;
+  background-color: #b3b3b3;
+  position: sticky;
 }
 
 #stockTable {
-  height: 35vh;
   width: 100%;
   margin-bottom: 1vh;
-  overflow: auto;
+}
+
+#refreshButton {
+  grid-column: 1;
+  grid-row: 1 / 2;
+}
+
+#returnButton {
+  grid-column: 2;
+  grid-row: 1 / 2;
+  float: right;
+}
+
+#overviewText {
+  grid-column: 1;
+  grid-row: 2 / 3;
+}
+
+#current {
+  grid-column: 2;
+  grid-row: 2 / 3;
 }
 
 .overview {
+  grid-column: 1 / span 2;
+  grid-row: 3 / 4;
   background-color: lightgray;
   height: 10vh;
   width: 100%;
-  margin-bottom: 2vh;
 }
 
 .monthly {
@@ -61,10 +82,6 @@ body {
   font-size: 1.15em;
 }
 
-.return {
-  margin-top: 2vh;
-}
-
 .blue {
   background-color: rgba(1, 1, 255, 0.445);
 }
@@ -90,5 +107,5 @@ td {
 th {
   background: #b3b3b3;
   position: sticky;
-  top: 0;
+  top: 19vh;
 }
