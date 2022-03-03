@@ -220,6 +220,17 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
+function formatAMPM(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    let strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
 function get_todays_date() {
     let current = document.getElementById("current");
     let today = new Date();
@@ -231,7 +242,7 @@ function get_todays_date() {
     };
 
     current.innerHTML = "Last Updated: " + today.toLocaleDateString(undefined, options)
-    +  " at " + today.getHours() +":" + today.getMinutes();
+    +  " at " + formatAMPM(today);
 }
 
 function fillTable() {
