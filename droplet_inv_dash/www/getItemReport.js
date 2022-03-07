@@ -51,7 +51,7 @@ async function getItemReportFromDatabase() {
         this.current_inv = inventory.get(this.item_code).actual_qty
         this.incomming_qty = inventory.get(this.item_code).projected_qty - this.current_inv;
       }
-      
+
       //console.log("fill_item_report");
       //console.log(item);
     };
@@ -210,11 +210,26 @@ function getDaysBetweenDates(date_past, date_future) {
   return diffDays;
 }
 
-frappe.ready(async function() {
-  let report = await getItemReportFromDatabase()
+// frappe.ready(async function() {
+//   let report = await getItemReportFromDatabase();
+//   jsonArray = item_report_list.getJSONArray();
+//   //clearTable();
+//   fillTable();
+//   console.log("##### OBJECT #####");
+//   console.log(report);
+//   console.log("##### String #####");
+//   console.log(JSON.stringify(report));
+  
+// });
+
+async function fillTableDriver() {
+  let report = await getItemReportFromDatabase();
+  jsonArray = report;
+  //clearTable();
+  fillTable();
   console.log("##### OBJECT #####");
   console.log(report);
   console.log("##### String #####");
   console.log(JSON.stringify(report));
   
-});
+}

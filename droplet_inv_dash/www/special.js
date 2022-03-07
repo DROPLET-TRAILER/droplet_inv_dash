@@ -616,5 +616,5 @@ function getWeekView(itemName) {
 frappe.ready(async function () {
     
     get_todays_date();
-    fillTable();
+    //fillTable();
 });
