@@ -571,7 +571,7 @@ function fillTable() {
             row.setAttribute("id", "row" + i);
 
             document.getElementById('row' + i).addEventListener('click', function (e) {
-                
+
             });
 
             // let item = row.insertCell(0);
