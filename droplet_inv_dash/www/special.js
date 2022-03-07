@@ -614,7 +614,25 @@ function getWeekView(itemName) {
 }
 
 frappe.ready(async function () {
-    
     get_todays_date();
     //fillTable();
+    fillTableDriver();
+
+    document.getElementById('refreshButton').addEventListener('click', function (e) {
+
+        fillTableDriver();
+
+    });
 });
+
+async function fillTableDriver() {
+    let report = await getItemReportFromDatabase();
+    jsonArray = report;
+    //clearTable();
+    fillTable();
+    console.log("##### OBJECT #####");
+    console.log(report);
+    console.log("##### String #####");
+    console.log(JSON.stringify(report));
+    
+  }
