@@ -509,9 +509,38 @@ function get_todays_date() {
     +  " at " + formatAMPM(today);
 }
 
+function getWeekView(itemIndex, weekView) {
+    let tableToAdd = document.createElement('table');
+    let itemName = jsonArray[itemIndex];
+
+    //Set the Monthly Header
+    let monthHeader = tableToAdd.insertRow(0);
+    for (let i = 0; i < 12; ++i) {
+        let cell = document.createElement('th');
+        cell.setAttribute("class", "gray");
+        cell.innerText = calendar[i];
+        monthHeader.appendChild(cell);
+    }
+
+    console.log(itemName);
+
+    //Get the data and set the calendar
+    let calendarInfo = tableToAdd.insertRow(1);
+    for (let j = 0; j < 12; ++j) {
+        console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][1]);
+        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][0];
+        calendarInfo.appendChild(cell);
+    }
+
+    weekView.innerHTML = '';
+    weekView.appendChild(tableToAdd);
+    return;
+}
+
 function fillTable() {
     let numOfJsonOb = jsonArray.length;
-
 
     if (numOfJsonOb === 0) {
         let table = document.getElementById("MainTable");
@@ -535,24 +564,28 @@ function fillTable() {
         order_date.innerHTML = "N/A";
         PO.innerHTML = "N/A";
     } else {
-
         for (let i = 0; i < numOfJsonOb; ++i) {
             let table = document.getElementById("MainTable");
             let row = table.insertRow(1);
 
+            row.setAttribute("id", "row" + i);
+
+            document.getElementById('row' + i).addEventListener('click', function (e) {
+                
+            });
+
             // let item = row.insertCell(0);
-            let item = document.createElement("a");
-            item.setAttribute("onClick", "getWeekView(this)");
-            item.setAttribute("style", "cursor: pointer; cursor: hand;");
+            let item = row.insertCell(0);
+            // item.setAttribute("onClick", "getWeekView(this)");
             row.appendChild(item);
 
-            let total_req = row.insertCell(0);
-            let current_inv = row.insertCell(1);
-            let lead_time = row.insertCell(2);
-            let lead_time_qty = row.insertCell(3);
-            let order_qty = row.insertCell(4);
-            let order_date = row.insertCell(5);
-            let PO = row.insertCell(6);
+            let total_req = row.insertCell(1);
+            let current_inv = row.insertCell(2);
+            let lead_time = row.insertCell(3);
+            let lead_time_qty = row.insertCell(4);
+            let order_qty = row.insertCell(5);
+            let order_date = row.insertCell(6);
+            let PO = row.insertCell(7);
 
             item.innerText = jsonArray[i].item;
             total_req.innerHTML = jsonArray[i].total_req;
@@ -562,61 +595,22 @@ function fillTable() {
             order_qty.innerHTML = jsonArray[i].order_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
+
+            let weekView = document.createElement("td");
+            weekView.setAttribute("id", "weekView" + i);
+            weekView.setAttribute("colspan", "8");
+            weekView.setAttribute("class", "table-bordered");
+
+            row = table.insertRow(2);
+            row.appendChild(weekView);
+            getWeekView(i, weekView);
         }
     }
-}
-
-function getWeekView(itemName) {
-    let weekView = document.getElementById('weekView');
-    let tableToAdd = document.createElement('table');
-
-    //Set the Monthly Header
-    let monthHeader = tableToAdd.insertRow(0);
-    for (let i = 0; i < 12; ++i) {
-        let cell = document.createElement('th');
-        cell.setAttribute("class", "gray");
-        cell.innerText = calendar[i];
-        monthHeader.appendChild(cell);
-    }
-
-    console.log(itemName.innerHTML);
-
-
-    //Get the data and set the calendar
-    for (let i = 0; i < jsonArray.length; ++i) {
-
-        if (jsonArray[i].item === itemName.innerHTML) {
-            console.log("Arrived here2");
-
-            let calendarInfo = tableToAdd.insertRow(1);
-            for (let j = 0; j < 12; ++j) {
-                console.log("Arrived here3");
-
-
-
-
-                let cell = document.createElement("td");
-                cell.setAttribute("class", jsonArray[i].parts_calendar[j][1]);
-                cell.innerHTML = jsonArray[i].parts_calendar[j][0];
-                calendarInfo.appendChild(cell);
-            }
-            weekView.innerHTML = '';
-            weekView.appendChild(tableToAdd);
-            return;
-
-        }
-    }
-
-    weekView.innerHTML = '';
-    weekView.appendChild(tableToAdd);
-
-
 }
 
 frappe.ready(async function () {
     get_todays_date();
     fillTable();
-
     document.getElementById('refreshButton').addEventListener('click', function (e) {
 
         // Do all those things
