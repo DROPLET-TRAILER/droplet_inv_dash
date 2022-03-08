@@ -99,13 +99,17 @@ body {
 }
 
 table,
-th,
+.dash_header,
 td {
   padding: 1.0em;
 }
 
-th {
+.dash_header {
   background: #b3b3b3;
   position: sticky;
   top: 20vh;
+}
+
+.gray {
+  background: #b3b3b3;
 }
