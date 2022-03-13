@@ -8,19 +8,10 @@ async function getItemReportFromDatabase() {
     // general function for caching api request for short term storage
     request = async (apiPath, apiFunction) => {
       if(!this.cached_pages.has(apiPath)){
-        console.log(`#### Page not in cache: ${apiPath}`)
+        //console.log(`#### Page not in cache: ${apiPath}`)
         this.cached_pages.set(apiPath, await apiFunction(apiPath))
       } 
-      console.log(`#### loading from cache: ${apiPath} ${this.cached_pages.get(apiPath)}`)
-      return this.cached_pages.get(apiPath) 
-    }
-
-
-    getFrappeJson = async function(apiPath) {
-      if(!this.cached_pages.has(apiPath)){
-        console.log(`Page ${apiPath} not in cache`)
-        await this.cached_pages.set(apiPath, getFrappeJson(apiPath))
-      } 
+      //console.log(`#### loading from cache: ${apiPath} ${this.cached_pages.get(apiPath)}`)
       return this.cached_pages.get(apiPath) 
     }
   }
@@ -40,18 +31,83 @@ async function getItemReportFromDatabase() {
       this.last_PO = null;
 
       this.req_parts = new Array();
+      this.parts_calendar = null;
     }
 
     fill_item_report = async function (inventory) {
-      //console.log("fill item values test");
+      //get item name and lead time from item doctype
       let item = await getFrappeJson(`resource/Item/${this.item_code}`);
       this.item_name = item.item_name;
       this.lead_time = item.lead_time_days;
+
+      //use inventory that was retrieved in an earlier step
       if(inventory.has(this.item_code)) {
-        this.current_inv = inventory.get(this.item_code).actual_qty
-        this.incomming_qty = inventory.get(this.item_code).projected_qty - this.current_inv;
+        this.current_inv = parseInt(inventory.get(this.item_code).actual_qty)
+        this.incomming_qty = parseInt(inventory.get(this.item_code).projected_qty - this.current_inv);
+      } else {
+        // if item is not stored in database, it will be assumed there is 0 for calculations
+        this.current_inv = "N/A"
+        this.incomming_qty = "N/A"
       }
 
+      //get last PO for order
+      let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"]]&limit=1`)
+      //console.log(last_po)
+      //console.log(last_po[0])
+      if(last_po.length > 0){
+        this.last_PO = last_po[0].name;
+      } else {
+        this.last_PO = "N/A";
+      }
+
+      //calculate number of items that are not in inventory
+      // TODO: 
+      //console.log(this.total_req + ">" + (this.current_inv + this.incomming_qty))
+      if(this.total_req > (this.current_inv + this.incomming_qty)) {
+        //console.log("parts need to be ordered")
+        let remaining_parts_on_day = 0
+        let count_parts_inv = 0;
+        let days_of_inv = 0;
+        // crawl through days until you find the days covered by inventory
+        //console.log(this.req_parts.length)
+        for (let i = 0; i < this.req_parts.length; i++) {
+         // console.log(`in ${i} days ${this.req_parts[i]}`)
+          if(this.req_parts[i]) {
+            count_parts_inv += this.req_parts[i];
+            //console.log(`count parts inv ${count_parts_inv} currentinv+incomming ${this.current_inv + this.incomming_qty}`)
+            if(count_parts_inv >= (this.current_inv + this.incomming_qty)) {
+              days_of_inv = i;
+              remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
+              //console.log(`remaining parts on day ${remaining_parts_on_day}`)
+              break;
+            } 
+          }          
+        }
+        let order_date = new Date();
+        order_date.setDate(server_date.getDate() + days_of_inv - this.lead_time);
+        this.order_date = order_date.toISOString().slice(0, 10);
+
+        let lead_time_index = days_of_inv + this.lead_time;
+        if(lead_time_index > this.req_parts.length) {
+          lead_time_index = this.req_parts.length;
+        }
+        this.lead_time_qty += remaining_parts_on_day;
+       // console.log("days of inv" + days_of_inv)
+        for (let i = days_of_inv + 1; i < lead_time_index; i++) {
+          if(this.req_parts[i] > 0) {
+            this.lead_time_qty += this.req_parts[i];
+          }          
+        }
+
+        this.order_qty = this.total_req - this.incomming_qty - this.current_inv - this.lead_time_qty
+        
+      } else {
+        this.lead_time_qty = 0;
+        this.order_qty = 0;
+        this.order_date = "N/A";
+      }
+
+      // TODO: figure out how qty to be ordered is different from qty required for next lead time
       //console.log("fill_item_report");
       //console.log(item);
     };
@@ -59,14 +115,16 @@ async function getItemReportFromDatabase() {
     count = function (amount, needByDate) {
       this.total_req += parseInt(amount);
       //console.log(needByDate)
-      let daysUntilNeeded = getDaysBetweenDates(this.server_date, convertFrappeDateToDate(needByDate));
+      let daysUntilNeeded = parseInt(getDaysBetweenDates(this.server_date, needByDate));
       //console.log(daysUntilNeeded)
       let tempAmount = this.req_parts[daysUntilNeeded]
-      this.req_parts[daysUntilNeeded] = amount
+      this.req_parts[daysUntilNeeded] = parseInt(amount)
       if(tempAmount > 0) {
         this.req_parts[daysUntilNeeded] += tempAmount
       }
     };
+
+    
 
     toJSON = function() {
       let newJson = {}
@@ -79,7 +137,19 @@ async function getItemReportFromDatabase() {
       newJson.order_qty = this.order_qty
       newJson.order_date = this.order_date
       newJson.PO = this.last_PO
-      newJson.parts_calendar = null;
+      newJson.parts_calendar = 
+      [["2", "green"],
+        ["5", "green"],
+        ["10", "green"],
+        ["6", "blue"],
+        ["2", "blue"],
+        ["3", "blue"],
+        ["1", "blue"],
+        ["2", "blue"],
+        ["5", "red"],
+        ["7", "red"],
+        ["4", "red"],
+        ["4", "red"]];
       return newJson;
     }
   }
@@ -97,13 +167,13 @@ async function getItemReportFromDatabase() {
     };
 
     fill_all = async function (inventory) {
-      console.log("filling report list");
+      //console.log("filling report list");
       for(const entry of this.list) {
         let value = entry[1];
         //console.log(value)
         await value.fill_item_report(inventory);
       }
-      console.log("done filling report list");
+      //console.log("done filling report list");
     };
 
     getMap = () => {
@@ -125,21 +195,26 @@ async function getItemReportFromDatabase() {
 
   
   let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
-  console.log(frappe_server_date)
+  if (frappe_server_date == null) {
+    console.log("not signed in")
+    return;
+  }
+  let server_date = convertFrappeDateToDate(frappe_server_date);
+  //console.log(frappe_server_date)
+  //console.log(server_date)
   // pass the item report the date it was created at, get this date from the server
-  let item_report_list = new Item_report_list(convertFrappeDateToDate(frappe_server_date));
+  
+  let item_report_list = new Item_report_list(server_date);
   let cache = new Cache_api()
 
-  
-  
   const inventoryJSON = await getFrappeJson("method/erpnext.stock.dashboard.item_dashboard.get_data");
   let inventory = new Map()
   for(const inventory_item of inventoryJSON) {
     //console.log(inventory_item)
     inventory.set(inventory_item.item_code, inventory_item)
   }
-  console.log(`inventory from server`)
-  console.log(inventory)
+  //console.log(`inventory from server`)
+  //console.log(inventory)
   // customer_name, delivery_date, items, filter by delivery_status 
   const sales_orders =  await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","status","=","To Deliver and Bill"]]`);// this will probs break, im not sure what the status of open sales order are in the droptlet trailer implememntation
   //console.log(sales_orders);
@@ -149,34 +224,40 @@ async function getItemReportFromDatabase() {
     // customer_name, delivery_date, items, filter by delivery_status 
     const sales_order =  await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
     //console.log(sales_order);
-    console.log(`customer_name: ${sales_order.customer_name} delivery_date: ${sales_order.delivery_date} delivery_status: ${sales_order.delivery_status}`)
+    //console.log(`customer_name: ${sales_order.customer_name} delivery_date: ${sales_order.delivery_date} delivery_status: ${sales_order.delivery_status}`)
     const items_order = sales_order.items
     //console.log(items_order);
     for (const key in items_order) {
       const item_order = items_order[key];
       // amount, bom_no, item_code 
-      console.log(`item_code: ${item_order.item_code} amount: ${item_order.amount} bom_no: ${item_order.bom_no} delivery_date: ${item_order.delivery_date}`)
+      //console.log(`item_code: ${item_order.item_code} amount: ${item_order.amount} bom_no: ${item_order.bom_no} delivery_date: ${item_order.delivery_date}`)
+      // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
+      let item_lead_time = 14;
+      let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
+      delivery_date.setDate(delivery_date.getDate() - item_lead_time);
         // get the details of the bom given the name in the item
         const bomDetails = await cache.request(`resource/BOM/${item_order.bom_no}`, getFrappeJson);
         //console.log(bomDetails);
         for (const key in bomDetails.items) {
           const item = bomDetails.items[key];
           //console.log(item);
-          console.log(`item: ${item.item_code} ${item.item_name} amount: ${item.amount}`)
+          //console.log(`item: ${item.item_code} ${item.item_name} amount: ${item.amount}`)
           // push the required amount of items to the list, if the item doesnt exist it will be added
-          item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), sales_order.delivery_date);
+          
+
+          item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), delivery_date);
         }
     }
   }
   await item_report_list.fill_all(inventory);
-  console.log(item_report_list.list);
+  //console.log(item_report_list.list);
   //console.log(JSON.stringify(item_report_list.list));
-  for(const item_report of item_report_list.list) {
-    //console.log("test end")
+  // for(const item_report of item_report_list.list) {
+  //   //console.log("test end")
     
-    //console.log(item_report);
-    //console.log(item_report[1].toJSON());
-  }
+  //   //console.log(item_report);
+  //   //console.log(item_report[1].toJSON());
+  // }
   //console.log(item_report_list.getJSONArray());
 
   //jsonArray = item_report_list.getJSONArray();
@@ -193,7 +274,11 @@ function convertFrappeDateToDate(date_from_server) {
 }
 
 async function getFrappeJson(apiPath) {
-  let json = await (await fetch("/api/" + apiPath)).json()
+  let response =  await fetch("/api/" + apiPath)
+  if(response.status != 200) {
+    return null;
+  }
+  let json = await response.json()
   if(json.hasOwnProperty('message')){
     return json.message
   } else {
@@ -203,7 +288,7 @@ async function getFrappeJson(apiPath) {
 }
 
 function getDaysBetweenDates(date_past, date_future) {
- // console.log(date_past)
+  //console.log(date_past)
   //console.log(date_future)
   const diffTime = Math.abs(date_future - date_past);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));

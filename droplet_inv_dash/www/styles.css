@@ -113,3 +113,13 @@ td {
 .gray {
   background: #b3b3b3;
 }
+
+.loadingIcon {
+  display: inline-block;
+  width: 100%;
+}
+.loadingIconParent {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}

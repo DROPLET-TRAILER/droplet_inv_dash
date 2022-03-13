@@ -1,4 +1,4 @@
-let jsonArray = [{
+let jsonTestArray = [{
         "item": "Wheels",
         "total_req": "47",
         "current_inv": "17",
@@ -509,9 +509,9 @@ function get_todays_date() {
     +  " at " + formatAMPM(today);
 }
 
-function fillTable() {
+function fillTable(report) {
+    let jsonArray = report;
     let numOfJsonOb = jsonArray.length;
-
 
     if (numOfJsonOb === 0) {
         let table = document.getElementById("MainTable");
@@ -554,18 +554,20 @@ function fillTable() {
             let current_inv     = row.insertCell(2);
             let lead_time       = row.insertCell(3);
             let lead_time_qty   = row.insertCell(4);
-            let order_qty       = row.insertCell(5);
-            let order_date      = row.insertCell(6);
-            let PO              = row.insertCell(7);
+            let order_date      = row.insertCell(5);
+            let future_order_qty = row.insertCell(6);
+            let incomming_qty   = row.insertCell(7);
+            let PO              = row.insertCell(8);
 
             item.innerText = jsonArray[i].item;
             total_req.innerHTML = jsonArray[i].total_req;
             current_inv.innerHTML = jsonArray[i].current_inv;
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
-            order_qty.innerHTML = jsonArray[i].order_qty;
+            incomming_qty.innerHTML = jsonArray[i].incomming_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
+            future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
             weekView.setAttribute("id", "weekView" + i);
@@ -575,17 +577,20 @@ function fillTable() {
 
             row = table.insertRow(2);
             row.appendChild(weekView);
-            getWeekView(i, weekView);
+            getWeekView(i, weekView, report);
 
             
         }
     }
 }
 
-function getWeekView(itemIndex, weekView) {
+
+
+function getWeekView(itemIndex, weekView, report) {
+    let jsonArray = report;
+
     let tableToAdd = document.createElement('table');
     let itemName = jsonArray[itemIndex];
-
     //Set the Monthly Header
     let monthHeader = tableToAdd.insertRow(0);
     for (let i = 0; i < 12; ++i) {
@@ -594,13 +599,13 @@ function getWeekView(itemIndex, weekView) {
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
     }
-    console.log(itemName);
+    //console.log(itemName);
 
 
     //Get the data and set the calendar
     let calendarInfo = tableToAdd.insertRow(1);
     for (let j = 0; j < 12; ++j) {
-        console.log("Arrived here3");
+        //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][1]);
         cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][0];
@@ -612,25 +617,80 @@ function getWeekView(itemIndex, weekView) {
 }
 
 frappe.ready(async function () {
+    //frappePostRequest()
     get_todays_date();
     //fillTable();
     fillTableDriver();
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
-
+        //fillTable();
         fillTableDriver();
 
     });
 });
 
+function clearTable(table) {
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
+}
+
+// refrenced and modified from https://flexiple.com/bubble-sort-javascript/
+function bubbleSort (jsonArray, compareFunction) {
+    let len = jsonArray.length - 1;
+    let modified;
+    do {
+        modified = false;
+        for (let i = 0; i < len; i++) {
+            if (compareFunction(jsonArray[i], jsonArray[i + 1])) {
+                let tmp = jsonArray[i];
+                jsonArray[i] = jsonArray[i + 1];
+                jsonArray[i + 1] = tmp;
+                modified = true;
+            }
+        }
+    } while (modified);
+    return jsonArray;
+};
+
+
+function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
+    return jsonObjectOne.order_date < jsonObjectTwo.order_date;
+}
+
 async function fillTableDriver() {
+    let table = document.getElementById("MainTable");
+    clearTable(table)
+    let row = table.insertRow(1);
+    row.classList.add("loadingIcon");
+    row.innerHTML = `<td class="loadingIconParent" colspan="8"><i class="loadingIcon fas fa-spinner fa-spin fa-5x"></i></td>`
     let report = await getItemReportFromDatabase();
-    jsonArray = report;
-    //clearTable();
-    fillTable();
+    let sorted_report = bubbleSort(report, soonestOrderDate);
+    clearTable(table)
+    
+    fillTable(sorted_report);
     console.log("##### OBJECT #####");
     console.log(report);
     console.log("##### String #####");
     console.log(JSON.stringify(report));
     
   }
+
+  async function fillTableDriverTestData() {
+    let table = document.getElementById("MainTable");
+    clearTable(table)
+    let row = table.insertRow(1);
+    row.innerHTML = `<i colspan="8" class="loadingIcon fas fa-spinner fa-spin fa-5x"></i>`
+    let report = await getItemReportFromDatabase();
+    clearTable(table)
+    
+    fillTable(jsonTestArray);
+    console.log("##### OBJECT #####");
+    console.log(report);
+    console.log("##### String #####");
+    console.log(JSON.stringify(report));
+    
+  }
+
+
+
