@@ -99,10 +99,11 @@ async function getItemReportFromDatabase() {
       }
 
       // set flag based off of distance to order date from current date
-      if(this.order_date_formatted = "N/A") {
-        this.flag = "gray";
+      if(this.order_date_formatted == "N/A") {
+        this.flag = "white";
       } else {
         let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
+        console.log(daysUntilOrder);
         if(daysUntilOrder < 0) {
           this.flag = "red";
         } else if (daysUntilOrder < 7) {
@@ -114,6 +115,8 @@ async function getItemReportFromDatabase() {
         } else if (daysUntilOrder < 28) {
           this.flag = "green";
         } else if (daysUntilOrder < 35) {
+          this.flag = "blue";
+        } else {
           this.flag = "gray";
         }
       }
@@ -144,7 +147,7 @@ async function getItemReportFromDatabase() {
       newJson.lead_time = this.lead_time
       newJson.lead_time_qty = this.lead_time_qty
       newJson.order_qty = this.order_qty
-      newJson.order_date = this.order_date
+      newJson.order_date = this.order_date_formatted
       newJson.PO = this.last_PO
       newJson.parts_calendar = 
       [["2", "2", "green"],
