@@ -67,8 +67,8 @@ async function getItemReportFromDatabase() {
       for (let i = 0; i < this.req_parts.length; i++) {
         if (this.req_parts[i]) {
           count_parts_inv += this.req_parts[i];
+          days_of_inv = i;
           if (count_parts_inv >= (this.current_inv + this.incomming_qty)) {
-            days_of_inv = i;
             remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
             break;
           }
