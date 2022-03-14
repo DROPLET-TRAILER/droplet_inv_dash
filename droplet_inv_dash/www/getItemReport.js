@@ -92,6 +92,9 @@ async function getItemReportFromDatabase() {
 
         this.order_qty = this.total_req - this.incomming_qty - this.current_inv - this.lead_time_qty
 
+
+        
+
       } else {
         this.lead_time_qty = 0;
         this.order_qty = 0;
@@ -103,7 +106,7 @@ async function getItemReportFromDatabase() {
         this.flag = "white";
       } else {
         let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-        console.log(daysUntilOrder);
+        console.log(`days between ${this.server_date} and ${this.order_date} is ${daysUntilOrder}`);
         if (daysUntilOrder < 0) {
           this.flag = "red";
         } else if (daysUntilOrder < 7) {
@@ -115,9 +118,29 @@ async function getItemReportFromDatabase() {
         } else if (daysUntilOrder < 35) {
           this.flag = "green";
         } else {
-          this.flag = "gray";
+          this.flag = "green";
         }
       }
+      
+
+      // starting to try to make the calendar
+      let parts_per_month = [];
+      for (let i = 0; i < this.req_parts.length; i++) {
+        let tempDay = new Date();
+        tempDay.setDate(this.server_date.getDate() + i);
+        let current_month = temp.getMonth();
+        let tempAmount = parts_per_month[current_month];
+        parts_per_month[current_month] = 0;
+        if(this.req_parts[i] > 0) {
+          parts_per_month[current_month] = this.req_parts[i] + tempAmount
+        }
+      }
+      this.parts_calendar = []
+      for (let i = 0; i < parts_per_month.length; i++) {
+        
+        
+      }
+      
 
 
       // TODO: figure out how qty to be ordered is different from qty required for next lead time
@@ -266,6 +289,12 @@ async function getFrappeJson(apiPath) {
 }
 
 function getDaysBetweenDates(date_past, date_future) {
+  const diffTime = date_future - date_past;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
+function getDaysBetweenDatesAbs(date_past, date_future) {
   const diffTime = Math.abs(date_future - date_past);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
