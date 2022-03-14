@@ -57,22 +57,27 @@ async function getItemReportFromDatabase() {
         this.last_PO = "N/A";
       }
 
-      //calculate number of items that are not in inventory
-      if (this.total_req > (this.current_inv + this.incomming_qty)) {
-        let remaining_parts_on_day = 0
-        let count_parts_inv = 0;
-        let days_of_inv = 0;
-        // crawl through days until you find the days covered by inventory
-        for (let i = 0; i < this.req_parts.length; i++) {
-          if (this.req_parts[i]) {
-            count_parts_inv += this.req_parts[i];
-            if (count_parts_inv >= (this.current_inv + this.incomming_qty)) {
-              days_of_inv = i;
-              remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
-              break;
-            }
+
+
+      // calculate the number of days that you have inventory for
+      let remaining_parts_on_day = 0
+      let count_parts_inv = 0;
+      let days_of_inv = 0;
+      // crawl through days until you find the days covered by inventory
+      for (let i = 0; i < this.req_parts.length; i++) {
+        if (this.req_parts[i]) {
+          count_parts_inv += this.req_parts[i];
+          if (count_parts_inv >= (this.current_inv + this.incomming_qty)) {
+            days_of_inv = i;
+            remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
+            break;
           }
         }
+      }
+
+      //calculate number of items that are not in inventory
+      if (this.total_req > (this.current_inv + this.incomming_qty)) {
+        
         let order_date = new Date();
         let daysUntilOrder = days_of_inv - this.lead_time;
         order_date.setDate(server_date.getDate() + daysUntilOrder);
@@ -124,20 +129,44 @@ async function getItemReportFromDatabase() {
       
 
       // starting to try to make the calendar
-      let parts_per_month = [];
+      let parts_per_month = [0,0,0,0,0,0,0,0,0,0,0,0];
       for (let i = 0; i < this.req_parts.length; i++) {
-        let tempDay = new Date();
+        let tempDay = new Date(this.server_date);
         tempDay.setDate(this.server_date.getDate() + i);
-        let current_month = temp.getMonth();
-        let tempAmount = parts_per_month[current_month];
-        parts_per_month[current_month] = 0;
+        let current_month = tempDay.getMonth();
         if(this.req_parts[i] > 0) {
-          parts_per_month[current_month] = this.req_parts[i] + tempAmount
+          parts_per_month[current_month] += this.req_parts[i]
         }
       }
       this.parts_calendar = []
+      let month = this.server_date.getMonth();
+      let tempDay = new Date(this.server_date);
+      tempDay.setDate(this.server_date.getDate() + days_of_inv);
+      let inv_until_month = tempDay.getMonth();
+      tempDay.setDate(this.server_date.getDate() + this.lead_time);
+      let lead_time_months = tempDay.getMonth();
+      let inv_months_finished = false;
+      let lead_months_finished = false;
+
       for (let i = 0; i < parts_per_month.length; i++) {
-        
+        let month_no = (i + month) % 12;
+        console.log(month_no);
+        if(!inv_months_finished) {
+          this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "green"];
+        } else if (!lead_months_finished) {
+          this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "blue"];
+        } else if (parts_per_month[month_no] > 0){
+          this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "red"];
+        } else {
+          this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "gray"];
+        }
+
+        if(month_no == inv_until_month) {
+          inv_months_finished = true;
+        }
+        if(month_no == lead_time_months) {
+          lead_months_finished = true;
+        }
         
       }
       
@@ -168,20 +197,7 @@ async function getItemReportFromDatabase() {
       newJson.order_qty = this.order_qty
       newJson.order_date = this.order_date_formatted
       newJson.PO = this.last_PO
-      newJson.parts_calendar = [
-        ["2", "2", "green"],
-        ["3", "5", "green"],
-        ["4", "10", "green"],
-        ["5", "6", "blue"],
-        ["6", "2", "blue"],
-        ["7", "3", "blue"],
-        ["8", "1", "blue"],
-        ["9", "2", "blue"],
-        ["10", "5", "red"],
-        ["11", "7", "red"],
-        ["0", "4", "red"],
-        ["1", "4", "red"]
-      ];
+      newJson.parts_calendar = this.parts_calendar
       return newJson;
     }
   }
