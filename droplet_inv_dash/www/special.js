@@ -484,6 +484,9 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
+setInterval(update_timer_since_last_update, 60000);
+let minElapsed = 0;
+
 function formatAMPM(date) {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -616,16 +619,29 @@ function getWeekView(itemIndex, weekView, report) {
     return;
 }
 
+function init_timer_update() {
+    let current = document.getElementById("current");
+    minElapsed = 0;
+    current.innerHTML = "Last Updated: " + minElapsed + " minutes ago";
+}
+
+function update_timer_since_last_update() {
+    minElapsed++;
+    let current = document.getElementById("current");
+    current.innerHTML = "Last Updated: " + minElapsed + " minutes ago";
+}
+
 frappe.ready(async function () {
     //frappePostRequest()
-    get_todays_date();
-    //fillTable();
-    fillTableDriver();
+    // get_todays_date();
+    init_timer_update();
+    fillTable();
+    // fillTableDriver();
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
-        //fillTable();
-        fillTableDriver();
-
+        fillTable();
+        // fillTableDriver();
+        init_timer_update();
     });
 });
 
