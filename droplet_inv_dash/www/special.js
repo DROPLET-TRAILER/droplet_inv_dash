@@ -137,11 +137,19 @@ function getWeekView(itemIndex, weekView) {
 
     //Get the data and set the calendar
     let calendarInfo = tableToAdd.insertRow(1);
-    for (let j = 0; j < 12; ++j) {
+    for (let j = currentMonth; j < 12; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][1]);
-        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][0];
+        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
+        calendarInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
         calendarInfo.appendChild(cell);
     }
 
