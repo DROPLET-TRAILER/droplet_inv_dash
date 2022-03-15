@@ -18,6 +18,7 @@ async function getItemReportFromDatabase() {
 
   class Item_report {
     constructor(item_code, date_from_server) {
+      this.flag = null;
       this.server_date = date_from_server;
       this.item_code = item_code;
       this.item_name = null;
@@ -84,8 +85,10 @@ async function getItemReportFromDatabase() {
           }          
         }
         let order_date = new Date();
-        order_date.setDate(server_date.getDate() + days_of_inv - this.lead_time);
-        this.order_date = order_date.toISOString().slice(0, 10);
+        let daysUntilOrder =  days_of_inv - this.lead_time;
+        order_date.setDate(server_date.getDate() + daysUntilOrder);
+        this.order_date = order_date;
+        this.order_date_formatted = order_date.toISOString().slice(0, 10);
 
         let lead_time_index = days_of_inv + this.lead_time;
         if(lead_time_index > this.req_parts.length) {
@@ -104,8 +107,29 @@ async function getItemReportFromDatabase() {
       } else {
         this.lead_time_qty = 0;
         this.order_qty = 0;
-        this.order_date = "N/A";
+        this.order_date_formatted = "N/A";
       }
+
+      // set flag based off of distance to order date from current date
+      if(this.order_date_formatted = "N/A") {
+        this.flag = "gray";
+      } else {
+        let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
+        if(daysUntilOrder < 0) {
+          this.flag = "red";
+        } else if (daysUntilOrder < 7) {
+          this.flag = "orange";
+        } else if (daysUntilOrder < 14) {
+          this.flag = "yellow";
+        } else if (daysUntilOrder < 21) {
+          this.flag = "green";
+        } else if (daysUntilOrder < 28) {
+          this.flag = "green";
+        } else if (daysUntilOrder < 35) {
+          this.flag = "gray";
+        }
+      }
+
 
       // TODO: figure out how qty to be ordered is different from qty required for next lead time
       //console.log("fill_item_report");
@@ -128,6 +152,7 @@ async function getItemReportFromDatabase() {
 
     toJSON = function() {
       let newJson = {}
+      newJson.flag = this.flag;
       newJson.item = this.item_code + " " + this.item_name
       newJson.total_req = this.total_req;
       newJson.current_inv = this.current_inv
@@ -138,18 +163,18 @@ async function getItemReportFromDatabase() {
       newJson.order_date = this.order_date
       newJson.PO = this.last_PO
       newJson.parts_calendar = 
-      [["2", "green"],
-        ["5", "green"],
-        ["10", "green"],
-        ["6", "blue"],
-        ["2", "blue"],
-        ["3", "blue"],
-        ["1", "blue"],
-        ["2", "blue"],
-        ["5", "red"],
-        ["7", "red"],
-        ["4", "red"],
-        ["4", "red"]];
+      [["2", "2", "green"],
+        ["3", "5", "green"],
+        ["4", "10", "green"],
+        ["5", "6", "blue"],
+        ["6", "2", "blue"],
+        ["7", "3", "blue"],
+        ["8", "1", "blue"],
+        ["9", "2", "blue"],
+        ["10", "5", "red"],
+        ["11", "7", "red"],
+        ["0", "4", "red"],
+        ["1", "4", "red"]];
       return newJson;
     }
   }
