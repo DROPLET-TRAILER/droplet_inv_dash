@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 let jsonArray = [{
         "item": "Wheels",
         "total_req": "47",
@@ -479,10 +480,17 @@ let jsonArray = [{
         ]
     }
 ];
+=======
+
+let current_report = {};
+>>>>>>> 7b0cbab59d14fd6983d8aefcdb402ed5a6caa76a
 
 let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
+
+setInterval(update_timer_since_last_update, 60000);
+let minElapsed = 0;
 
 function formatAMPM(date) {
     let hours = date.getHours();
@@ -510,6 +518,10 @@ function get_todays_date() {
 }
 
 function fillTable() {
+<<<<<<< HEAD
+=======
+    let jsonArray = current_report;
+>>>>>>> 7b0cbab59d14fd6983d8aefcdb402ed5a6caa76a
     let numOfJsonOb = jsonArray.length;
 
 
@@ -582,7 +594,15 @@ function fillTable() {
     }
 }
 
+<<<<<<< HEAD
 function getWeekView(itemIndex, weekView) {
+=======
+
+
+function getWeekView(itemIndex, weekView) {
+    let jsonArray = current_report;
+
+>>>>>>> 7b0cbab59d14fd6983d8aefcdb402ed5a6caa76a
     let tableToAdd = document.createElement('table');
     let itemName = jsonArray[itemIndex];
 
@@ -611,7 +631,20 @@ function getWeekView(itemIndex, weekView) {
     return;
 }
 
+function init_timer_update() {
+    let current = document.getElementById("current");
+    minElapsed = 0;
+    current.innerHTML = "Last Updated: " + minElapsed + " minutes ago";
+}
+
+function update_timer_since_last_update() {
+    minElapsed++;
+    let current = document.getElementById("current");
+    current.innerHTML = "Last Updated: " + minElapsed + " minutes ago";
+}
+
 frappe.ready(async function () {
+<<<<<<< HEAD
     get_todays_date();
     //fillTable();
     fillTableDriver();
@@ -620,14 +653,50 @@ frappe.ready(async function () {
 
         fillTableDriver();
 
+=======
+    //frappePostRequest()
+    // get_todays_date();
+    init_timer_update();
+    fillTable();
+    // fillTableDriver();
+
+    document.getElementById('refreshButton').addEventListener('click', function (e) {
+        fillTable();
+        // fillTableDriver();
+        init_timer_update();
+>>>>>>> 7b0cbab59d14fd6983d8aefcdb402ed5a6caa76a
     });
 });
 
 async function fillTableDriver() {
     let report = await getItemReportFromDatabase();
+<<<<<<< HEAD
     jsonArray = report;
     //clearTable();
     fillTable();
+=======
+    let sorted_report = bubbleSort(report, soonestOrderDate);
+    clearTable(table)
+    
+    fillTable(sorted_report);
+    console.log("##### OBJECT #####");
+    console.log(report);
+    console.log("##### String #####");
+    console.log(JSON.stringify(report));
+    
+  }
+
+  async function fillTableDriverTestData() {
+    let table = document.getElementById("MainTable");
+    clearTable(table)
+    let row = table.insertRow(1);
+    row.innerHTML = `<i colspan="8" class="loadingIcon fas fa-spinner fa-spin fa-5x"></i>`
+    current_report = await getItemReportFromDatabase();
+    //current_report = testJson;
+    clearTable(table)
+    
+    fillTable(jsonTestArray);
+>>>>>>> 7b0cbab59d14fd6983d8aefcdb402ed5a6caa76a
     console.log("##### OBJECT #####");
     console.log(report);
     console.log("##### String #####");
