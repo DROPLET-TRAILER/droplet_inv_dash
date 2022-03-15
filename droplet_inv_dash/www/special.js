@@ -173,12 +173,12 @@ frappe.ready(async function () {
     //frappePostRequest()
     // get_todays_date();
     init_timer_update();
-    fillTable();
-    // fillTableDriver();
+    //fillTable();
+     fillTableDriver();
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
         fillTable();
-        // fillTableDriver();
+         fillTableDriver();
         init_timer_update();
     });
 });
@@ -212,40 +212,34 @@ function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
     return jsonObjectOne.order_date < jsonObjectTwo.order_date;
 }
 
+
+
+
+async function sortAndRefreshTable(sortingFunction) {
+    let table = document.getElementById("MainTable");
+    clearTable(table)
+    let sorted_report = bubbleSort(current_report, sortingFunction);
+    fillTable(sorted_report);
+}
+
 async function fillTableDriver() {
     let table = document.getElementById("MainTable");
     clearTable(table)
     let row = table.insertRow(1);
     row.classList.add("loadingIcon");
     row.innerHTML = `<td class="loadingIconParent" colspan="8"><i class="loadingIcon fas fa-spinner fa-spin fa-5x"></i></td>`
-    let report = await getItemReportFromDatabase();
-    let sorted_report = bubbleSort(report, soonestOrderDate);
+    current_report = await getItemReportFromDatabase();
+    let sorted_report = bubbleSort(current_report, soonestOrderDate);
     clearTable(table)
     
     fillTable(sorted_report);
     console.log("##### OBJECT #####");
-    console.log(report);
+    console.log(sorted_report);
     console.log("##### String #####");
-    console.log(JSON.stringify(report));
+    console.log(JSON.stringify(sorted_report));
     
   }
 
-  async function fillTableDriverTestData() {
-    let table = document.getElementById("MainTable");
-    clearTable(table)
-    let row = table.insertRow(1);
-    row.innerHTML = `<i colspan="8" class="loadingIcon fas fa-spinner fa-spin fa-5x"></i>`
-    current_report = await getItemReportFromDatabase();
-    //current_report = testJson;
-    clearTable(table)
-    
-    fillTable(jsonTestArray);
-    console.log("##### OBJECT #####");
-    console.log(report);
-    console.log("##### String #####");
-    console.log(JSON.stringify(report));
-    
-  }
 
 
 
