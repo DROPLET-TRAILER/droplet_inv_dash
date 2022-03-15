@@ -64,7 +64,7 @@ function fillTable() {
         for (let i = 0; i < numOfJsonOb; ++i) {
             let table = document.getElementById("MainTable");
             let row = table.insertRow(1);
-            row.setAttribute("id", "row" + i);
+            row.setAttribute("class", "row-" + jsonArray[i].flag);
             row.addEventListener('click', function (e) {
                 if(weekView.style.display === "none") {
                     weekView.setAttribute("style", "display: visible");
