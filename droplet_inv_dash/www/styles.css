@@ -125,7 +125,7 @@ td {
   margin-top: 20px;
 }
 
-.row-gray {
+.row-white {
   background: rgb(95, 95, 95);
   color: black;
 }
@@ -156,6 +156,11 @@ td {
 }
 
 .row-blue {
+  background: rgb(95, 95, 95);
+  color: black;
+}
+
+.row-gray {
   background: rgb(95, 95, 95);
   color: black;
 }
