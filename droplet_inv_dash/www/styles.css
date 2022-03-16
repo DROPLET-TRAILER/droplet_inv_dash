@@ -126,41 +126,36 @@ td {
 }
 
 .row-white {
-  background: rgb(95, 95, 95);
+  background: rgb(255, 255, 255);
   color: black;
 }
 
 .row-red {
-  background: rgb(95, 95, 95);
+  background: rgb(255, 153, 153);
   color: black;
 }
 
 .row-orange {
-  background: rgb(95, 95, 95);
+  background: rgb(255, 204, 153);
   color: black;
 }
 
 .row-yellow {
-  background: rgb(95, 95, 95);
+  background: rgb(255, 255, 153);
   color: black;
 }
 
 .row-lightgreen {
-  background: rgb(95, 95, 95);
+  background: rgb(204, 255, 153);
   color: black;
 }
 
 .row-green {
-  background: rgb(95, 95, 95);
-  color: black;
-}
-
-.row-blue {
-  background: rgb(95, 95, 95);
+  background: rgb(153, 255, 153);
   color: black;
 }
 
 .row-gray {
-  background: rgb(95, 95, 95);
+  background: rgb(224, 224, 224);
   color: black;
 }

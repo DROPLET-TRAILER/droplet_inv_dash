@@ -112,10 +112,8 @@ async function getItemReportFromDatabase() {
           this.flag = "yellow";
         } else if (daysUntilOrder < 21) {
           this.flag = "lightgreen";
-        } else if (daysUntilOrder < 28) {
-          this.flag = "green";
         } else if (daysUntilOrder < 35) {
-          this.flag = "blue";
+          this.flag = "green";
         } else {
           this.flag = "gray";
         }
