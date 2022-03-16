@@ -231,38 +231,7 @@ frappe.ready(async function () {
     // get_todays_date();
     init_timer_update();
     //fillTable();
-    fillTableDriver();
-
-    set_ID_drop_down();
-    let dropDownMenu = document.getElementById("dropDown");
-    let topOfDashboard = document.getElementById("page-card");
-    let topPos = topOfDashboard.offsetTop;
-
-    dropDownMenu.onchange = function () {
-        // window.scrollTo(0, 0);
-        // let hrefTogo = this.value;
-        // let index = this.options[this.selectedIndex].getAttribute('index');
-        // setTimeout(function() {
-        //     window.location.href = hrefTogo;
-        //     showTable(index);
-        // }, 1000);
-
-        let elem = document.querySelector(this.value);
-        let selectedElement = elem.getBoundingClientRect();
-        console.log(selectedElement);
-
-        let x = getOffset(document.getElementById(this.value)).left;
-        let y = getOffset(document.getElementById(this.value)).top;
-
-        console.log("x: "+ x);
-        console.log("y: "+ y);
-
-        // window.scrollTo(selectedElement.x, selectedElement.y + topOfDashboard);
-
-        // window.location.href = this.value;
-        let index = this.options[this.selectedIndex].getAttribute('index');
-        showTable(index);
-    };
+    await fillTableDriver();
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
         // fillTable();
@@ -483,4 +452,54 @@ async function fillTableDriver() {
     console.log(sorted_report);
     console.log("##### String #####");
     console.log(JSON.stringify(sorted_report));
+
+
+    // create drop down menu for items
+    set_ID_drop_down();
+    let dropDownMenu = document.getElementById("dropDown");
+    dropDownMenu.onchange = function () {
+        // window.scrollTo(0, 0);
+        // let hrefTogo = this.value;
+        // let index = this.options[this.selectedIndex].getAttribute('index');
+        // setTimeout(function() {
+        //     window.location.href = hrefTogo;
+        //     showTable(index);
+        // }, 1000);
+
+        window.location.href = this.value;
+        let index = this.options[this.selectedIndex].getAttribute('index');
+        showTable(index);
+    };
+
+
+    // set_ID_drop_down();
+    // let dropDownMenu = document.getElementById("dropDown");
+    // let topOfDashboard = document.getElementById("page-card");
+    // let topPos = topOfDashboard.offsetTop;
+
+    // dropDownMenu.onchange = function () {
+    //     // window.scrollTo(0, 0);
+    //     // let hrefTogo = this.value;
+    //     // let index = this.options[this.selectedIndex].getAttribute('index');
+    //     // setTimeout(function() {
+    //     //     window.location.href = hrefTogo;
+    //     //     showTable(index);
+    //     // }, 1000);
+
+    //     let elem = document.querySelector(this.value);
+    //     let selectedElement = elem.getBoundingClientRect();
+    //     console.log(selectedElement);
+
+    //     let x = getOffset(document.getElementById(this.value)).left;
+    //     let y = getOffset(document.getElementById(this.value)).top;
+
+    //     console.log("x: "+ x);
+    //     console.log("y: "+ y);
+
+    //     // window.scrollTo(selectedElement.x, selectedElement.y + topOfDashboard);
+
+    //     // window.location.href = this.value;
+    //     let index = this.options[this.selectedIndex].getAttribute('index');
+    //     showTable(index);
+    // };
 }
