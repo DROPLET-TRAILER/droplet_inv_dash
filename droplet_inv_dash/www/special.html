@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<div class='page-card'>
+<div id="page-card" lass='page-card'>
 	<div class="container">
 		<nav id="navigation" class="navbar sticky-top navbar-light bg-light">
 			<div><button type="button" id="refreshButton" class='btn btn-primary btn-sm return'>Reload</button></div>
@@ -15,28 +15,20 @@
 			<div id="overviewText">Overview</div>
 			<div id="current"></div>
 			<div id="overview" class="overview"></div>
-			<div class="btn-group" role="group" aria-label="Basic example">
-				<button type="button" id="sortTotalReqButton" class="btn btn-secondary">Total Req</button>
-			
-				<button type="button" id="sortCurrentInvButton" class='btn btn-secondary'>Current Inv</button>
-			
-				<button type="button" id="sortLeadTimeButton" class='btn btn-secondary'>Lead Time</button>
-
-			</div>
-			
-
+			<!-- <div class="btn-group" role="group" aria-label="Basic example">
+			</div> -->
 		</nav>
 		<div id="stockTable">
 			<table id="MainTable" class="table table-hover">
 				<tr>
 					<th class="dash_header" scope="col">Item</th>
-					<th class="dash_header" scope="col">Total Req</th>
-					<th class="dash_header" scope="col">Current Inv</th>
-					<th class="dash_header" scope="col">Lead Time</th>
-					<th class="dash_header" scope="col">Next Order Qty</th>
-					<th class="dash_header" scope="col">Order by date</th>
-					<th class="dash_header" scope="col">Future Order Qty</th>
-					<th class="dash_header" scope="col">Qty on the way</th>
+					<th class="dash_header" scope="col"><button type="button" id="sortTotalReqButton" class="btn btn-secondary custom-button">Total Req</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortCurrentInvButton" class='btn btn-secondary custom-button'>Current Inv</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortLeadTimeButton" class='btn btn-secondary custom-button'>Lead Time</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortLeadTimeQty" class='btn btn-secondary custom-button'>Next Order Qty</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortByDate" class='btn btn-secondary custom-button'>Order by date</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortByFutureOrder" class='btn btn-secondary custom-button'>Future Order Qty</button></th>
+					<th class="dash_header" scope="col"><button type="button" id="sortIncomingQty" class='btn btn-secondary custom-button'>Qty on the way</button></th>
 					<th class="dash_header" scope="col">PO</th>
 				</tr>
 			</table>
