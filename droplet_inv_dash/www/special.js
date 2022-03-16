@@ -1,10 +1,6 @@
 
-<<<<<<< HEAD
-let current_report = [{"flag":"gray","item":"733 4 Pin Trailer Connector Cable","total_req":9,"current_inv":8,"incomming_qty":0,"lead_time":7,"lead_time_qty":1,"order_qty":0,"order_date":"2022-05-23T22:51:34.417Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"720 Side Mrakers Red - 26mm","total_req":18,"current_inv":16,"incomming_qty":0,"lead_time":7,"lead_time_qty":2,"order_qty":0,"order_date":"2022-05-23T22:51:34.268Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"729 Amber Reflective Tape 2'' X 2 3/4''","total_req":18,"current_inv":14,"incomming_qty":0,"lead_time":7,"lead_time_qty":0,"order_qty":4,"order_date":"2022-04-06T22:51:34.565Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"728 Red Reflective Tape 2'' X 2 3/4''","total_req":18,"current_inv":14,"incomming_qty":0,"lead_time":7,"lead_time_qty":0,"order_qty":4,"order_date":"2022-04-06T22:51:33.962Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"719 LED Light Bar - Tail Light 15 1/2'' X 1 5/8'' X 3/4''","total_req":18,"current_inv":10,"incomming_qty":0,"lead_time":14,"lead_time_qty":2,"order_qty":6,"order_date":"2022-03-10T23:51:34.872Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"805 License PLate Lights - 12V 88mm x 20mm","total_req":45,"current_inv":5,"incomming_qty":0,"lead_time":10,"lead_time_qty":20,"order_qty":20,"order_date":"2022-03-06T23:51:33.017Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"730 Square Plugs, Snap-in, Flexible Ridges, for 1.74\"-1.83\" Inside Length","total_req":36,"current_inv":18,"incomming_qty":0,"lead_time":25,"lead_time_qty":10,"order_qty":8,"order_date":"2022-02-27T23:51:34.723Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"621 Tongue Bare","total_req":9,"current_inv":4,"incomming_qty":2,"lead_time":35,"lead_time_qty":1,"order_qty":2,"order_date":"2022-02-24T23:51:35.341Z","PO":"PUR-ORD-2022-00003","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"736 3/16\" Class 1 Safety cable 48\" Long","total_req":90,"current_inv":6,"incomming_qty":0,"lead_time":21,"lead_time_qty":54,"order_qty":30,"order_date":"2022-02-23T23:51:33.161Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"620 Chasis Bare","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":3,"order_qty":2,"order_date":"2022-02-17T23:51:35.188Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"725 Coupler 1 7/8'' X 2'' 2K W/ Pin Ram","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":3,"order_qty":2,"order_date":"2022-02-17T23:51:33.666Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"1043 Universal 4 Way Flat Y-Splitter Plug Trailer cable","total_req":45,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":31,"order_qty":10,"order_date":"2022-02-09T23:51:33.307Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"710 Wheel jack FULTON F2 Wide track","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":66,"lead_time_qty":3,"order_qty":2,"order_date":"2022-01-17T23:51:33.459Z","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"726 VIN plate","total_req":9,"current_inv":10,"incomming_qty":0,"lead_time":10,"lead_time_qty":0,"order_qty":0,"order_date":null,"PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"731 HALF AXLE 1400 LBS WITH HUB 5 STUDS(12\" AND LESS) Pair","total_req":9,"current_inv":10,"incomming_qty":0,"lead_time":35,"lead_time_qty":0,"order_qty":0,"order_date":null,"PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"gray","item":"723 Plastic Unthreaded-Hole Rectangular Pull Handle 5-3/16\"  Cent-to-Cent, Black","total_req":9,"current_inv":13,"incomming_qty":0,"lead_time":21,"lead_time_qty":0,"order_qty":0,"order_date":null,"PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]}];
-=======
 // let current_report = {};
 let current_report = [{"flag":"red","item":"726 VIN plate","total_req":9,"current_inv":10,"incomming_qty":0,"lead_time":10,"lead_time_qty":0,"order_qty":0,"order_date":"N/A","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"white","item":"731 HALF AXLE 1400 LBS WITH HUB 5 STUDS(12\" AND LESS) Pair","total_req":9,"current_inv":10,"incomming_qty":0,"lead_time":35,"lead_time_qty":0,"order_qty":0,"order_date":"N/A","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"white","item":"723 Plastic Unthreaded-Hole Rectangular Pull Handle 5-3/16\"  Cent-to-Cent, Black","total_req":9,"current_inv":13,"incomming_qty":0,"lead_time":21,"lead_time_qty":0,"order_qty":0,"order_date":"N/A","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":null,"item":"720 Side Mrakers Red - 26mm","total_req":18,"current_inv":16,"incomming_qty":0,"lead_time":7,"lead_time_qty":2,"order_qty":0,"order_date":"2022-05-23","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":null,"item":"733 4 Pin Trailer Connector Cable","total_req":9,"current_inv":8,"incomming_qty":0,"lead_time":7,"lead_time_qty":1,"order_qty":0,"order_date":"2022-05-23","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"728 Red Reflective Tape 2'' X 2 3/4''","total_req":18,"current_inv":14,"incomming_qty":0,"lead_time":7,"lead_time_qty":0,"order_qty":4,"order_date":"2022-04-06","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"729 Amber Reflective Tape 2'' X 2 3/4''","total_req":18,"current_inv":14,"incomming_qty":0,"lead_time":7,"lead_time_qty":0,"order_qty":4,"order_date":"2022-04-06","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"orange","item":"719 LED Light Bar - Tail Light 15 1/2'' X 1 5/8'' X 3/4''","total_req":18,"current_inv":10,"incomming_qty":0,"lead_time":14,"lead_time_qty":2,"order_qty":6,"order_date":"2022-03-11","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"yellow","item":"805 License PLate Lights - 12V 88mm x 20mm","total_req":45,"current_inv":5,"incomming_qty":0,"lead_time":10,"lead_time_qty":20,"order_qty":20,"order_date":"2022-03-07","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"-730 Square Plugs, Snap-in, Flexible Ridges, for 1.74\"-1.83\" Inside Length","total_req":36,"current_inv":18,"incomming_qty":0,"lead_time":25,"lead_time_qty":10,"order_qty":8,"order_date":"2022-02-28","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"621 Tongue Bare","total_req":9,"current_inv":4,"incomming_qty":2,"lead_time":35,"lead_time_qty":1,"order_qty":2,"order_date":"2022-02-25","PO":"PUR-ORD-2022-00003","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"736 3/16\" Class 1 Safety cable 48\" Long","total_req":90,"current_inv":6,"incomming_qty":0,"lead_time":21,"lead_time_qty":54,"order_qty":30,"order_date":"2022-02-24","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"725 Coupler 1 7/8'' X 2'' 2K W/ Pin Ram","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":3,"order_qty":2,"order_date":"2022-02-18","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"green","item":"620 Chasis Bare","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":3,"order_qty":2,"order_date":"2022-02-18","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":"blue","item":"1043 Universal 4 Way Flat Y-Splitter Plug Trailer cable","total_req":45,"current_inv":4,"incomming_qty":0,"lead_time":35,"lead_time_qty":31,"order_qty":10,"order_date":"2022-02-10","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]},{"flag":null,"item":"710 Wheel jack FULTON F2 Wide track","total_req":9,"current_inv":4,"incomming_qty":0,"lead_time":66,"lead_time_qty":3,"order_qty":2,"order_date":"2022-01-18","PO":"N/A","parts_calendar":[["2","2","green"],["3","5","green"],["4","10","green"],["5","6","blue"],["6","2","blue"],["7","3","blue"],["8","1","blue"],["9","2","blue"],["10","5","red"],["11","7","red"],["0","4","red"],["1","4","red"]]}];
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
 
 let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -13,10 +9,6 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
 function set_ID_drop_down() {
     let numberOfJsonItems = current_report.length;
     let itemNames = new Array(numberOfJsonItems);
@@ -27,11 +19,6 @@ function set_ID_drop_down() {
     for (let i = 0; i < numberOfJsonItems; ++i) {
         let words = current_report[i].item.split(" ");
         itemNames[i] = words[0];
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
         let optionToAdd = document.createElement("option");
         optionToAdd.innerHTML = itemNames[i];
         optionToAdd.setAttribute("value", "#row" + i);
@@ -43,14 +30,10 @@ function set_ID_drop_down() {
     overViewElement.appendChild(selectTagToAdd);
 }
 
-<<<<<<< HEAD
-
-=======
 function showTable(counter) {
     let elementID = "weekView" + counter;
     document.getElementById(elementID).setAttribute("style", "display: visible");
 }
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
 
 function formatAMPM(date) {
     let hours = date.getHours();
@@ -171,10 +154,7 @@ function getWeekView(itemIndex, weekView) {
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
     }
-<<<<<<< HEAD
     console.log(itemName);
-=======
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
 
     for (let i = 0; i < currentMonth; ++i) {
         let cell = document.createElement('th');
@@ -186,13 +166,8 @@ function getWeekView(itemIndex, weekView) {
 
     //Get the data and set the calendar
     let calendarInfo = tableToAdd.insertRow(1);
-<<<<<<< HEAD
-    for (let j = 0; j < 12; ++j) {
-        console.log("Arrived here3");
-=======
     for (let j = currentMonth; j < 12; ++j) {
         //console.log("Arrived here3");
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
         cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
@@ -227,25 +202,15 @@ frappe.ready(async function () {
     //frappePostRequest()
     // get_todays_date();
     init_timer_update();
-<<<<<<< HEAD
     fillTable();
     set_ID_drop_down();
     // fillTableDriver();
-=======
-    //fillTable();
-    fillTableDriver();
 
-    set_ID_drop_down();
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
     let dropDownMenu = document.getElementById("dropDown");
     dropDownMenu.onchange = function() {
         window.location.href=this.value;
         showTable(this.index);
-<<<<<<< HEAD
-        console.log(this.value);
-=======
         console.log(this.index);
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
     };
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
@@ -255,13 +220,11 @@ frappe.ready(async function () {
     });
 });
 
-<<<<<<< HEAD
 async function fillTableDriver() {
     let report = await getItemReportFromDatabase();
     let sorted_report = bubbleSort(report, soonestOrderDate);
     clearTable(table)
-    
-=======
+
 function clearTable(table) {
     while (table.rows.length > 1) {
         table.deleteRow(1);
@@ -286,19 +249,14 @@ function bubbleSort (jsonArray, compareFunction) {
     return jsonArray;
 };
 
-
 function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
     return jsonObjectOne.order_date < jsonObjectTwo.order_date;
 }
-
-
-
 
 async function sortAndRefreshTable(sortingFunction) {
     let table = document.getElementById("MainTable");
     clearTable(table)
     let sorted_report = bubbleSort(current_report, sortingFunction);
->>>>>>> 312bdcfbf6013e2c786c58c18fdedeb232ae5c3a
     fillTable(sorted_report);
 }
 
