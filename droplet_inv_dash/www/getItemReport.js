@@ -214,17 +214,17 @@ async function getItemReportFromDatabase() {
     //console.log(inventory_item)
     inventory.set(inventory_item.item_code, inventory_item)
   }
-  // customer_name, delivery_date, items, filter by delivery_status 
+  // customer_name, delivery_date, items, filter by delivery_status
   // this may break, im not sure what the status of open sales order are in the droptlet trailer implememntation
   const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","status","=","To Deliver and Bill"]]`);
   for (const key in sales_orders) {
     //could avaoid doing this second request if proper field names are declared in the first reqest, by default only name is returned
-    // customer_name, delivery_date, items, filter by delivery_status 
+    // customer_name, delivery_date, items, filter by delivery_status
     const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
     const items_order = sales_order.items
     for (const key in items_order) {
       const item_order = items_order[key];
-      // amount, bom_no, item_code 
+      // amount, bom_no, item_code
       // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
       let item_lead_time = 14;
       let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
