@@ -33,6 +33,7 @@ function set_ID_drop_down() {
 
 function showTable(counter) {
     let elementID = "weekView" + counter;
+    
     document.getElementById(elementID).setAttribute("style", "display: visible");
 }
 
@@ -208,9 +209,9 @@ frappe.ready(async function () {
     set_ID_drop_down();
     let dropDownMenu = document.getElementById("dropDown");
     dropDownMenu.onchange = function() {
-        window.location.href=this.value;
-        showTable(this.index);
-        console.log(this.index);
+        window.location.href = this.value;
+        let index = this.options[this.selectedIndex].getAttribute('index');
+        showTable(index);
     };
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
@@ -219,6 +220,7 @@ frappe.ready(async function () {
         init_timer_update();
     });
 });
+
 
 function clearTable(table) {
     while (table.rows.length > 1) {
