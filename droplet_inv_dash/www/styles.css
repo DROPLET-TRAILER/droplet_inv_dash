@@ -118,8 +118,44 @@ td {
   display: inline-block;
   width: 100%;
 }
+
 .loadingIconParent {
   text-align: center;
   width: 100%;
   margin-top: 20px;
+}
+
+.row-white {
+  background: rgb(255, 255, 255);
+  color: black;
+}
+
+.row-red {
+  background: rgb(255, 153, 153);
+  color: black;
+}
+
+.row-orange {
+  background: rgb(255, 204, 153);
+  color: black;
+}
+
+.row-yellow {
+  background: rgb(255, 255, 153);
+  color: black;
+}
+
+.row-lightgreen {
+  background: rgb(204, 255, 153);
+  color: black;
+}
+
+.row-green {
+  background: rgb(153, 255, 153);
+  color: black;
+}
+
+.row-gray {
+  background: rgb(224, 224, 224);
+  color: black;
 }
