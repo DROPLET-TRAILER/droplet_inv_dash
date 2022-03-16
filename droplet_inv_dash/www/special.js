@@ -45,10 +45,7 @@ function set_ID_drop_down() {
         // optionToAdd.setAttribute("index", i);
         // selectTagToAdd.appendChild(optionToAdd);
     }
-    
-
-    let overViewElement = document.getElementById("overview");
-    overViewElement.appendChild(selectTagToAdd);
+    $("#dropDownOverview").replaceWith(selectTagToAdd);
 }
 
 function showTable(counter) {
