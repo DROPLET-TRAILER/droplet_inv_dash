@@ -225,6 +225,14 @@ frappe.ready(async function () {
     set_ID_drop_down();
     let dropDownMenu = document.getElementById("dropDown");
     dropDownMenu.onchange = function () {
+        // window.scrollTo(0, 0);
+        // let hrefTogo = this.value;
+        // let index = this.options[this.selectedIndex].getAttribute('index');
+        // setTimeout(function() {
+        //     window.location.href = hrefTogo;
+        //     showTable(index);
+        // }, 1000);
+
         window.location.href = this.value;
         let index = this.options[this.selectedIndex].getAttribute('index');
         showTable(index);
@@ -235,6 +243,64 @@ frappe.ready(async function () {
         fillTableDriver();
         init_timer_update();
     });
+    
+    //For Total Req
+    let numOfTotalReqButtonClicked = 0;
+    document.getElementById('sortTotalReqButton').addEventListener('click', function (e) {
+        let table = document.getElementById("MainTable");
+        clearTable(table);
+        current_report = bubbleSort(current_report, lowestTotalReq);
+
+        if (numOfTotalReqButtonClicked % 2 === 0) {
+            fillTable();
+            numOfTotalReqButtonClicked++;
+        } else {
+            //Reverse the current_report
+            current_report.reverse();
+            fillTable();
+            numOfTotalReqButtonClicked++;
+        }
+
+    });
+
+    //For Current INv
+    let numOfCurrentInvButtonClicked = 0;
+    document.getElementById('sortCurrentInvButton').addEventListener('click', function (e) {
+        let table = document.getElementById("MainTable");
+        clearTable(table);
+        current_report = bubbleSort(current_report, lowestcurrentInv);
+
+        if (numOfCurrentInvButtonClicked % 2 === 0) {
+            fillTable();
+            numOfCurrentInvButtonClicked++;
+        } else {
+            //Reverse the current_report
+            current_report.reverse();
+            fillTable();
+            numOfCurrentInvButtonClicked++;
+        }
+
+    });
+
+    //For Lead Time
+    let numOfLeadTimeButtonClicked = 0;
+    document.getElementById('sortLeadTimeButton').addEventListener('click', function (e) {
+        let table = document.getElementById("MainTable");
+        clearTable(table);
+        current_report = bubbleSort(current_report, lowestLeadTime);
+
+        if (numOfLeadTimeButtonClicked % 2 === 0) {
+            fillTable();
+            numOfLeadTimeButtonClicked++;
+        } else {
+            //Reverse the current_report
+            current_report.reverse();
+            fillTable();
+            numOfLeadTimeButtonClicked++;
+        }
+
+    });
+
 });
 
 
@@ -265,6 +331,18 @@ function bubbleSort(jsonArray, compareFunction) {
 
 function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
     return jsonObjectOne.order_date < jsonObjectTwo.order_date;
+}
+
+function lowestTotalReq(jsonObjectOne, jsonObjectTwo) {
+    return jsonObjectOne.total_req < jsonObjectTwo.total_req;
+}
+
+function lowestcurrentInv(jsonObjectOne, jsonObjectTwo) {
+    return jsonObjectOne.current_inv < jsonObjectTwo.current_inv;
+}
+
+function lowestLeadTime(jsonObjectOne, jsonObjectTwo) {
+    return jsonObjectOne.lead_time < jsonObjectTwo.lead_time;
 }
 
 async function sortAndRefreshTable(sortingFunction) {
