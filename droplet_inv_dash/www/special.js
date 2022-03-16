@@ -15,7 +15,6 @@ function set_ID_drop_down() {
     let selectTagToAdd = document.createElement("select");
     selectTagToAdd.setAttribute("id", "dropDown");
 
-
     for (let i = 0; i < numberOfJsonItems; ++i) {
         let words = current_report[i].item.split(" ");
         itemNames[i] = words[0];
