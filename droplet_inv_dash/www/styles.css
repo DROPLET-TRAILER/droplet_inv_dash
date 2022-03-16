@@ -159,3 +159,8 @@ td {
   background: rgb(224, 224, 224);
   color: black;
 }
+
+.custom-button {
+  padding: 0;
+  margin: 0;
+}
