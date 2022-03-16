@@ -9,6 +9,33 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
+function set_ID_drop_down() {
+    let numberOfJsonItems = current_report.length;
+    let itemNames = new Array(numberOfJsonItems);
+    let selectTagToAdd = document.createElement("select");
+    selectTagToAdd.setAttribute("id", "dropDown");
+
+
+    for (let i = 0; i < numberOfJsonItems; ++i) {
+        let words = current_report[i].item.split(" ");
+        itemNames[i] = words[0];
+
+        let optionToAdd = document.createElement("option");
+        optionToAdd.innerHTML = itemNames[i];
+        optionToAdd.setAttribute("value", "#row" + i);
+        optionToAdd.setAttribute("index", i);
+        selectTagToAdd.appendChild(optionToAdd);
+    }
+
+    let overViewElement = document.getElementById("overview");
+    overViewElement.appendChild(selectTagToAdd);
+}
+
+function showTable(counter) {
+    let elementID = "weekView" + counter;
+    document.getElementById(elementID).setAttribute("style", "display: visible");
+}
+
 function formatAMPM(date) {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -64,6 +91,7 @@ function fillTable() {
         for (let i = 0; i < numOfJsonOb; ++i) {
             let table = document.getElementById("MainTable");
             let row = table.insertRow(1);
+            row.setAttribute("id", "row" + i);
             row.setAttribute("class", "row-" + jsonArray[i].flag);
             row.addEventListener('click', function (e) {
                 if(weekView.style.display === "none") {
@@ -175,7 +203,15 @@ frappe.ready(async function () {
     // get_todays_date();
     init_timer_update();
     //fillTable();
-     fillTableDriver();
+    fillTableDriver();
+
+    set_ID_drop_down();
+    let dropDownMenu = document.getElementById("dropDown");
+    dropDownMenu.onchange = function() {
+        window.location.href=this.value;
+        showTable(this.index);
+        console.log(this.index);
+    };
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
         fillTable();
