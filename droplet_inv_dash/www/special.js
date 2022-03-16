@@ -19,6 +19,7 @@ function set_ID_drop_down() {
     for (let i = 0; i < numberOfJsonItems; ++i) {
         let words = current_report[i].item.split(" ");
         itemNames[i] = words[0];
+
         let optionToAdd = document.createElement("option");
         optionToAdd.innerHTML = itemNames[i];
         optionToAdd.setAttribute("value", "#row" + i);
@@ -64,7 +65,6 @@ function fillTable() {
     let jsonArray = current_report;
     let numOfJsonOb = jsonArray.length;
 
-
     if (numOfJsonOb === 0) {
         let table = document.getElementById("MainTable");
         let row = table.insertRow(1);
@@ -107,18 +107,20 @@ function fillTable() {
             let current_inv     = row.insertCell(2);
             let lead_time       = row.insertCell(3);
             let lead_time_qty   = row.insertCell(4);
-            let order_qty       = row.insertCell(5);
-            let order_date      = row.insertCell(6);
-            let PO              = row.insertCell(7);
+            let order_date      = row.insertCell(5);
+            let future_order_qty = row.insertCell(6);
+            let incomming_qty   = row.insertCell(7);
+            let PO              = row.insertCell(8);
 
             item.innerText = jsonArray[i].item;
             total_req.innerHTML = jsonArray[i].total_req;
             current_inv.innerHTML = jsonArray[i].current_inv;
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
-            order_qty.innerHTML = jsonArray[i].order_qty;
+            incomming_qty.innerHTML = jsonArray[i].incomming_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
+            future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
             weekView.setAttribute("id", "weekView" + i);
@@ -129,6 +131,8 @@ function fillTable() {
             row = table.insertRow(2);
             row.appendChild(weekView);
             getWeekView(i, weekView);
+
+            
         }
     }
 }
@@ -140,7 +144,6 @@ function getWeekView(itemIndex, weekView) {
 
     let tableToAdd = document.createElement('table');
     let itemName = jsonArray[itemIndex];
-
     //Set the Monthly Header
     let monthHeader = tableToAdd.insertRow(0);
     const currentDate = new Date();
@@ -152,7 +155,6 @@ function getWeekView(itemIndex, weekView) {
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
     }
-    console.log(itemName);
 
     for (let i = 0; i < currentMonth; ++i) {
         let cell = document.createElement('th');
@@ -200,10 +202,10 @@ frappe.ready(async function () {
     //frappePostRequest()
     // get_todays_date();
     init_timer_update();
-    fillTable();
-    set_ID_drop_down();
-    // fillTableDriver();
+    //fillTable();
+    fillTableDriver();
 
+    set_ID_drop_down();
     let dropDownMenu = document.getElementById("dropDown");
     dropDownMenu.onchange = function() {
         window.location.href=this.value;
@@ -212,16 +214,11 @@ frappe.ready(async function () {
     };
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
-        fillTable();
-         fillTableDriver();
+        // fillTable();
+        fillTableDriver();
         init_timer_update();
     });
 });
-
-async function fillTableDriver() {
-    let report = await getItemReportFromDatabase();
-    let sorted_report = bubbleSort(report, soonestOrderDate);
-    clearTable(table)
 
 function clearTable(table) {
     while (table.rows.length > 1) {
@@ -247,6 +244,7 @@ function bubbleSort (jsonArray, compareFunction) {
     return jsonArray;
 };
 
+
 function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
     return jsonObjectOne.order_date < jsonObjectTwo.order_date;
 }
@@ -267,19 +265,9 @@ async function fillTableDriver() {
     // current_report = await getItemReportFromDatabase();
     let sorted_report = bubbleSort(current_report, soonestOrderDate);
     clearTable(table);
-    
     fillTable(sorted_report);
     console.log("##### OBJECT #####");
     console.log(sorted_report);
     console.log("##### String #####");
     console.log(JSON.stringify(sorted_report));
-    
   }
-
-function showTable(counter) {
-    let elementID = "weekView" + counter;
-    document.getElementById(elementID).setAttribute("style", "display: visible");
-}
-
-
-
