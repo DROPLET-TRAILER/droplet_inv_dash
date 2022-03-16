@@ -15,7 +15,6 @@ function set_ID_drop_down() {
     let selectTagToAdd = document.createElement("select");
     selectTagToAdd.setAttribute("id", "dropDown");
 
-
     for (let i = 0; i < numberOfJsonItems; ++i) {
         let words = current_report[i].item.split(" ");
         itemNames[i] = words[0];
@@ -215,8 +214,8 @@ frappe.ready(async function () {
     };
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
-        fillTable();
-         fillTableDriver();
+        // fillTable();
+        fillTableDriver();
         init_timer_update();
     });
 });
@@ -251,9 +250,6 @@ function soonestOrderDate(jsonObjectOne, jsonObjectTwo) {
     return jsonObjectOne.order_date < jsonObjectTwo.order_date;
 }
 
-
-
-
 async function sortAndRefreshTable(sortingFunction) {
     let table = document.getElementById("MainTable");
     clearTable(table)
@@ -270,15 +266,9 @@ async function fillTableDriver() {
     // current_report = await getItemReportFromDatabase();
     let sorted_report = bubbleSort(current_report, soonestOrderDate);
     clearTable(table);
-    
     fillTable(sorted_report);
     console.log("##### OBJECT #####");
     console.log(sorted_report);
     console.log("##### String #####");
     console.log(JSON.stringify(sorted_report));
-    
   }
-
-
-
-
