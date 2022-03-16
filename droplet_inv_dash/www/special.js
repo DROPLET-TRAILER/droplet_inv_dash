@@ -133,7 +133,6 @@ function fillTable() {
 }
 
 
-
 function getWeekView(itemIndex, weekView) {
     let jsonArray = current_report;
 
