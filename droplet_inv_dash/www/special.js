@@ -9,6 +9,7 @@ setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
 function set_ID_drop_down() {
+    console.log("Hello From Dan");
     let numberOfJsonItems = current_report.length;
     let itemNames = new Array(numberOfJsonItems);
     let selectTagToAdd = document.createElement("select");
