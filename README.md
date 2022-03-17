@@ -6,13 +6,11 @@ Dashboard for Order Procurement Information.
 
 MIT# droplet_inv_dash
 
-#### Steven
-
-#### Stirling
-
-#### Isaac
-
-#### Dan
+## Team
+- Steven
+- Stirling
+- Isaac
+- Dan
 
 ## Installation
 These commands can be executed from the terminal on the server instance of ERPNext (hosted server).
