@@ -32,9 +32,12 @@ These commands can be executed from the terminal on the server instance of ERPNe
 
 #### Pulling Changes
 ```cd /home/frappe/frappe-bench/apps/droplet_inv_dash```
+
 ```git pull```
 
 #### Updating the Site given your site name
-```bench --site <site.site> migrate
-bench --site <site.site> build
-bench --site <site.site> restart```
+```bench --site <site.site> migrate```
+
+```bench --site <site.site> build```
+
+```bench --site <site.site> restart```
