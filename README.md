@@ -20,3 +20,21 @@ These commands can be executed from the terminal on the server instance of ERPNe
 
 #### Download the Application to the apps folder
 ```bench get-app https://github.com/Sanderson162/droplet_inv_dash.git```
+
+#### Go to frappe-bench directory
+```cd /home/frappe/frappe-bench```
+
+#### Install the App on the given site
+```bench --site <site.site> install-app droplet_inv_dash```
+###### site.site = name of site to install on
+###### Example for our install on a test site
+```bench --site site1.local install-app droplet_inv_dash```
+
+#### Pulling Changes
+```cd /home/frappe/frappe-bench/apps/droplet_inv_dash```
+```git pull```
+
+#### Updating the Site given your site name
+```bench --site <site.site> migrate
+bench --site <site.site> build
+bench --site <site.site> restart```
