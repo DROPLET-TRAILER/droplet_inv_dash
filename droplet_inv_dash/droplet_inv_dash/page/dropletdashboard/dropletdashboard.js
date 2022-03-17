@@ -12,7 +12,7 @@ frappe.pages['dropletdashboard'].on_page_load = function(wrapper) {
 	// , 'octicon octicon-plus');
 
 	// Automatic Redirect
-	window.location.href = frappe.urllib.get_full_url("/special");
+	window.location.href = frappe.urllib.get_full_url("/droplet_dashboard");
 }
 
 // HTML Content
