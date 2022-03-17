@@ -41,3 +41,21 @@ These commands can be executed from the terminal on the server instance of ERPNe
 ```bench --site <site.site> build```
 
 ```bench --site <site.site> restart```
+
+#### Accessing Dashboard
+
+###### Step 1
+Select Icon in Interface.
+
+![image](https://drive.google.com/file/d/1srv5qH8kmuyytT_EcFRqLtAOXC34jupX/view?usp=sharing)
+
+###### Step 2
+Select link to dashboard page.
+
+![image](https://drive.google.com/file/d/1ss-YwF23modfwXxqMk_h6QjQJHtUkDuD/view?usp=sharing)
+
+###### Step 3
+View Dashboard.
+
+![image](https://drive.google.com/file/d/1k-v7NwnRcSSRo1yMW3v30qyX-KM9psFJ/view?usp=sharing)
+
