@@ -146,6 +146,8 @@ function fillTable() {
 
             row = table.insertRow(2);
             row.appendChild(weekView);
+            
+            
             getWeekView(i, weekView);
         }
     }
@@ -462,9 +464,14 @@ async function fillTableDriver() {
         //     showTable(index);
         // }, 1000);
 
+        document.documentElement.scrollTop = 0;
         window.location.href = this.value;
         let index = this.options[this.selectedIndex].getAttribute('index');
         showTable(index);
+
+        // $('html').animate({scrollTop: $(this.value).offset().top}, slow);
+        // let index = this.options[this.selectedIndex].getAttribute('index');
+        // showTable(index);
     };
 
 
