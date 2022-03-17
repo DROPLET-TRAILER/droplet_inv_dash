@@ -52,10 +52,10 @@ Select Icon in Interface.
 ###### Step 2
 Select link to dashboard page.
 
-![image](https://drive.google.com/uc?export=1ss-YwF23modfwXxqMk_h6QjQJHtUkDuD)
+![image](https://drive.google.com/uc?export=view&id=1ss-YwF23modfwXxqMk_h6QjQJHtUkDuD)
 
 ###### Step 3
 View Dashboard.
 
-![image](https://drive.google.com/uc?export=1k-v7NwnRcSSRo1yMW3v30qyX-KM9psFJ)
+![image](https://drive.google.com/uc?export=view&id=1k-v7NwnRcSSRo1yMW3v30qyX-KM9psFJ)
 
