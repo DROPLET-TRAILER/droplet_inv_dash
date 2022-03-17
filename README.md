@@ -47,7 +47,7 @@ These commands can be executed from the terminal on the server instance of ERPNe
 ###### Step 1
 Select Icon in Interface.
 
-![image](https://drive.google.com/file/d/1srv5qH8kmuyytT_EcFRqLtAOXC34jupX/view?usp=sharing)
+![image](https://drive.google.com/uc?export=view&id=1srv5qH8kmuyytT_EcFRqLtAOXC34jupX)
 
 ###### Step 2
 Select link to dashboard page.
