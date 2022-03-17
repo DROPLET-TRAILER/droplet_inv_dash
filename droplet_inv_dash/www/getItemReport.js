@@ -273,8 +273,6 @@ async function getItemReportFromDatabase() {
       for (const key in bomDetails.items) {
         const item = bomDetails.items[key];
         // push the required amount of items to the list, if the item doesnt exist it will be added
-
-
         item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), delivery_date);
       }
     }
