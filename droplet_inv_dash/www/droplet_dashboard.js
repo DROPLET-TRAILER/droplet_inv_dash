@@ -471,10 +471,6 @@ async function fillTableDriver() {
         if (index > current_report.length - 5) {
             window.scrollBy(0, -250);
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 31b5edde7cac6bfb10fb5efd985b1856caad9eb3
         // $('html').animate({scrollTop: $(this.value).offset().top}, slow);
         // let index = this.options[this.selectedIndex].getAttribute('index');
         // showTable(index);
