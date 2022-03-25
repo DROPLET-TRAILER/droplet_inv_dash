@@ -1,4 +1,4 @@
-// let current_report = {};
+let current_report = {};
 
 let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -139,7 +139,7 @@ function fillTable() {
             future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
-            weekView.setAttribute("id", "weekView" + i);
+            weekView.setAttribute("id", "weekView" + current_report[i].item_code);
             weekView.setAttribute("colspan", "8");
             weekView.setAttribute("class", "table-bordered");
             weekView.setAttribute("style", "display:none;");
@@ -442,7 +442,7 @@ async function fillTableDriver() {
     let row = table.insertRow(1);
     row.classList.add("loadingIcon");
     row.innerHTML = `<td class="loadingIconParent" colspan="8"><i class="loadingIcon fas fa-spinner fa-spin fa-5x"></i></td>`;
-    // current_report = await getItemReportFromDatabase();
+    current_report = await getItemReportFromDatabase();
     let sorted_report = bubbleSort(current_report, orderDateDesc);
     clearTable(table);
     fillTable(sorted_report);
