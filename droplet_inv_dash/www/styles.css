@@ -39,7 +39,7 @@ body {
   float: right;
 }
 
-#selectText {
+#overviewText {
   grid-column: 1;
   grid-row: 2 / 3;
 }
