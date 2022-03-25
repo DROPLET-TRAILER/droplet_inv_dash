@@ -49,14 +49,6 @@ body {
   grid-row: 2 / 3;
 }
 
-.overview {
-  grid-column: 1 / span 2;
-  grid-row: 3 / 4;
-  background-color: lightgray;
-  height: 10vh;
-  width: 100%;
-}
-
 .monthly {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
@@ -108,7 +100,7 @@ td {
 .dash_header {
   background: #b3b3b3;
   position: sticky;
-  top: 20vh;
+  top: 13.75vh;
 }
 
 .gray {

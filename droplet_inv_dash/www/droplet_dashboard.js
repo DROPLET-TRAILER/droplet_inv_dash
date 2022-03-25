@@ -146,8 +146,6 @@ function fillTable() {
 
             row = table.insertRow(2);
             row.appendChild(weekView);
-            
-            
             getWeekView(i, weekView);
         }
     }
