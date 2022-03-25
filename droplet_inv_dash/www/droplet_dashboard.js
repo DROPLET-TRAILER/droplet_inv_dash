@@ -139,7 +139,7 @@ function fillTable() {
             future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
-            weekView.setAttribute("id", "weekView" + i);
+            weekView.setAttribute("id", "weekView" + current_report[i].item_code);
             weekView.setAttribute("colspan", "8");
             weekView.setAttribute("class", "table-bordered");
             weekView.setAttribute("style", "display:none;");
