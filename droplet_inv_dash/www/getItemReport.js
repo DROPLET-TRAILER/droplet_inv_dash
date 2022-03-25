@@ -189,6 +189,7 @@ async function getItemReportFromDatabase() {
       let newJson = {}
       newJson.flag = this.flag;
       newJson.item = this.item_code + " " + this.item_name
+      newJson.item_code = this.item_code;
       newJson.total_req = this.total_req;
       newJson.current_inv = this.current_inv
       newJson.incomming_qty = this.incomming_qty
