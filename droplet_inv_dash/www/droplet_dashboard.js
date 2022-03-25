@@ -468,7 +468,9 @@ async function fillTableDriver() {
         window.location.href = this.value;
         let index = this.options[this.selectedIndex].getAttribute('index');
         showTable(index);
-
+        if (index > current_report.length - 5) {
+            window.scrollBy(0, -250);
+        }
         // $('html').animate({scrollTop: $(this.value).offset().top}, slow);
         // let index = this.options[this.selectedIndex].getAttribute('index');
         // showTable(index);
