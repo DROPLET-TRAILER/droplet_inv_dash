@@ -1,4 +1,4 @@
-let current_report = {};
+// let current_report = {};
 
 let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -34,8 +34,8 @@ function set_ID_drop_down() {
 
         for (let j = 0; j < numberOfJsonItems; ++j) {
             if (current_report[j].item.split(" ")[0] == sortedArray[i]) {
-                optionToAdd.setAttribute("value", "#row" + j);
-                optionToAdd.setAttribute("index", j);
+                optionToAdd.setAttribute("value", "#row" + current_report[j].item_code);
+                optionToAdd.setAttribute("index", current_report[j].item_code);
                 selectTagToAdd.appendChild(optionToAdd);
                 break;
             }
@@ -107,7 +107,7 @@ function fillTable() {
         for (let i = 0; i < numOfJsonOb; ++i) {
             let table = document.getElementById("MainTable");
             let row = table.insertRow(1);
-            row.setAttribute("id", "row" + i);
+            row.setAttribute("id", "row" + current_report[i].item_code);
             row.setAttribute("class", "row-" + jsonArray[i].flag);
             row.addEventListener('click', function (e) {
                 if (weekView.style.display === "none") {
@@ -442,7 +442,7 @@ async function fillTableDriver() {
     let row = table.insertRow(1);
     row.classList.add("loadingIcon");
     row.innerHTML = `<td class="loadingIconParent" colspan="8"><i class="loadingIcon fas fa-spinner fa-spin fa-5x"></i></td>`;
-    current_report = await getItemReportFromDatabase();
+    // current_report = await getItemReportFromDatabase();
     let sorted_report = bubbleSort(current_report, orderDateDesc);
     clearTable(table);
     fillTable(sorted_report);
@@ -471,6 +471,10 @@ async function fillTableDriver() {
         if (index > current_report.length - 5) {
             window.scrollBy(0, -250);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 31b5edde7cac6bfb10fb5efd985b1856caad9eb3
         // $('html').animate({scrollTop: $(this.value).offset().top}, slow);
         // let index = this.options[this.selectedIndex].getAttribute('index');
         // showTable(index);
