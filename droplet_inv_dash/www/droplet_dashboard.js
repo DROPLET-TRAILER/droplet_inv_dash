@@ -464,6 +464,9 @@ async function fillTableDriver() {
 
         document.documentElement.scrollTop = 0;
         window.location.href = this.value;
+        tableHeader
+        let testRowPos = document.getElementById(this.value.substring(1));
+        console.log(testRowPos.offsetTop);
         let index = this.options[this.selectedIndex].getAttribute('index');
         showTable(index);
         if (index > current_report.length - 5) {
