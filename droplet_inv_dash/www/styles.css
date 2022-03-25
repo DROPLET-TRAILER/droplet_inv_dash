@@ -20,6 +20,7 @@ body {
   padding-bottom: 2vh;
   background-color: #b3b3b3;
   position: sticky;
+  z-index: 0;
 }
 
 #stockTable {
