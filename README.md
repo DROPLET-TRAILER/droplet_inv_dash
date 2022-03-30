@@ -19,7 +19,7 @@ These commands can be executed from the terminal on the server instance of ERPNe
 ```cd /home/frappe/frappe-bench/apps/```
 
 #### Download the Application to the apps folder
-```bench get-app https://github.com/Sanderson162/droplet_inv_dash.git```
+```bench get-app https://github.com/DROPLET-TRAILER/droplet_inv_dash.git```
 
 #### Go to frappe-bench directory
 ```cd /home/frappe/frappe-bench```
