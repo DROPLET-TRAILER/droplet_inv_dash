@@ -150,7 +150,7 @@ async function getItemReportFromDatabase() {
 
       for (let i = 0; i < parts_per_month.length; i++) {
         let month_no = (i + month) % 12;
-        console.log(month_no);
+        //console.log(month_no);
         if(!inv_months_finished) {
           this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "green"];
         } else if (!lead_months_finished) {
