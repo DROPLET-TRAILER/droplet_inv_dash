@@ -260,7 +260,7 @@ async function getItemReportFromDatabase() {
   for (const key in sales_orders) {
     //could avaoid doing this second request if proper field names are declared in the first reqest, by default only name is returned
     // customer_name, delivery_date, items, filter by delivery_status
-    const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+    const sales_order = await cache.request(`resource/Sales Order/${sales_orders[key].name}`, getFrappeJson);
     const items_order = sales_order.items
     for (const key in items_order) {
       const item_order = items_order[key];
