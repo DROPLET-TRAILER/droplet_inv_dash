@@ -266,7 +266,7 @@ async function getItemReportFromDatabase() {
       const item_order = items_order[key];
       // amount, bom_no, item_code
       // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
-      let item_lead_time = 14;
+      let item_lead_time = document.getElementById("item_lead_time").value;
       let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
       delivery_date.setDate(delivery_date.getDate() - item_lead_time);
       // get the details of the bom given the name in the item
