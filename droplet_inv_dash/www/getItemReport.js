@@ -270,7 +270,7 @@ async function getItemReportFromDatabase() {
       let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
       delivery_date.setDate(delivery_date.getDate() - item_lead_time);
       // get the details of the bom given the name in the item
-      if(item_order.hasOwnProperty('bom_no')){
+      if(!item_order.hasOwnProperty('bom_no')){
         item_report_list.pushCount(item_order.item_code, parseInt(item_order.amount), delivery_date);
       } else {
         const bomDetails = await cache.request(`resource/BOM/${item_order.bom_no}`, getFrappeJson);
