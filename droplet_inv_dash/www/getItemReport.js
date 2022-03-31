@@ -270,11 +270,15 @@ async function getItemReportFromDatabase() {
       let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
       delivery_date.setDate(delivery_date.getDate() - item_lead_time);
       // get the details of the bom given the name in the item
-      const bomDetails = await cache.request(`resource/BOM/${item_order.bom_no}`, getFrappeJson);
-      for (const key in bomDetails.items) {
-        const item = bomDetails.items[key];
-        // push the required amount of items to the list, if the item doesnt exist it will be added
-        item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), delivery_date);
+      if(item_order.hasOwnProperty('bom_no')){
+        item_report_list.pushCount(item_order.item_code, parseInt(item_order.amount), delivery_date);
+      } else {
+        const bomDetails = await cache.request(`resource/BOM/${item_order.bom_no}`, getFrappeJson);
+        for (const key in bomDetails.items) {
+          const item = bomDetails.items[key];
+          // push the required amount of items to the list, if the item doesnt exist it will be added
+          item_report_list.pushCount(item.item_code, parseInt(item.amount * item_order.amount), delivery_date);
+        }
       }
     }
   }
