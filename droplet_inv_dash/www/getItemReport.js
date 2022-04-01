@@ -28,14 +28,28 @@ async function getItemReportFromDatabase() {
       this.order_qty = 0;
       this.order_date = null;
       this.last_PO = null;
+      this.is_included_in_manu = true;
 
       this.req_parts = new Array();
       this.parts_calendar = null;
     }
 
-    fill_item_report = async function (inventory) {
+    fill_item_report = async function () {
       //get item name and lead time from item doctype
       let item = await getFrappeJson(`resource/Item/${this.item_code}`);
+      if (item.is_stock_item == 0) {
+        // do not do the calculation for this item, remove it in the next step.
+        this.is_included_in_manu = false;
+        return;
+      }
+
+      const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data&item_code=${this.item_code}`);
+      let inventory = new Map()
+      for (const inventory_item of inventory_info) {
+        //console.log(inventory_item)
+        inventory.set(inventory_item.item_code, inventory_item)
+      }
+
       this.item_name = item.item_name;
       this.lead_time = item.lead_time_days;
 
@@ -222,6 +236,15 @@ async function getItemReportFromDatabase() {
       }
     };
 
+    remove_items_not_included = function() {
+      for (const entry of this.list) {
+        let value = entry[1];
+        if(!value.is_included_in_manu) {
+          this.list.delete(entry[0]);
+        }
+      }
+    }
+
     getMap = () => {
       return this.list;
     };
@@ -248,41 +271,41 @@ async function getItemReportFromDatabase() {
   let item_report_list = new Item_report_list(server_date);
   let cache = new Cache_api()
 
-  const inventoryJSON = await getFrappeJson("method/erpnext.stock.dashboard.item_dashboard.get_data");
-  let inventory = new Map()
-  for (const inventory_item of inventoryJSON) {
-    //console.log(inventory_item)
-    inventory.set(inventory_item.item_code, inventory_item)
-  }
+
   // customer_name, delivery_date, items, filter by delivery_status
-  // this may break, im not sure what the status of open sales order are in the droptlet trailer implememntation
-  const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","status","=","To Deliver and Bill"]]`);
+  // this has to be done as multiple requests as "items" list is not a valid field while accessing bulk document data. see api/resource/Sales%20Order?fields=["*"]
+  const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"]]`);
   for (const key in sales_orders) {
-    //could avaoid doing this second request if proper field names are declared in the first reqest, by default only name is returned
-    // customer_name, delivery_date, items, filter by delivery_status
-    const sales_order = await cache.request(`resource/Sales Order/${sales_orders[key].name}`, getFrappeJson);
-    const items_order = sales_order.items
-    for (const key in items_order) {
-      const item_order = items_order[key];
+   // delivery_date, items list from the above list of orders
+    const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+    const sales_order_item_list = sales_order.items
+    for (const key in sales_order_item_list) {
+      const sales_order_item = sales_order_item_list[key];
       // amount, bom_no, item_code
       // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
       let item_lead_time = document.getElementById("item_lead_time").value;
-      let delivery_date = convertFrappeDateToDate(item_order.delivery_date);
-      delivery_date.setDate(delivery_date.getDate() - item_lead_time);
+      let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
+      let need_by_date = new Date();
+      need_by_date.setDate(delivery_date.getDate() - item_lead_time);
       // get the details of the bom given the name in the item
-      if(!item_order.hasOwnProperty('bom_no')){
-        item_report_list.pushCount(item_order.item_code, parseInt(item_order.qty), delivery_date);
+      if(!sales_order_item.hasOwnProperty('bom_no')){
+        item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
       } else {
-        const bomDetails = await cache.request(`resource/BOM/${item_order.bom_no}`, getFrappeJson);
+        const bomDetails = await cache.request(`resource/BOM/${sales_order_item.bom_no}`, getFrappeJson);
         for (const key in bomDetails.items) {
           const item = bomDetails.items[key];
           // push the required amount of items to the list, if the item doesnt exist it will be added
-          item_report_list.pushCount(item.item_code, parseInt(item.qty * item_order.qty), delivery_date);
+          item_report_list.pushCount(item.item_code, parseInt(item.qty * sales_order_item.qty), need_by_date);
         }
       }
     }
   }
+
+
+
   await item_report_list.fill_all(inventory);
+
+  item_report_list.remove_items_not_included();
 
   return item_report_list.getJSONArray()
 }
