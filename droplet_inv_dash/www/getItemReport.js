@@ -229,10 +229,10 @@ async function getItemReportFromDatabase() {
       this.list.get(item_code).count(required_amount, required_by_date);
     };
 
-    fill_all = async function (inventory) {
+    fill_all = async function () {
       for (const entry of this.list) {
         let value = entry[1];
-        await value.fill_item_report(inventory);
+        await value.fill_item_report();
       }
     };
 
@@ -303,7 +303,7 @@ async function getItemReportFromDatabase() {
 
 
 
-  await item_report_list.fill_all(inventory);
+  await item_report_list.fill_all();
 
   item_report_list.remove_items_not_included();
 
