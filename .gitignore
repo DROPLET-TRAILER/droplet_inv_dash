@@ -4,3 +4,4 @@
 *.swp
 tags
 droplet_inv_dash/docs/current
+.vscode/settings.json
