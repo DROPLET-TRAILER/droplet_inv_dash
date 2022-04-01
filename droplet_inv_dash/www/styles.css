@@ -46,12 +46,12 @@ body {
 
 #item_lead_time_text {
   grid-column: 1;
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
 }
 
 #item_lead_time {
   grid-column: 1;
-  grid-row: 3 / 4;
+  grid-row: 4 / 5;
 }
 
 #select_item {
@@ -72,8 +72,6 @@ body {
 #item {
   align-self: center;
 }
-
-
 
 #values {
   display: grid;
