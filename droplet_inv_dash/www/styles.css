@@ -15,7 +15,7 @@ body {
 #navigation {
   display: grid;
   grid-template-columns: fit-content(30%) fit-content(40%);
-  grid-template-rows: fit-content(3vh) fit-content(3vh) fit-content(10vh);
+  grid-template-rows: fit-content(3vh) fit-content(3vh) fit-content(3vh) fit-content(3vh) fit-content(3vh);
   column-gap: 1%;
   padding-bottom: 2vh;
   background-color: #b3b3b3;
@@ -56,12 +56,12 @@ body {
 
 #select_item {
   grid-column: 2;
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
 }
 
 #dropDownOverview {
   grid-column: 2;
-  grid-row: 3 / 4;
+  grid-row: 4 / 5;
 }
 
 .monthly {
