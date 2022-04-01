@@ -43,7 +43,7 @@ async function getItemReportFromDatabase() {
         return;
       }
 
-      const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data&item_code=${this.item_code}`);
+      const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data?item_code=${this.item_code}`);
       let inventory = new Map()
       for (const inventory_item of inventory_info) {
         //console.log(inventory_item)
@@ -300,7 +300,6 @@ async function getItemReportFromDatabase() {
       }
     }
   }
-
 
 
   await item_report_list.fill_all();
