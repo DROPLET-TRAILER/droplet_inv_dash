@@ -224,8 +224,15 @@ function getOffset( el ) {
     return { top: _y, left: _x };
 }
 
-function setProgressBarCount(itemProgress, maximumItems) {
-    itemsLoaded += itemProgress;
+// Call this function like you would a counter. ++ every time you finish loading
+// an item.
+function setProgressBarCount(maximumItems) {
+    itemsLoaded++;
+
+    if (itemsLoaded > maximumItems) {
+        itemsLoaded = maximumItems;
+    }
+
     let percentageComplete = (itemsLoaded / maximumItems) * 100;
     let progressBar = document.getElementById('progress_bar');
     progressBar.innerHTML = itemsLoaded + "/" + maximumItems;
@@ -236,12 +243,6 @@ frappe.ready(async function () {
     //frappePostRequest()
     // get_todays_date();
     init_timer_update();
-
-    setProgressBarCount(0, 250);
-    setProgressBarCount(10, 250);
-    setProgressBarCount(10, 250);
-    setProgressBarCount(50, 250);
-    setProgressBarCount(180, 250);
 
     //fillTable();
     await fillTableDriver();
