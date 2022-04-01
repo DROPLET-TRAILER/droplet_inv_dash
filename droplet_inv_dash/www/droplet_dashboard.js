@@ -7,7 +7,7 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
-let progressCounter = 0;
+let itemsLoaded = 0;
 
 function set_ID_drop_down() {
     let numberOfJsonItems = current_report.length;
@@ -224,22 +224,25 @@ function getOffset( el ) {
     return { top: _y, left: _x };
 }
 
-function incrementProgressBar(amount) {
-    progressCounter += amount;
+function setProgressBarCount(itemProgress, maximumItems) {
+    itemsLoaded += itemProgress;
+    let percentageComplete = (itemsLoaded / maximumItems) * 100;
     let progressBar = document.getElementById('progress_bar');
-    progressBar.setAttribute("aria-valuenow", progressCounter);
-}
-
-function createProgressBar() {
-    let progressBar = document.getElementById('progress_bar');
-    setInterval(function () {progressCounter++}, 1000 );
-    progressBar.setAttribute("aria-valuenow", progressCounter);
+    progressBar.innerHTML = itemsLoaded + "/" + maximumItems;
+    progressBar.style.width = percentageComplete + '%';
 }
 
 frappe.ready(async function () {
     //frappePostRequest()
     // get_todays_date();
     init_timer_update();
+
+    setProgressBarCount(0, 250);
+    setProgressBarCount(10, 250);
+    setProgressBarCount(10, 250);
+    setProgressBarCount(50, 250);
+    setProgressBarCount(180, 250);
+
     //fillTable();
     await fillTableDriver();
 
