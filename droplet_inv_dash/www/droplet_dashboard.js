@@ -220,7 +220,14 @@ function getOffset( el ) {
           el = el.offsetParent;
     }
     return { top: _y, left: _x };
-    }
+}
+
+function createProgressBar() {
+    let progressBar = document.getElementById('progress_bar');
+    let counter = 0;
+    setInterval(function () {counter++}, 1000 );
+    progressBar.setAttribute("aria-valuenow", counter);
+}
 
 frappe.ready(async function () {
     //frappePostRequest()
