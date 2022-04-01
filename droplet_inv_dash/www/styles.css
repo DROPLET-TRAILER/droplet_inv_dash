@@ -78,6 +78,10 @@ body {
   grid-template-columns: repeat(12, 1fr);
 }
 
+#progress_bar {
+  height: 2vh;
+}
+
 .month {
   height: 7vh;
   width: 100%;
