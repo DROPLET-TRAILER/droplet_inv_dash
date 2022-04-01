@@ -56,7 +56,7 @@ async function getItemReportFromDatabase() {
       //use inventory that was retrieved in an earlier step
       if (inventory.has(this.item_code)) {
         this.current_inv = parseInt(inventory.get(this.item_code).actual_qty)
-        this.incomming_qty = parseInt(inventory.get(this.item_code).projected_qty - this.current_inv);
+        this.incomming_qty = parseInt(inventory.get(this.item_code).projected_qty - this.current_inv + inventory.get(this.item_code).reserved_qty);
       } else {
         // if item is not stored in database, it will be assumed there is 0 for calculations
         this.current_inv = "N/A"
