@@ -94,6 +94,9 @@ async function getItemReportFromDatabase() {
         
         let order_date = new Date();
         let daysUntilOrder = days_of_inv - this.lead_time;
+        if (daysUntilOrder < 0) {
+          daysUntilOrder = 0;
+        }
         order_date.setDate(server_date.getDate() + daysUntilOrder);
         this.order_date = order_date;
         this.order_date_formatted = order_date.toISOString().slice(0, 10);
@@ -126,7 +129,7 @@ async function getItemReportFromDatabase() {
       } else {
         let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
         console.log(`days between ${this.server_date} and ${this.order_date} is ${daysUntilOrder}`);
-        if (daysUntilOrder < 0) {
+        if (daysUntilOrder <= 0) {
           this.flag = "red";
         } else if (daysUntilOrder < 7) {
           this.flag = "orange";
@@ -259,16 +262,18 @@ async function getItemReportFromDatabase() {
     }
   }
 
-
+  // get the date from the server so that it is timezone independent for the client
   let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
   if (frappe_server_date == null) {
     console.log("not signed in")
     return;
   }
   let server_date = convertFrappeDateToDate(frappe_server_date);
-  // pass the item report the date it was created at, get this date from the server
 
+  // pass the item report the date it was created at, get this date from the server
   let item_report_list = new Item_report_list(server_date);
+
+  // instantiate a cache 
   let cache = new Cache_api()
 
 
@@ -286,7 +291,12 @@ async function getItemReportFromDatabase() {
       let item_lead_time = document.getElementById("item_lead_time").value;
       let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
       let need_by_date = new Date();
+      let todays_date = server_date;
       need_by_date.setDate(delivery_date.getDate() - item_lead_time);
+      if (todays_date > need_by_date) {
+        need_by_date = todays_date;
+      }
+
       // get the details of the bom given the name in the item
       if(!sales_order_item.hasOwnProperty('bom_no')){
         item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
