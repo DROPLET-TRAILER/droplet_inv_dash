@@ -7,6 +7,8 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
+let progressCounter = 0;
+
 function set_ID_drop_down() {
     let numberOfJsonItems = current_report.length;
     let itemNames = new Array(numberOfJsonItems);
@@ -222,11 +224,16 @@ function getOffset( el ) {
     return { top: _y, left: _x };
 }
 
+function incrementProgressBar(amount) {
+    progressCounter += amount;
+    let progressBar = document.getElementById('progress_bar');
+    progressBar.setAttribute("aria-valuenow", progressCounter);
+}
+
 function createProgressBar() {
     let progressBar = document.getElementById('progress_bar');
-    let counter = 0;
-    setInterval(function () {counter++}, 1000 );
-    progressBar.setAttribute("aria-valuenow", counter);
+    setInterval(function () {progressCounter++}, 1000 );
+    progressBar.setAttribute("aria-valuenow", progressCounter);
 }
 
 frappe.ready(async function () {
