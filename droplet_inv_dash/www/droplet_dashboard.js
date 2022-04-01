@@ -226,6 +226,7 @@ function getOffset( el ) {
 
 // Call this function like you would a counter. ++ every time you finish loading
 // an item.
+// Parameters --> Give it the maximum number of items that will be loaded
 function setProgressBarCount(maximumItems) {
     itemsLoaded++;
 
