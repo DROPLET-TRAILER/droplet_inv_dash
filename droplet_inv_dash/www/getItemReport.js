@@ -60,7 +60,7 @@ async function getItemReportFromDatabase() {
 
       if (hasInventory) {
         this.current_inv = inventory_info_accumulated.actual_qty;
-        this.incomming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty) - this.current_inv;
+        this.incomming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
       } else {
         // if item is not stored in database, it will be assumed there is 0 for calculations
         this.current_inv = "N/A"
@@ -255,7 +255,7 @@ async function getItemReportFromDatabase() {
     };
 
     fill_all = async function () {
-      let num_items = this.list.size
+      let num_items = this.list.size;
       setProgressBarCount(num_items)
       for (const entry of this.list) {
         let value = entry[1];
