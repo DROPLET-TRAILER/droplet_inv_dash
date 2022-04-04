@@ -255,7 +255,7 @@ async function getItemReportFromDatabase() {
     };
 
     fill_all = async function () {
-      let num_items = this.list.length()
+      let num_items = this.list.size
       setProgressBarCount(num_items)
       for (const entry of this.list) {
         let value = entry[1];
