@@ -43,25 +43,31 @@ async function getItemReportFromDatabase() {
         return;
       }
 
-      const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data?item_code=${this.item_code}`);
-      let inventory = new Map()
-      for (const inventory_item of inventory_info) {
-        //console.log(inventory_item)
-        inventory.set(inventory_item.item_code, inventory_item)
-      }
-
       this.item_name = item.item_name;
       this.lead_time = item.lead_time_days;
 
-      //use inventory that was retrieved in an earlier step
-      if (inventory.has(this.item_code)) {
-        this.current_inv = parseInt(inventory.get(this.item_code).actual_qty)
-        this.incomming_qty = parseInt(inventory.get(this.item_code).projected_qty - this.current_inv + inventory.get(this.item_code).reserved_qty);
+
+      let inventory_info_accumulated = {
+        actual_qty: 0,
+        projected_qty: 0,
+        reserved_qty: 0,
+        reserved_qty_for_production: 0,
+        reserved_qty_for_sub_contract: 0
+      };
+
+      let hasInventory = false;
+      hasInventory = await this.fill_inventory(inventory_info_accumulated);
+
+      if (hasInventory) {
+        this.current_inv = inventory_info_accumulated.actual_qty;
+        this.incomming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty) - this.current_inv;
       } else {
         // if item is not stored in database, it will be assumed there is 0 for calculations
         this.current_inv = "N/A"
         this.incomming_qty = "N/A"
       }
+      
+
 
       //get last PO for order
       let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"]]&limit=1`)
@@ -101,7 +107,8 @@ async function getItemReportFromDatabase() {
         this.order_date = order_date;
         this.order_date_formatted = order_date.toISOString().slice(0, 10);
 
-        let lead_time_index = days_of_inv + this.lead_time;
+        // add 1 to every lead time to ignore the present day
+        let lead_time_index = days_of_inv + this.lead_time + 1;
         if (lead_time_index > this.req_parts.length) {
           lead_time_index = this.req_parts.length;
         }
@@ -218,6 +225,21 @@ async function getItemReportFromDatabase() {
       newJson.parts_calendar = this.parts_calendar
       return newJson;
     }
+
+    async fill_inventory(inventory_info_accumulated) {
+      const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data?item_code=${this.item_code}`);
+      let hasInventory = false;
+      for (const inventory_item of inventory_info) {
+        //console.log(inventory_item)
+        inventory_info_accumulated.actual_qty += parseInt(inventory_item.actual_qty);
+        inventory_info_accumulated.projected_qty += parseInt(inventory_item.projected_qty);
+        inventory_info_accumulated.reserved_qty += parseInt(inventory_item.reserved_qty);
+        inventory_info_accumulated.reserved_qty_for_production += parseInt(inventory_item.reserved_qty_for_production);
+        inventory_info_accumulated.reserved_qty_for_sub_contract += parseInt(inventory_item.reserved_qty_for_sub_contract);
+        hasInventory = true;
+      }
+      return hasInventory;
+    }
   }
 
   class Item_report_list {
@@ -233,9 +255,12 @@ async function getItemReportFromDatabase() {
     };
 
     fill_all = async function () {
+      let num_items = this.list.length()
+      setProgressBarCount(num_items)
       for (const entry of this.list) {
         let value = entry[1];
         await value.fill_item_report();
+        setProgressBarCount(num_items)
       }
     };
 
