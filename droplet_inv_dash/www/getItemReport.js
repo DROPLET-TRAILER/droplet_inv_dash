@@ -203,10 +203,6 @@ async function getItemReportFromDatabase() {
         }
         
       }
-      
-
-
-      // TODO: figure out how qty to be ordered is different from qty required for next lead time
     };
 
     count = function (amount, needByDate) {
