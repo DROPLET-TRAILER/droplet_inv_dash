@@ -77,10 +77,10 @@ async function getItemReportFromDatabase() {
         this.last_PO = "N/A";
       }
 
-
-
-      // calculate the number of days that you have inventory for
       let remaining_parts_on_day = 0
+      
+      // calculate the number of days that you have inventory for
+      
       let count_parts_inv = 0;
       let days_of_inv = 0;
       // crawl through days until you find the days covered by inventory
@@ -88,6 +88,10 @@ async function getItemReportFromDatabase() {
         if (this.req_parts[i]) {
           count_parts_inv += this.req_parts[i];
           days_of_inv = i;
+          if (this.current_inv == "N/A") {
+            remaining_parts_on_day = count_parts_inv;
+            break;
+          }
           if (count_parts_inv >= (this.current_inv + this.incomming_qty)) {
             remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
             break;
