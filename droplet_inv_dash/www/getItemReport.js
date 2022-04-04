@@ -123,8 +123,14 @@ async function getItemReportFromDatabase() {
           }
         }
 
-        this.order_qty = this.total_req - this.incomming_qty - this.current_inv - this.lead_time_qty
+        if (this.current_inv == "N/A") {
+          this.order_qty = this.total_req - this.lead_time_qty
 
+        } else {
+          this.order_qty = this.total_req - this.incomming_qty - this.current_inv - this.lead_time_qty
+
+        }
+        
 
         
 
