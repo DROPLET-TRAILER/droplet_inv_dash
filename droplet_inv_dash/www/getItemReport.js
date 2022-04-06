@@ -313,15 +313,17 @@ async function getItemReportFromDatabase() {
   // instantiate a cache, this is a global now
   //let cache = new Cache_api()
 
-
+  let progressBarSize = 0;
   // customer_name, delivery_date, items, filter by delivery_status
   // this has to be done as multiple requests as "items" list is not a valid field while accessing bulk document data. see api/resource/Sales%20Order?fields=["*"]
   const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"]]`);
   for (const key in sales_orders) {
+    progressBarSize += sales_order.length * sales_order.items.length
    // delivery_date, items list from the above list of orders
     const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
     const sales_order_item_list = sales_order.items
     for (const key in sales_order_item_list) {
+      setProgressBarCount(progressBarSize)
       const sales_order_item = sales_order_item_list[key];
       // amount, bom_no, item_code
       // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
@@ -342,28 +344,28 @@ async function getItemReportFromDatabase() {
           const sub_item_1 = bomDetails1.items[key];
           let sub_item_1_data = await cache.request(`resource/Item/${sub_item_1.item_code}`, getFrappeJson);
           if(!sub_item_1_data.hasOwnProperty('default_bom')){
-            item_report_list.pushCount(sub_item_1.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty), need_by_date);
+            item_report_list.pushCount(sub_item_1.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty), need_by_date);
           } else {
             const bomDetails2 = await cache.request(`resource/BOM/${sub_item_1_data.default_bom}`, getFrappeJson);
             for (const key in bomDetails2.items) {
               const sub_item_2 = bomDetails2.items[key];
               let sub_item_2_data = await cache.request(`resource/Item/${sub_item_2.item_code}`, getFrappeJson);
               if(!sub_item_2_data.hasOwnProperty('default_bom')){
-                item_report_list.pushCount(sub_item_2.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty), need_by_date);
+                item_report_list.pushCount(sub_item_2.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty), need_by_date);
               } else {
                 const bomDetails3 = await cache.request(`resource/BOM/${sub_item_2_data.default_bom}`, getFrappeJson);
                 for (const key in bomDetails3.items) {
                   const sub_item_3 = bomDetails3.items[key];
                   let sub_item_3_data = await cache.request(`resource/Item/${sub_item_3.item_code}`, getFrappeJson);
                   if(!sub_item_3_data.hasOwnProperty('default_bom')){
-                    item_report_list.pushCount(sub_item_3.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty) * parseInt(sub_item_3_data.qty), need_by_date);
+                    item_report_list.pushCount(sub_item_3.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty), need_by_date);
                   } else {
                     const bomDetails4 = await cache.request(`resource/BOM/${sub_item_3_data.default_bom}`, getFrappeJson);
                     for (const key in bomDetails4.items) {
                       const sub_item_4 = bomDetails4.items[key];
                       let sub_item_4_data = await cache.request(`resource/Item/${sub_item_4.item_code}`, getFrappeJson);
                       // push the required amount of items to the list, if the item doesnt exist it will be added
-                      item_report_list.pushCount(sub_item_4.item_code,parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty) * parseInt(sub_item_3_data.qty) * parseInt(sub_item_4_data.qty), need_by_date);
+                      item_report_list.pushCount(sub_item_4.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty) * parseInt(sub_item_4.qty), need_by_date);
                     }
                   }
                 }
@@ -386,7 +388,7 @@ async function getItemReportFromDatabase() {
     }
   }
 
-
+  itemsLoaded = 0;
   await item_report_list.fill_all();
 
   item_report_list.remove_items_not_included();
