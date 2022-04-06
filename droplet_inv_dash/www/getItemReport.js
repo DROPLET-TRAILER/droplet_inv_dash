@@ -170,8 +170,13 @@ class Item_report {
       let tempDay = new Date(this.server_date);
       tempDay.setDate(this.server_date.getDate() + i);
       let current_month = tempDay.getMonth();
+      
       if(this.req_parts[i] > 0) {
-        parts_per_month[current_month] += this.req_parts[i]
+        if(parts_per_month[current_month] ==  0) {
+          parts_per_month[current_month] = this.req_parts[i]
+        } else {
+          parts_per_month[current_month] += this.req_parts[i]
+        }
       }
     }
     this.parts_calendar = []
