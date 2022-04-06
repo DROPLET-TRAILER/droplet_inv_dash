@@ -38,7 +38,7 @@ class Item_report {
 
   fill_item_report = async function () {
     //get item name and lead time from item doctype
-    let item = await getFrappeJson(`resource/Item/${this.item_code}`);
+    let item = await cache.request(`resource/Item/${this.item_code}`, getFrappeJson);
     if (item.is_stock_item == 0) {
       // do not do the calculation for this item, remove it in the next step.
       this.is_included_in_manu = false;
