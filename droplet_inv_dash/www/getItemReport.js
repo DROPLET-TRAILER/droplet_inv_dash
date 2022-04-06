@@ -109,7 +109,7 @@ class Item_report {
       if (daysUntilOrder < 0) {
         daysUntilOrder = 0;
       }
-      order_date.setDate(server_date.getDate() + daysUntilOrder);
+      order_date.setDate(this.server_date.getDate() + daysUntilOrder);
       this.order_date = order_date;
       this.order_date_formatted = order_date.toISOString().slice(0, 10);
 
