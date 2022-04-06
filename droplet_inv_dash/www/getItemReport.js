@@ -316,7 +316,7 @@ async function getItemReportFromDatabase() {
   let progressBarSize = 0;
   // customer_name, delivery_date, items, filter by delivery_status
   // this has to be done as multiple requests as "items" list is not a valid field while accessing bulk document data. see api/resource/Sales%20Order?fields=["*"]
-  const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"]]`);
+  const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`);
   for (const key in sales_orders) {
     
    // delivery_date, items list from the above list of orders

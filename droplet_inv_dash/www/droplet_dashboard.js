@@ -7,7 +7,7 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
-let itemsLoaded = -1;
+let itemsLoaded = 0;
 
 function set_ID_drop_down() {
     let numberOfJsonItems = current_report.length;
