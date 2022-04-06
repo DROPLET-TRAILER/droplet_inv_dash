@@ -1,5 +1,3 @@
-
-
 class Cache_api {
   constructor() {
     this.cached_pages = new Map();
@@ -14,10 +12,11 @@ class Cache_api {
   }
 }
 
-let cache = new Cache_api();
-
 class Item_report {
-  constructor(item_code, date_from_server) {
+  constructor(data_item, item_code, date_from_server) {
+    this.data_item = data_item;
+    this.data_PO = null;
+    this.data_Inventory = null;
     this.flag = null;
     this.server_date = date_from_server;
     this.item_code = item_code;
@@ -30,7 +29,6 @@ class Item_report {
     this.order_qty = 0;
     this.order_date = null;
     this.last_PO = null;
-    this.is_included_in_manu = true;
 
     this.req_parts = new Array();
     this.parts_calendar = null;
@@ -38,12 +36,7 @@ class Item_report {
 
   fill_item_report = async function () {
     //get item name and lead time from item doctype
-    let item = await getFrappeJson(`resource/Item/${this.item_code}`);
-    if (item.is_stock_item == 0) {
-      // do not do the calculation for this item, remove it in the next step.
-      this.is_included_in_manu = false;
-      return;
-    }
+    let item = this.data_item;
 
     this.item_name = item.item_name;
     this.lead_time = item.lead_time_days;
@@ -68,8 +61,6 @@ class Item_report {
       this.current_inv = "N/A"
       this.incomming_qty = "N/A"
     }
-    
-
 
     //get last PO for order
     let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"]]&limit=1`)
@@ -255,11 +246,11 @@ class Item_report_list {
     this.server_time = date_from_server;
     this.list = new Map();
   }
-  pushCount = function (item_code, required_amount, required_by_date) {
+  pushCount = function (data_item, item_code, required_amount, required_by_date) {
     if (!this.list.has(item_code)) {
-      this.list.set(item_code, new Item_report(item_code, this.server_time));
+      this.list.set(item_code, new Item_report(data_item, item_code, this.server_time));
     }
-    this.list.get(item_code).count(required_amount, required_by_date);
+    this.list.get(item_code).count(data_item, required_amount, required_by_date);
   };
 
   fill_all = async function () {
@@ -272,14 +263,6 @@ class Item_report_list {
     }
   };
 
-  remove_items_not_included = function() {
-    for (const entry of this.list) {
-      let value = entry[1];
-      if(!value.is_included_in_manu) {
-        this.list.delete(entry[0]);
-      }
-    }
-  }
 
   getMap = () => {
     return this.list;
@@ -295,9 +278,47 @@ class Item_report_list {
   }
 }
 
+
+class item_request {
+  constructor(item_code, required_qty, need_by_date) {
+    this.item_code = item_code;
+    this.required_qty = required_qty;
+    this.need_by_date = need_by_date;
+  }
+}
+
+class item_request_group {
+  constructor(item_code) {
+    this.item_code = item_code;
+    this.items = new Array();
+  }
+
+  count = function (required_qty, need_by_date) {
+    this.items.push(new item_request(this.item_code, required_qty, need_by_date))
+  };
+}
+
+class item_request_group_list {
+  constructor(server_time) {
+    this.server_time = server_time;
+    this.item_groups = new Map();
+  }
+  count_item = function (item_code, required_qty, need_by_date) {
+    if (!this.item_groups.has(item_code)) {
+      this.item_groups.set(item_code, new item_request_group(item_code));
+    }
+    this.item_groups.get(item_code).count(required_qty, need_by_date);
+  };
+}
+
 async function getItemReportFromDatabase() {
 
-  
+
+
+  //get the date
+  // instantiate a report list object to allow easy insertion without duplication
+  // instantiate a cache so requests of similar nature are ignored
+
 
   // get the date from the server so that it is timezone independent for the client
   let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
@@ -310,8 +331,10 @@ async function getItemReportFromDatabase() {
   // pass the item report the date it was created at, get this date from the server
   let item_report_list = new Item_report_list(server_date);
 
-  // instantiate a cache, this is a global now
-  //let cache = new Cache_api()
+  let salesItems = new item_request_group_list(server_date);
+
+  // instantiate a cache 
+  let cache = new Cache_api()
 
 
   // customer_name, delivery_date, items, filter by delivery_status
@@ -323,69 +346,63 @@ async function getItemReportFromDatabase() {
     const sales_order_item_list = sales_order.items
     for (const key in sales_order_item_list) {
       const sales_order_item = sales_order_item_list[key];
-      // amount, bom_no, item_code
-      // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
-      let item_lead_time = document.getElementById("item_lead_time").value;
+      
+      let required_qty = parseInt(sales_order_item.qty);
       let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
-      let need_by_date = new Date();
-      let todays_date = server_date;
-      need_by_date.setDate(delivery_date.getDate() - item_lead_time);
-      if (todays_date > need_by_date) {
-        need_by_date = todays_date;
-      }
-      let item_data = await cache.request(`resource/Item/${sales_order_item.item_code}`, getFrappeJson);
-      if(!item_data.hasOwnProperty('default_bom')){
-        item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
-      } else {
-        const bomDetails1 = await cache.request(`resource/BOM/${item_data.default_bom}`, getFrappeJson);
-        for (const key in bomDetails1.items) {
-          const sub_item_1 = bomDetails1.items[key];
-          let sub_item_1_data = await cache.request(`resource/Item/${sub_item_1.item_code}`, getFrappeJson);
-          if(!sub_item_1_data.hasOwnProperty('default_bom')){
-            item_report_list.pushCount(sub_item_1.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty), need_by_date);
-          } else {
-            const bomDetails2 = await cache.request(`resource/BOM/${sub_item_1_data.default_bom}`, getFrappeJson);
-            for (const key in bomDetails2.items) {
-              const sub_item_2 = bomDetails2.items[key];
-              let sub_item_2_data = await cache.request(`resource/Item/${sub_item_2.item_code}`, getFrappeJson);
-              if(!sub_item_2_data.hasOwnProperty('default_bom')){
-                item_report_list.pushCount(sub_item_2.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty), need_by_date);
-              } else {
-                const bomDetails3 = await cache.request(`resource/BOM/${sub_item_2_data.default_bom}`, getFrappeJson);
-                for (const key in bomDetails3.items) {
-                  const sub_item_3 = bomDetails3.items[key];
-                  let sub_item_3_data = await cache.request(`resource/Item/${sub_item_3.item_code}`, getFrappeJson);
-                  if(!sub_item_3_data.hasOwnProperty('default_bom')){
-                    item_report_list.pushCount(sub_item_3.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty) * parseInt(sub_item_3_data.qty), need_by_date);
-                  } else {
-                    const bomDetails4 = await cache.request(`resource/BOM/${sub_item_3_data.default_bom}`, getFrappeJson);
-                    for (const key in bomDetails4.items) {
-                      const sub_item_4 = bomDetails4.items[key];
-                      let sub_item_4_data = await cache.request(`resource/Item/${sub_item_4.item_code}`, getFrappeJson);
-                      // push the required amount of items to the list, if the item doesnt exist it will be added
-                      item_report_list.pushCount(sub_item_4.item_code,parseInt(sales_order_item.qty) * parseInt(sub_item_1_data.qty) * parseInt(sub_item_2_data.qty) * parseInt(sub_item_3_data.qty) * parseInt(sub_item_4_data.qty), need_by_date);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      // // get the details of the bom given the name in the item
-      // if(!sales_order_item.hasOwnProperty('bom_no')){
-      //   item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
-      // } else {
-      //   const bomDetails = await cache.request(`resource/BOM/${sales_order_item.bom_no}`, getFrappeJson);
-      //   for (const key in bomDetails.items) {
-      //     const item = bomDetails.items[key];
-      //     // push the required amount of items to the list, if the item doesnt exist it will be added
-      //     item_report_list.pushCount(item.item_code, parseInt(item.qty * sales_order_item.qty), need_by_date);
-      //   }
-      // }
+      salesItems.count_item(sales_order_item.item_code, required_qty, delivery_date);
     }
   }
 
+  // at this point we have a list of sales items, grouped by item code and listed with required qty and delivery date
+
+
+
+  // expand list to include items in sub assemblies.
+
+  let requiredItems = new item_request_group_list(server_date);
+
+
+  for (const key in salesItems.item_groups) {
+    if (Object.hasOwnProperty.call(salesItems.item_groups, key)) {
+      const itemRequestGroup = salesItems.item_groups[key];
+    }
+  }
+
+
+  function fill_required_items_recursive(requiredItems, itemRequestGroup) {
+    
+    let item_request_code = itemRequestGroup.item_code
+    // amount, bom_no, item_code
+    let item_data = await cache.request(`resource/Item/${item_request_code}`, getFrappeJson);
+    if(!item_data.hasOwnProperty('default_bom')){
+      for (let index = 0; index < itemRequestGroup.items.length; index++) {
+        const item_request = itemRequestGroup.items[index];
+        requiredItems.pushCount(item_request.item_code, item_request.required_qty, item_request.need_by_date);
+      }
+    } else {
+      const bomDetails = await cache.request(`resource/BOM/${item_data.default_bom}`, getFrappeJson);
+      for (const key in bomDetails.items) {
+        const item = bomDetails.items[key];
+        // push the required amount of items to the list, if the item doesnt exist it will be added
+        item_report_list.pushCount(item.item_code, parseInt(item.qty * sales_order_item.qty), need_by_date);
+      }
+    }
+  }
+
+
+  function recursive_helper(item_code, required_qty, need_by_date) {
+
+  }
+
+
+
+  // amount, bom_no, item_code
+  let data_item = await getFrappeJson(`resource/Item/${sales_order_item.item_code}`);
+  if (data_item.is_stock_item == 0) {
+    // do not do the calculation for this item, remove it in the next step.
+    this.is_included_in_manu = false;
+    return;
+  }
 
   await item_report_list.fill_all();
 
