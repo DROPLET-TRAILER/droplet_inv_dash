@@ -250,6 +250,7 @@ frappe.ready(async function () {
 
     document.getElementById('refreshButton').addEventListener('click', function (e) {
         // fillTable();
+        itemsLoaded = -1;
         fillTableDriver();
         init_timer_update();
     });
