@@ -356,17 +356,36 @@ async function getItemReportFromDatabase() {
   // at this point we have a list of sales items, grouped by item code and listed with required qty and delivery date
 
 
+  // get list of item codes in the format to request bulk
+  // get item data for every item in list (item code, item name, lead time days, default_bom)
+  // 
+
 
   // expand list to include items in sub assemblies.
-
+  let expandableItems = new item_request_group_list(server_date);
   let requiredItems = new item_request_group_list(server_date);
 
-
+  let item_code_filters = "";
   for (const key in salesItems.item_groups) {
     if (Object.hasOwnProperty.call(salesItems.item_groups, key)) {
       const itemRequestGroup = salesItems.item_groups[key];
+      let item_code = itemRequestGroup.item_code
+      item_code_filters.concat(`["item_code", "=", "${item_code}"], `)
     }
   }
+  item_code_filters = item_code_filters.substring(0, item_code_filters.length - 2);
+
+  let item_data_ = `resource/Item?fields=["item_name", "item_code", "default_bom", "lead_time_days"]&limit=500&or_filters=[${item_code_filters}]`
+
+  for (const inventory_item of inventory_info) {
+    //console.log(inventory_item)
+    inventory_info_accumulated.actual_qty += parseInt(inventory_item.actual_qty);
+    inventory_info_accumulated.projected_qty += parseInt(inventory_item.projected_qty);
+    inventory_info_accumulated.reserved_qty += parseInt(inventory_item.reserved_qty);
+    inventory_info_accumulated.reserved_qty_for_production += parseInt(inventory_item.reserved_qty_for_production);
+    inventory_info_accumulated.reserved_qty_for_sub_contract += parseInt(inventory_item.reserved_qty_for_sub_contract);
+    hasInventory = true;
+  } 
 
 
   function fill_required_items_recursive(requiredItems, itemRequestGroup) {
