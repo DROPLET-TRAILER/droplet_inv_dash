@@ -71,12 +71,14 @@ class Item_report {
     
 
 
-    //get last PO for order
-    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"]]&limit=1`)
+    //get last PO for order, limit to 1 and only get PO's that have not been received
+    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["per_received","!=",100]]&limit=1`)
     if (last_po.length > 0) {
       this.last_PO = last_po[0].name;
     } else {
       this.last_PO = "N/A";
+      // if there are no PO then there is no incomming orders
+      this.incomming_qty = 0
     }
 
     let remaining_parts_on_day = 0
