@@ -72,7 +72,7 @@ class Item_report {
 
 
     //get last PO for order, limit to 1 and only get PO's that have not been received
-    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100]]&limit=1`)
+    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&limit=1`)
     if (last_po.length > 0) {
       this.last_PO = last_po[0].name;
     } else {
