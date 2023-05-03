@@ -302,107 +302,261 @@ class Item_report_list {
   }
 }
 
+// *********************** FASTEST ONE ***********************
+
 async function getItemReportFromDatabase() {
+    console.time("getItemReportFromDatabase");
+  
+    // Helper function to fetch BOM items recursively
+    async function fetchBOMItems(itemCode, itemQty, needByDate, cache) {
+      const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
+      if (!itemData.hasOwnProperty("default_bom")) {
+        item_report_list.pushCount(itemCode, itemQty, needByDate);
+      } else {
+        const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
+        const bomItemsPromises = bomDetails.items.map(async (subItem) => {
+          await fetchBOMItems(
+            subItem.item_code,
+            itemQty * parseInt(subItem.qty),
+            needByDate,
+            cache
+          );
+        });
+        await Promise.all(bomItemsPromises);
+      }
+    }
+  
+    let frappe_server_date = await getFrappeJson(
+      "method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date"
+    );
+    if (frappe_server_date == null) {
+      console.log("not signed in");
+      return;
+    }
+    let server_date = convertFrappeDateToDate(frappe_server_date);
+  
+    let item_report_list = new Item_report_list(server_date);
+  
+    let progressBarSize = 0;
+  
+    const sales_orders = await getFrappeJson(
+      `resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`
+    );
+    for (const key in sales_orders) {
+      const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+      progressBarSize += sales_orders.length * sales_order.items.length;
+  
+      const salesOrderItemsPromises = sales_order.items.map(async (sales_order_item) => {
+        setProgressBarCount(progressBarSize);
+  
+        let item_lead_time = document.getElementById("item_lead_time").value;
+        let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
+        let need_by_date = new Date(delivery_date);
+        let todays_date = server_date;
+        need_by_date.setDate(need_by_date.getDate() - item_lead_time);
+        if (todays_date > need_by_date) {
+          need_by_date = todays_date;
+        }
+  
+        await fetchBOMItems(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date, cache);
+      });
+  
+      await Promise.all(salesOrderItemsPromises);
+    }
+  
+    itemsLoaded = 0;
+    await item_report_list.fill_all();
+  
+    item_report_list.remove_items_not_included();
+  
+    console.timeEnd("getItemReportFromDatabase");
+  
+    return item_report_list.getJSONArray();
+  }
+  
+  
+// async function fetchBOMItems(itemCode, quantity, needByDate, cache, item_report_list) {
+//     const fetchAndProcess = async (itemCode, quantity, needByDate) => {
+//       const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
+//       if (!itemData.hasOwnProperty("default_bom")) {
+//         item_report_list.pushCount(itemCode, quantity, needByDate);
+//       } else {
+//         const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
+//         for (const bomItem of bomDetails.items) {
+//           await fetchBOMItems(bomItem.item_code, quantity * parseInt(bomItem.qty), needByDate, cache, item_report_list);
+//         }
+//       }
+//     };
+  
+//     return fetchAndProcess(itemCode, quantity, needByDate);
+//   }
+  
+//   async function processInBatches(items, batchSize, callback) {
+//     for (let i = 0; i < items.length; i += batchSize) {
+//       const batch = items.slice(i, i + batchSize);
+//       await Promise.all(batch.map((item) => callback(item)));
+//     }
+//   }
+  
+//   async function getItemReportFromDatabase() {
+//     console.time("getItemReportFromDatabase");
+  
+//     // get the date from the server so that it is timezone independent for the client
+//     let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
+//     if (frappe_server_date == null) {
+//       console.log("not signed in")
+//       return;
+//     }
+//     let server_date = convertFrappeDateToDate(frappe_server_date);
+  
+//     // pass the item report the date it was created at, get this date from the server
+//     let item_report_list = new Item_report_list(server_date);
+  
+//     const sales_orders = await getFrappeJson(
+//       `resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`
+//     );
+  
+//     let progressBarSize = 0;
+  
+//     await processInBatches(sales_orders, 5, async (sales_order_data) => {
+//       const sales_order = await getFrappeJson(`resource/Sales Order/${sales_order_data.name}`);
+//       progressBarSize += sales_orders.length * sales_order.items.length;
+  
+//       let item_lead_time = document.getElementById("item_lead_time").value;
+//       let delivery_date = convertFrappeDateToDate(sales_order.delivery_date);
+//       let need_by_date = new Date(delivery_date);
+//       let todays_date = server_date;
+//       need_by_date.setDate(need_by_date.getDate() - item_lead_time);
+//       if (todays_date > need_by_date) {
+//         need_by_date = todays_date;
+//       }
+  
+//       await processInBatches(sales_order.items, 5, async (sales_order_item) => {
+//         setProgressBarCount(progressBarSize);
+//         await fetchBOMItems(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date, cache, item_report_list);
+//       });
+//     });
+  
+//     itemsLoaded = 0;
+//     await item_report_list.fill_all();
+  
+//     item_report_list.remove_items_not_included();
+  
+//     console.timeEnd("getItemReportFromDatabase");
+  
+//     return item_report_list.getJSONArray();
+//   }
+  
+  
+  
+  
+  
+// *********************** OG CODE ***********************
+
+//   async function getItemReportFromDatabase() {
+//     console.time('getItemReportFromDatabase');
 
   
 
-  // get the date from the server so that it is timezone independent for the client
-  let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
-  if (frappe_server_date == null) {
-    console.log("not signed in")
-    return;
-  }
-  let server_date = convertFrappeDateToDate(frappe_server_date);
+//     // get the date from the server so that it is timezone independent for the client
+//     let frappe_server_date = await getFrappeJson("method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date")
+//     if (frappe_server_date == null) {
+//       console.log("not signed in")
+//       return;
+//     }
+//     let server_date = convertFrappeDateToDate(frappe_server_date);
+  
+//     // pass the item report the date it was created at, get this date from the server
+//     let item_report_list = new Item_report_list(server_date);
+  
+//     // instantiate a cache, this is a global now
+//     //let cache = new Cache_api()
+  
+//     let progressBarSize = 0;
+//     // customer_name, delivery_date, items, filter by delivery_status
+//     // this has to be done as multiple requests as "items" list is not a valid field while accessing bulk document data. see api/resource/Sales%20Order?fields=["*"]
+//     const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`);
+//     for (const key in sales_orders) {
+      
+//      // delivery_date, items list from the above list of orders
+//       const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+//       progressBarSize += sales_orders.length * sales_order.items.length
+//       const sales_order_item_list = sales_order.items
+//       for (const key in sales_order_item_list) {
+//         setProgressBarCount(progressBarSize)
+//         const sales_order_item = sales_order_item_list[key];
+//         // amount, bom_no, item_code
+//         // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
+//         let item_lead_time = document.getElementById("item_lead_time").value;
+//         let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
+//         let need_by_date = new Date(delivery_date);
+//         let todays_date = server_date;
+//         need_by_date.setDate(need_by_date.getDate() - item_lead_time);
+//         if (todays_date > need_by_date) {
+//           need_by_date = todays_date;
+//         }
+//         let item_data = await cache.request(`resource/Item/${sales_order_item.item_code}`, getFrappeJson);
+//         if(!item_data.hasOwnProperty('default_bom')){
+//           item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
+//         } else {
+//           const bomDetails1 = await cache.request(`resource/BOM/${item_data.default_bom}`, getFrappeJson);
+//           for (const key in bomDetails1.items) {
+//             const sub_item_1 = bomDetails1.items[key];
+//             let sub_item_1_data = await cache.request(`resource/Item/${sub_item_1.item_code}`, getFrappeJson);
+//             if(!sub_item_1_data.hasOwnProperty('default_bom')){
+//               item_report_list.pushCount(sub_item_1.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty), need_by_date);
+//             } else {
+//               const bomDetails2 = await cache.request(`resource/BOM/${sub_item_1_data.default_bom}`, getFrappeJson);
+//               for (const key in bomDetails2.items) {
+//                 const sub_item_2 = bomDetails2.items[key];
+//                 let sub_item_2_data = await cache.request(`resource/Item/${sub_item_2.item_code}`, getFrappeJson);
+//                 if(!sub_item_2_data.hasOwnProperty('default_bom')){
+//                   item_report_list.pushCount(sub_item_2.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty), need_by_date);
+//                 } else {
+//                   const bomDetails3 = await cache.request(`resource/BOM/${sub_item_2_data.default_bom}`, getFrappeJson);
+//                   for (const key in bomDetails3.items) {
+//                     const sub_item_3 = bomDetails3.items[key];
+//                     let sub_item_3_data = await cache.request(`resource/Item/${sub_item_3.item_code}`, getFrappeJson);
+//                     if(!sub_item_3_data.hasOwnProperty('default_bom')){
+//                       item_report_list.pushCount(sub_item_3.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty), need_by_date);
+//                     } else {
+//                       const bomDetails4 = await cache.request(`resource/BOM/${sub_item_3_data.default_bom}`, getFrappeJson);
+//                       for (const key in bomDetails4.items) {
+//                         const sub_item_4 = bomDetails4.items[key];
+//                         let sub_item_4_data = await cache.request(`resource/Item/${sub_item_4.item_code}`, getFrappeJson);
+//                         // push the required amount of items to the list, if the item doesnt exist it will be added
+//                         item_report_list.pushCount(sub_item_4.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty) * parseInt(sub_item_4.qty), need_by_date);
+//                       }
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//         // // get the details of the bom given the name in the item
+//         // if(!sales_order_item.hasOwnProperty('bom_no')){
+//         //   item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
+//         // } else {
+//         //   const bomDetails = await cache.request(`resource/BOM/${sales_order_item.bom_no}`, getFrappeJson);
+//         //   for (const key in bomDetails.items) {
+//         //     const item = bomDetails.items[key];
+//         //     // push the required amount of items to the list, if the item doesnt exist it will be added
+//         //     item_report_list.pushCount(item.item_code, parseInt(item.qty * sales_order_item.qty), need_by_date);
+//         //   }
+//         // }
+//       }
+//     }
+  
+//     itemsLoaded = 0;
+//     await item_report_list.fill_all();
+  
+//     item_report_list.remove_items_not_included();
 
-  // pass the item report the date it was created at, get this date from the server
-  let item_report_list = new Item_report_list(server_date);
-
-  // instantiate a cache, this is a global now
-  //let cache = new Cache_api()
-
-  let progressBarSize = 0;
-  // customer_name, delivery_date, items, filter by delivery_status
-  // this has to be done as multiple requests as "items" list is not a valid field while accessing bulk document data. see api/resource/Sales%20Order?fields=["*"]
-  const sales_orders = await getFrappeJson(`resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`);
-  for (const key in sales_orders) {
-    
-   // delivery_date, items list from the above list of orders
-    const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
-    progressBarSize += sales_orders.length * sales_order.items.length
-    const sales_order_item_list = sales_order.items
-    for (const key in sales_order_item_list) {
-      setProgressBarCount(progressBarSize)
-      const sales_order_item = sales_order_item_list[key];
-      // amount, bom_no, item_code
-      // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
-      let item_lead_time = document.getElementById("item_lead_time").value;
-      let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
-      let need_by_date = new Date(delivery_date);
-      let todays_date = server_date;
-      need_by_date.setDate(need_by_date.getDate() - item_lead_time);
-      if (todays_date > need_by_date) {
-        need_by_date = todays_date;
-      }
-      let item_data = await cache.request(`resource/Item/${sales_order_item.item_code}`, getFrappeJson);
-      if(!item_data.hasOwnProperty('default_bom')){
-        item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
-      } else {
-        const bomDetails1 = await cache.request(`resource/BOM/${item_data.default_bom}`, getFrappeJson);
-        for (const key in bomDetails1.items) {
-          const sub_item_1 = bomDetails1.items[key];
-          let sub_item_1_data = await cache.request(`resource/Item/${sub_item_1.item_code}`, getFrappeJson);
-          if(!sub_item_1_data.hasOwnProperty('default_bom')){
-            item_report_list.pushCount(sub_item_1.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty), need_by_date);
-          } else {
-            const bomDetails2 = await cache.request(`resource/BOM/${sub_item_1_data.default_bom}`, getFrappeJson);
-            for (const key in bomDetails2.items) {
-              const sub_item_2 = bomDetails2.items[key];
-              let sub_item_2_data = await cache.request(`resource/Item/${sub_item_2.item_code}`, getFrappeJson);
-              if(!sub_item_2_data.hasOwnProperty('default_bom')){
-                item_report_list.pushCount(sub_item_2.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty), need_by_date);
-              } else {
-                const bomDetails3 = await cache.request(`resource/BOM/${sub_item_2_data.default_bom}`, getFrappeJson);
-                for (const key in bomDetails3.items) {
-                  const sub_item_3 = bomDetails3.items[key];
-                  let sub_item_3_data = await cache.request(`resource/Item/${sub_item_3.item_code}`, getFrappeJson);
-                  if(!sub_item_3_data.hasOwnProperty('default_bom')){
-                    item_report_list.pushCount(sub_item_3.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty), need_by_date);
-                  } else {
-                    const bomDetails4 = await cache.request(`resource/BOM/${sub_item_3_data.default_bom}`, getFrappeJson);
-                    for (const key in bomDetails4.items) {
-                      const sub_item_4 = bomDetails4.items[key];
-                      let sub_item_4_data = await cache.request(`resource/Item/${sub_item_4.item_code}`, getFrappeJson);
-                      // push the required amount of items to the list, if the item doesnt exist it will be added
-                      item_report_list.pushCount(sub_item_4.item_code, parseInt(sales_order_item.qty) * parseInt(sub_item_1.qty) * parseInt(sub_item_2.qty) * parseInt(sub_item_3.qty) * parseInt(sub_item_4.qty), need_by_date);
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      // // get the details of the bom given the name in the item
-      // if(!sales_order_item.hasOwnProperty('bom_no')){
-      //   item_report_list.pushCount(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date);
-      // } else {
-      //   const bomDetails = await cache.request(`resource/BOM/${sales_order_item.bom_no}`, getFrappeJson);
-      //   for (const key in bomDetails.items) {
-      //     const item = bomDetails.items[key];
-      //     // push the required amount of items to the list, if the item doesnt exist it will be added
-      //     item_report_list.pushCount(item.item_code, parseInt(item.qty * sales_order_item.qty), need_by_date);
-      //   }
-      // }
-    }
-  }
-
-  itemsLoaded = 0;
-  await item_report_list.fill_all();
-
-  item_report_list.remove_items_not_included();
-
-  return item_report_list.getJSONArray()
-}
+//     console.timeEnd('getItemReportFromDatabase');
+  
+//     return item_report_list.getJSONArray()
+//   }
 
 function convertFrappeDateToDate(date_from_server) {
   let dateArray = date_from_server.split("-");
