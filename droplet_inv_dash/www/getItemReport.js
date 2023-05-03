@@ -252,7 +252,7 @@ class Item_report {
       inventory_info_accumulated.reserved_qty_for_production += parseInt(inventory_item.reserved_qty_for_production);
       inventory_info_accumulated.reserved_qty_for_sub_contract += parseInt(inventory_item.reserved_qty_for_sub_contract);
       hasInventory = true;
-    }
+    } 
     return hasInventory;
   }
 }
