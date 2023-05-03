@@ -152,6 +152,7 @@ function fillTable() {
         }
     }
 }
+ 
 
 
 function getWeekView(itemIndex, weekView) {
