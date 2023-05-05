@@ -335,11 +335,11 @@ async function getItemReportFromDatabase() {
       const sales_order_item = sales_order_item_list[key];
       // amount, bom_no, item_code
       // TODO: use the items lead time to calculate when the parts actually have to arrive, for now subtract 14 days from delivery date
-      let item_lead_time = document.getElementById("item_lead_time").value;
+     
       let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
       let need_by_date = new Date(delivery_date);
       let todays_date = server_date;
-      need_by_date.setDate(need_by_date.getDate() - item_lead_time);
+      need_by_date.setDate(need_by_date.getDate());
       if (todays_date > need_by_date) {
         need_by_date = todays_date;
       }

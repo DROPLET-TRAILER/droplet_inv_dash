@@ -167,14 +167,14 @@ function getWeekView(itemIndex, weekView) {
     for (let i = currentMonth; i < 12; ++i) {
         let cell = document.createElement('th');
         cell.setAttribute("class", "gray");
-        cell.innerText = calendar[i];
+        cell.innerText = calendar[i] + "hello";
         monthHeader.appendChild(cell);
     }
 
     for (let i = 0; i < currentMonth; ++i) {
         let cell = document.createElement('th');
         cell.setAttribute("class", "gray");
-        cell.innerText = calendar[i];
+        cell.innerText = calendar[i] + "bye";
         monthHeader.appendChild(cell);
     }
     //console.log(itemName);
