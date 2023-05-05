@@ -152,19 +152,23 @@ function fillTable() {
         }
     }
 }
- 
 
 
 function getWeekView(itemIndex, weekView) {
     let jsonArray = current_report;
 
     let tableToAdd = document.createElement('table');
-    let itemName = jsonArray[itemIndex];
+    let itemArray = jsonArray[itemIndex];
+    // Creating the row for month headers
     //Set the Monthly Header
     let monthHeader = tableToAdd.insertRow(0);
     const currentDate = new Date();
     let currentMonth = currentDate.getMonth();
 
+    // Creating calender table with the given Item Array
+    let empty = document.createElement('th');
+    empty.setAttribute("class", "gray");
+    monthHeader.appendChild(empty);
     for (let i = currentMonth; i < 12; ++i) {
         let cell = document.createElement('th');
         cell.setAttribute("class", "gray");
@@ -178,10 +182,40 @@ function getWeekView(itemIndex, weekView) {
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
     }
-    //console.log(itemName);
 
-    //Get the data and set the calendar
-    let calendarInfo = tableToAdd.insertRow(1);
+    // Creating the row for stock
+    let currentStockInfo = tableToAdd.insertRow(1);
+    let currentStock = document.createElement("th");
+    currentStock.setAttribute("class", "gray");
+    currentStock.innerText = "Current";
+    currentStockInfo.appendChild(currentStock);
+
+    console.log(jsonArray)
+
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        currentStockInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        currentStockInfo.appendChild(cell);
+    }
+
+    // Get the data and set the calendar
+    // Creating the row for required stocks
+    let calendarInfo = tableToAdd.insertRow(2);
+
+    let required = document.createElement("th");
+    required.setAttribute("class", "gray");
+    required.innerText = "Required";
+    calendarInfo.appendChild(required);
     for (let j = currentMonth; j < 12; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
@@ -196,6 +230,37 @@ function getWeekView(itemIndex, weekView) {
         cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
         cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
         calendarInfo.appendChild(cell);
+    }
+
+    // Creating the row for on order stock
+    let incomingInfo = tableToAdd.insertRow(3);
+    let incoming = document.createElement("th");
+    incoming.setAttribute("class", "gray");
+    incoming.innerText = "On Order";
+    incomingInfo.appendChild(incoming);
+
+    let backOrderInfo = tableToAdd.insertRow(4);
+    let backOrder = document.createElement("th");
+    backOrder.setAttribute("class", "gray");
+    backOrder.innerText = "Back Order";
+    backOrderInfo.appendChild(backOrder);
+
+    console.log(jsonArray);
+    // Create table data for back order row
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
+        cell.innerHTML = jsonArray[itemIndex].back_order[j][1];
+        backOrderInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
+        cell.innerHTML = jsonArray[itemIndex].back_order[j][1];
+        backOrderInfo.appendChild(cell);
     }
 
     weekView.appendChild(tableToAdd);
