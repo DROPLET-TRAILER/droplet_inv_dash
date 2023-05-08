@@ -232,17 +232,31 @@ function getWeekView(itemIndex, weekView) {
         calendarInfo.appendChild(cell);
     }
 
-    // Creating the row for on order stock
-    let incomingInfo = tableToAdd.insertRow(3);
-    let incoming = document.createElement("th");
-    incoming.setAttribute("class", "gray");
-    incoming.innerText = "On Order";
-    incomingInfo.appendChild(incoming);
+    // Creating the row for "To Order"
+    let toOrderInfo = tableToAdd.insertRow(3);
+    let toOrder = document.createElement("th");
+    toOrder.setAttribute("class", "gray");
+    toOrder.innerText = "To Order";
+    toOrderInfo.appendChild(toOrder);
 
-    let backOrderInfo = tableToAdd.insertRow(4);
+    // Creating the row for "To Order Date"
+    let toOrderDateInfo = tableToAdd.insertRow(4);
+    let toOrderDate = document.createElement("th");
+    toOrderDate.setAttribute("class", "gray");
+    toOrderDate.innerText = "To Order Date";
+    toOrderDateInfo.appendChild(toOrderDate);
+
+    // Creating the row for ordered stock
+    let orderedStockInfo = tableToAdd.insertRow(5);
+    let ordered = document.createElement("th");
+    ordered.setAttribute("class", "gray");
+    ordered.innerText = "Ordered";
+    orderedStockInfo.appendChild(ordered);
+
+    let backOrderInfo = tableToAdd.insertRow(6);
     let backOrder = document.createElement("th");
     backOrder.setAttribute("class", "gray");
-    backOrder.innerText = "Back Order";
+    backOrder.innerText = "Forecast Inventory";
     backOrderInfo.appendChild(backOrder);
 
     console.log(jsonArray);
