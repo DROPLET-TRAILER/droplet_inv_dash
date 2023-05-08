@@ -183,30 +183,21 @@ function getWeekView(itemIndex, weekView) {
         monthHeader.appendChild(cell);
     }
 
-    // Creating the row for stock
-    let currentStockInfo = tableToAdd.insertRow(1);
-    let currentStock = document.createElement("th");
-    currentStock.setAttribute("class", "gray");
-    currentStock.innerText = "Current";
-    currentStockInfo.appendChild(currentStock);
+        // Creating the row for received stock
+        let initial_inventory_info = tableToAdd.insertRow(1);
 
-    console.log(jsonArray)
+        let initial_inventory = document.createElement("th");
+        initial_inventory.setAttribute("class", "gray");
+        initial_inventory.innerText = "Initial Inventory";
+        initial_inventory_info.appendChild(initial_inventory);
+    
+        // for (let j = 0; j < currentMonth; ++j) {
+        //     let cell = document.createElement("td");
+        //     cell.setAttribute("class", jsonArray[itemIndex].initial_inventory[j][1]);
+        //     cell.innerHTML = jsonArray[itemIndex].initial_inventory[j][0];
+        //     calendarInfo.appendChild(cell);
+        // }
 
-    for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
-        currentStockInfo.appendChild(cell);
-    }
-
-    for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
-        currentStockInfo.appendChild(cell);
-    }
 
     // Get the data and set the calendar
     // Creating the row for required stocks
@@ -232,28 +223,60 @@ function getWeekView(itemIndex, weekView) {
         calendarInfo.appendChild(cell);
     }
 
+        // Creating the row for stock
+        let safetyStockInfo = tableToAdd.insertRow(3);
+        let safetyStock = document.createElement("th");
+        safetyStock.setAttribute("class", "gray");
+        safetyStock.innerText = "Safety Stock";
+        safetyStockInfo.appendChild(safetyStock);
+
+    // Creating the row for stock
+    let currentStockInfo = tableToAdd.insertRow(4);
+    let currentStock = document.createElement("th");
+    currentStock.setAttribute("class", "gray");
+    currentStock.innerText = "Received";
+    currentStockInfo.appendChild(currentStock);
+
+    console.log(jsonArray)
+
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        currentStockInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        currentStockInfo.appendChild(cell);
+    }
+
     // Creating the row for "To Order"
-    let toOrderInfo = tableToAdd.insertRow(3);
+    let toOrderInfo = tableToAdd.insertRow(5);
     let toOrder = document.createElement("th");
     toOrder.setAttribute("class", "gray");
     toOrder.innerText = "To Order";
     toOrderInfo.appendChild(toOrder);
 
     // Creating the row for "To Order Date"
-    let toOrderDateInfo = tableToAdd.insertRow(4);
+    let toOrderDateInfo = tableToAdd.insertRow(6);
     let toOrderDate = document.createElement("th");
     toOrderDate.setAttribute("class", "gray");
     toOrderDate.innerText = "To Order Date";
     toOrderDateInfo.appendChild(toOrderDate);
 
     // Creating the row for ordered stock
-    let orderedStockInfo = tableToAdd.insertRow(5);
+    let orderedStockInfo = tableToAdd.insertRow(7);
     let ordered = document.createElement("th");
     ordered.setAttribute("class", "gray");
     ordered.innerText = "Ordered";
     orderedStockInfo.appendChild(ordered);
 
-    let backOrderInfo = tableToAdd.insertRow(6);
+    let backOrderInfo = tableToAdd.insertRow(8);
     let backOrder = document.createElement("th");
     backOrder.setAttribute("class", "gray");
     backOrder.innerText = "Forecast Inventory";
