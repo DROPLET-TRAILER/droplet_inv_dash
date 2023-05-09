@@ -223,12 +223,27 @@ function getWeekView(itemIndex, weekView) {
         calendarInfo.appendChild(cell);
     }
 
-        // Creating the row for stock
-        let safetyStockInfo = tableToAdd.insertRow(3);
-        let safetyStock = document.createElement("th");
-        safetyStock.setAttribute("class", "gray");
-        safetyStock.innerText = "Safety Stock";
-        safetyStockInfo.appendChild(safetyStock);
+    // Creating the row for stock
+    let safetyStockInfo = tableToAdd.insertRow(3);
+    let safetyStock = document.createElement("th");
+    safetyStock.setAttribute("class", "gray");
+    safetyStock.innerText = "Safety Stock";
+    safetyStockInfo.appendChild(safetyStock);
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
+        cell.innerHTML = jsonArray[itemIndex].safety_stock;
+        safetyStockInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
+        cell.innerHTML = jsonArray[itemIndex].safety_stock;
+        safetyStockInfo.appendChild(cell);
+    }
 
     // Creating the row for stock
     let currentStockInfo = tableToAdd.insertRow(4);
@@ -237,7 +252,7 @@ function getWeekView(itemIndex, weekView) {
     currentStock.innerText = "Received";
     currentStockInfo.appendChild(currentStock);
 
-    console.log(jsonArray)
+    // console.log(jsonArray)
 
     for (let j = currentMonth; j < 12; ++j) {
         //console.log("Arrived here3");
@@ -282,7 +297,7 @@ function getWeekView(itemIndex, weekView) {
     backOrder.innerText = "Forecast Inventory";
     backOrderInfo.appendChild(backOrder);
 
-    console.log(jsonArray);
+    // console.log(jsonArray);
     // Create table data for back order row
     for (let j = currentMonth; j < 12; ++j) {
         //console.log("Arrived here3");

@@ -35,7 +35,7 @@ class Item_report {
     this.req_parts = new Array();
     this.parts_calendar = null;
     this.initial_inventory = new Array(12);
-    this.safety_stock = new Array(12);
+    this.safety_stock = 0;
   }
 
   fill_item_report = async function () {
@@ -46,6 +46,8 @@ class Item_report {
       this.is_included_in_manu = false;
       return;
     }
+
+    this.safety_stock = item.safety_stock;
 
     this.item_name = item.item_name;
     this.lead_time = item.lead_time_days;
@@ -147,7 +149,7 @@ class Item_report {
       this.flag = "white";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-      console.log(`days between ${this.server_date} and ${this.order_date} is ${daysUntilOrder}`);
+      // console.log(`days between ${this.server_date} and ${this.order_date} is ${daysUntilOrder}`);
       if (daysUntilOrder <= 1) {
         this.flag = "red";
       } else if (daysUntilOrder < 7) {
@@ -165,7 +167,7 @@ class Item_report {
     
     // starting to try to make the calendar
     let parts_per_month = [0,0,0,0,0,0,0,0,0,0,0,0];
-    console.log(this.req_parts)
+    // console.log(this.req_parts)
 
     // requirements
     for (let i = 0; i < this.req_parts.length; i++) {
@@ -181,6 +183,11 @@ class Item_report {
         }
       }
     }
+
+    for (let i = 0; i < this.safety_stock.length; i++) {
+      
+    }
+
     this.parts_calendar = []
     let month = this.server_date.getMonth();
     let tempDay = new Date(this.server_date);
@@ -222,7 +229,7 @@ class Item_report {
       this.back_order[month_no] = [month_no, temp_curr];
     }
 
-    console.log(this.current_stock)
+    // console.log(this.current_stock)
 
     // console.log(this.parts_calendar)
   };
@@ -274,7 +281,7 @@ class Item_report {
   }
 }
 
-class Item_report_list {
+class Item_report_list {l_item
   constructor(date_from_server) {
     this.server_time = date_from_server;
     this.list = new Map();
