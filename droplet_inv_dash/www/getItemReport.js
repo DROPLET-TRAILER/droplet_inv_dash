@@ -229,24 +229,35 @@ class Item_report {
     }
   
     let temp_curr = this.current_inv;
-  
+    console.log(this.item_name)
     for (let i = 0; i < this.current_stock.length; i++) {
       let month_no = (i + month) % 12;
-      this.current_stock[month_no] = [month_no, temp_curr + this.safety_stock];
-      this.received[month_no] = [month_no, temp_curr + this.safety_stock];
+      this.current_stock[month_no] = [month_no, temp_curr];
+      this.received[month_no] = [month_no, temp_curr];
       temp_curr -= parts_per_month[month_no];
-      this.back_order[month_no] = [month_no, temp_curr];
+
+      // To Order Logic
       var to_order = this.parts_calendar[month_no][1] - this.current_stock[month_no][1];
-      if (this.minimum_order_qty > to_order && to_order >= 0) {
-        this.to_order[month_no] = [month_no, this.minimum_order_qty];
+      if (to_order > 0) {
+        if (this.minimum_order_qty > this.parts_calendar[month_no][1]) {
+            this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
+        } else {
+          this.to_order[month_no] = [month_no, to_order * 2];
+        }
       } else {
-        this.to_order[month_no] = [month_no, to_order];
+        if (this.minimum_order_qty > this.parts_calendar[month_no][1]) {
+          this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
+        } else {
+          this.to_order[month_no] = [month_no, to_order * 2];
+        }
       }
+
+      // Update future months with To Order value from this current month
+      temp_curr += this.to_order[month_no][1];
+
+
+      this.back_order[month_no] = [month_no, temp_curr];
     }
-
-    // console.log(this.current_stock)
-
-    // console.log(this.parts_calendar)
   };
 
   count = function (amount, needByDate) {
