@@ -38,6 +38,7 @@ class Item_report {
     this.safety_stock = 0;
     this.received = new Array(12);
     this.to_order = new Array(12);
+    this.minimum_order_qty = 0;
   }
 
   fill_item_report = async function () {
@@ -48,6 +49,8 @@ class Item_report {
       this.is_included_in_manu = false;
       return;
     }
+
+    this.minimum_order_qty = item.min_order_qty;
 
     this.safety_stock = item.safety_stock;
 
@@ -172,7 +175,7 @@ class Item_report {
     // console.log(this.req_parts)
 
     // requirements
-    console.log(this.item_code)
+    // console.log(this.item_code)
     for (let i = 0; i < this.req_parts.length; i++) {
       let tempDay = new Date(this.server_date);
       tempDay.setDate(this.server_date.getDate() + i);
@@ -182,8 +185,8 @@ class Item_report {
         if(parts_per_month[current_month] ==  0) {
           parts_per_month[current_month] = this.req_parts[i]
         } else { 
-          console.log(parts_per_month[current_month])
-          console.log(this.req_parts[i])
+          // console.log(parts_per_month[current_month])
+          // console.log(this.req_parts[i])
           parts_per_month[current_month] += this.req_parts[i]
         }
       }
@@ -233,15 +236,11 @@ class Item_report {
       this.received[month_no] = [month_no, temp_curr + this.safety_stock];
       temp_curr -= parts_per_month[month_no];
       this.back_order[month_no] = [month_no, temp_curr];
-      console.log()
-      var abs_to_order = this.current_stock[month_no][1] - this.parts_calendar[month_no][1];
-      console.log("abs to order");
-      console.log(abs_to_order);
-
-      if (abs_to_order < 0) {
-        this.to_order[month_no] = [month_no, Math.abs(abs_to_order)];
+      var to_order = this.parts_calendar[month_no][1] - this.current_stock[month_no][1];
+      if (this.minimum_order_qty > to_order && to_order >= 0) {
+        this.to_order[month_no] = [month_no, this.minimum_order_qty];
       } else {
-        this.to_order[month_no] = 0;
+        this.to_order[month_no] = [month_no, to_order];
       }
     }
 
@@ -286,13 +285,10 @@ class Item_report {
   async fill_inventory(inventory_info_accumulated) {
     const inventory_info = await getFrappeJson(`method/erpnext.stock.dashboard.item_dashboard.get_data?item_code=${this.item_code}`);
     let hasInventory = false;
-    console.log("Inventory Info")
     for (const inventory_item of inventory_info) {
-      // console.log(inventory_item)
       if (!inventory_item.warehouse.includes("Work In Progress")) {
         inventory_info_accumulated.actual_qty += parseInt(inventory_item.actual_qty);
       }
-      // inventory_info_accumulated.actual_qty += parseInt(inventory_item.actual_qty);
       inventory_info_accumulated.projected_qty += parseInt(inventory_item.projected_qty);
       inventory_info_accumulated.reserved_qty += parseInt(inventory_item.reserved_qty);
       inventory_info_accumulated.reserved_qty_for_production += parseInt(inventory_item.reserved_qty_for_production);
