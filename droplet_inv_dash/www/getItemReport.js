@@ -32,11 +32,12 @@ class Item_report {
     this.last_PO = null;
     this.is_included_in_manu = true;
     this.back_order = new Array(12);
-    this.req_parts = new Array();
+    this.req_parts = new Array(12);
     this.parts_calendar = null;
     this.initial_inventory = new Array(12);
     this.safety_stock = 0;
     this.received = new Array(12);
+    this.to_order = new Array(12);
   }
 
   fill_item_report = async function () {
@@ -67,7 +68,7 @@ class Item_report {
 
     if (hasInventory) {
       this.current_inv = inventory_info_accumulated.actual_qty;
-      this.incoming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
+      this.incmming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
     } else {
       // if item is not stored in database, it will be assumed there is 0 for calculations
       this.current_inv = "N/A"
@@ -232,6 +233,16 @@ class Item_report {
       this.received[month_no] = [month_no, temp_curr + this.safety_stock];
       temp_curr -= parts_per_month[month_no];
       this.back_order[month_no] = [month_no, temp_curr];
+      console.log()
+      var abs_to_order = this.current_stock[month_no][1] - this.parts_calendar[month_no][1];
+      console.log("abs to order");
+      console.log(abs_to_order);
+
+      if (abs_to_order < 0) {
+        this.to_order[month_no] = [month_no, Math.abs(abs_to_order)];
+      } else {
+        this.to_order[month_no] = 0;
+      }
     }
 
     // console.log(this.current_stock)
@@ -268,6 +279,7 @@ class Item_report {
     newJson.initial_inventory = this.initial_inventory
     newJson.safety_stock = this.safety_stock
     newJson.received = this.received
+    newJson.to_order = this.to_order
     return newJson;
   }
 

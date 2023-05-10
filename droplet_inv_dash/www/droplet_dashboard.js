@@ -290,6 +290,26 @@ function getWeekView(itemIndex, weekView) {
     toOrder.innerText = "To Order";
     toOrderInfo.appendChild(toOrder);
 
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].to_order[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].to_order[j][1];
+        toOrderInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        console.log("jsonArray[itemIndex]")
+        console.log(jsonArray[itemIndex].to_order[j])
+        cell.setAttribute("class", jsonArray[itemIndex].to_order[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].to_order[j][1];
+        // cell.setAttribute("class", jsonArray[itemIndex].to_order);
+        // cell.innerHTML = jsonArray[itemIndex].to_order;
+        toOrderInfo.appendChild(cell);
+    }
+
     // Creating the row for "To Order Date"
     let toOrderDateInfo = tableToAdd.insertRow(6);
     let toOrderDate = document.createElement("th");
