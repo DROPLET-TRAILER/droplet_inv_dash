@@ -452,6 +452,8 @@ async function getItemReportFromDatabase() {
     );
     for (const key in sales_orders) {
       const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+      console.log("Sales order");
+      console.log(sales_order);
       progressBarSize += sales_orders.length * sales_order.items.length;
   
       const salesOrderItemsPromises = sales_order.items.map(async (sales_order_item) => {
