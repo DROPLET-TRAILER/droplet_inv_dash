@@ -24,7 +24,7 @@ class Item_report {
     this.total_req = 0;
     this.current_inv = 0;
     this.current_stock = new Array(12);
-    this.incomming_qty = 0;
+    this.incoming_qty = 0;
     this.lead_time = 0;
     this.lead_time_qty = 0;
     this.order_qty = 0;
@@ -67,11 +67,11 @@ class Item_report {
 
     if (hasInventory) {
       this.current_inv = inventory_info_accumulated.actual_qty;
-      this.incomming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
+      this.incoming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
     } else {
       // if item is not stored in database, it will be assumed there is 0 for calculations
       this.current_inv = "N/A"
-      this.incomming_qty = "N/A"
+      this.incoming_qty = "N/A"
     }
     
 
@@ -82,8 +82,8 @@ class Item_report {
       this.last_PO = last_po[0].name;
     } else {
       this.last_PO = "N/A";
-      // if there are no PO then there is no incomming orders
-      this.incomming_qty = 0
+      // if there are no PO then there is no incoming orders
+      this.incoming_qty = 0
     }
 
     let remaining_parts_on_day = 0
@@ -101,15 +101,15 @@ class Item_report {
           remaining_parts_on_day = count_parts_inv;
           break;
         }
-        if (count_parts_inv >= (this.current_inv + this.incomming_qty)) {
-          remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incomming_qty);
+        if (count_parts_inv >= (this.current_inv + this.incoming_qty)) {
+          remaining_parts_on_day = count_parts_inv - (this.current_inv + this.incoming_qty);
           break;
         }
       }
     }
 
     //calculate number of items that are not in inventory
-    if (this.total_req > (this.current_inv + this.incomming_qty)) {
+    if (this.total_req > (this.current_inv + this.incoming_qty)) {
       
       let order_date = new Date();
       let daysUntilOrder = days_of_inv - this.lead_time;
@@ -136,7 +136,7 @@ class Item_report {
         this.order_qty = this.total_req - this.lead_time_qty
 
       } else {
-        this.order_qty = this.total_req - this.incomming_qty - this.current_inv - this.lead_time_qty
+        this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
 
       }
     } else {
@@ -256,7 +256,7 @@ class Item_report {
     newJson.item_code = this.item_code;
     newJson.total_req = this.total_req;
     newJson.current_inv = this.current_inv
-    newJson.incomming_qty = this.incomming_qty
+    newJson.incoming_qty = this.incoming_qty
     newJson.lead_time = this.lead_time
     newJson.lead_time_qty = this.lead_time_qty
     newJson.order_qty = this.order_qty
