@@ -238,18 +238,17 @@ class Item_report {
 
       // To Order Logic
       var to_order = this.parts_calendar[month_no][1] - this.current_stock[month_no][1];
+      // If an order needs to be placed
       if (to_order > 0) {
-        if (this.minimum_order_qty > this.parts_calendar[month_no][1]) {
+        // If there is a minimum order quantity, calculate the amount to be ordered
+        if (this.minimum_order_qty) {
             this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
         } else {
-          this.to_order[month_no] = [month_no, to_order * 2];
+          this.to_order[month_no] = [month_no, to_order];
         }
+        // Otherwise, none need to be ordered
       } else {
-        if (this.minimum_order_qty > this.parts_calendar[month_no][1]) {
-          this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
-        } else {
-          this.to_order[month_no] = [month_no, to_order * 2];
-        }
+        this.to_order[month_no] = [month_no, 0];
       }
 
       // Update future months with To Order value from this current month
