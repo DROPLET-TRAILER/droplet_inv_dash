@@ -183,20 +183,35 @@ function getWeekView(itemIndex, weekView) {
         monthHeader.appendChild(cell);
     }
 
-        // Creating the row for received stock
-        let initial_inventory_info = tableToAdd.insertRow(1);
+    // Creating the row for initial inventory stock
+    let initial_inventory_info = tableToAdd.insertRow(1);
 
-        let initial_inventory = document.createElement("th");
-        initial_inventory.setAttribute("class", "gray");
-        initial_inventory.innerText = "Initial Inventory";
-        initial_inventory_info.appendChild(initial_inventory);
+    let initial_inventory = document.createElement("th");
+    initial_inventory.setAttribute("class", "gray");
+    initial_inventory.innerText = "Initial Inventory";
+    initial_inventory_info.appendChild(initial_inventory);
     
-        // for (let j = 0; j < currentMonth; ++j) {
-        //     let cell = document.createElement("td");
-        //     cell.setAttribute("class", jsonArray[itemIndex].initial_inventory[j][1]);
-        //     cell.innerHTML = jsonArray[itemIndex].initial_inventory[j][0];
-        //     calendarInfo.appendChild(cell);
-        // }
+    // for (let j = 0; j < currentMonth; ++j) {
+    //     let cell = document.createElement("td");
+    //     cell.setAttribute("class", jsonArray[itemIndex].initial_inventory[j][1]);
+    //     cell.innerHTML = jsonArray[itemIndex].initial_inventory[j][0];
+    //     calendarInfo.appendChild(cell);
+    // }
+    for (let j = currentMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        initial_inventory_info.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+        initial_inventory_info.appendChild(cell);
+    }
 
 
     // Get the data and set the calendar
@@ -245,7 +260,7 @@ function getWeekView(itemIndex, weekView) {
         safetyStockInfo.appendChild(cell);
     }
 
-    // Creating the row for stock
+    // Creating the row for received stock
     let currentStockInfo = tableToAdd.insertRow(4);
     let currentStock = document.createElement("th");
     currentStock.setAttribute("class", "gray");
@@ -254,21 +269,21 @@ function getWeekView(itemIndex, weekView) {
 
     // console.log(jsonArray)
 
-    for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
-        currentStockInfo.appendChild(cell);
-    }
+    // for (let j = currentMonth; j < 12; ++j) {
+    //     //console.log("Arrived here3");
+    //     let cell = document.createElement("td");
+    //     cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+    //     cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+    //     currentStockInfo.appendChild(cell);
+    // }
 
-    for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
-        currentStockInfo.appendChild(cell);
-    }
+    // for (let j = 0; j < currentMonth; ++j) {
+    //     //console.log("Arrived here3");
+    //     let cell = document.createElement("td");
+    //     cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
+    //     cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
+    //     currentStockInfo.appendChild(cell);
+    // }
 
     // Creating the row for "To Order"
     let toOrderInfo = tableToAdd.insertRow(5);
