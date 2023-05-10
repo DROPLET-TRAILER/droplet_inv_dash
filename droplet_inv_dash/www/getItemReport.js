@@ -36,6 +36,7 @@ class Item_report {
     this.parts_calendar = null;
     this.initial_inventory = new Array(12);
     this.safety_stock = 0;
+    this.received = new Array(12);
   }
 
   fill_item_report = async function () {
@@ -228,6 +229,7 @@ class Item_report {
     for (let i = 0; i < this.current_stock.length; i++) {
       let month_no = (i + month) % 12;
       this.current_stock[month_no] = [month_no, temp_curr + this.safety_stock];
+      this.received[month_no] = [month_no, temp_curr + this.safety_stock];
       temp_curr -= parts_per_month[month_no];
       this.back_order[month_no] = [month_no, temp_curr];
     }
@@ -265,6 +267,7 @@ class Item_report {
     newJson.back_order = this.back_order
     newJson.initial_inventory = this.initial_inventory
     newJson.safety_stock = this.safety_stock
+    newJson.received = this.received
     return newJson;
   }
 
