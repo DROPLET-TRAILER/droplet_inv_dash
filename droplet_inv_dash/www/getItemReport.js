@@ -177,7 +177,6 @@ class Item_report {
       this.flag = "white";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-      // console.log(`days between ${this.server_date} and ${this.order_date} is ${daysUntilOrder}`);
       if (daysUntilOrder <= 1) {
         this.flag = "red";
       } else if (daysUntilOrder < 7) {
@@ -195,10 +194,8 @@ class Item_report {
     
     // starting to try to make the calendar
     let parts_per_month = [0,0,0,0,0,0,0,0,0,0,0,0];
-    // console.log(this.req_parts)
 
     // requirements
-    // console.log(this.item_code)
     for (let i = 0; i < this.req_parts.length; i++) {
       let tempDay = new Date(this.server_date);
       tempDay.setDate(this.server_date.getDate() + i);
@@ -208,15 +205,9 @@ class Item_report {
         if(parts_per_month[current_month] ==  0) {
           parts_per_month[current_month] = this.req_parts[i]
         } else { 
-          // console.log(parts_per_month[current_month])
-          // console.log(this.req_parts[i])
           parts_per_month[current_month] += this.req_parts[i]
         }
       }
-    }
-
-    for (let i = 0; i < this.safety_stock.length; i++) {
-      
     }
 
     this.parts_calendar = []
@@ -275,8 +266,7 @@ class Item_report {
       }
 
       // Update future months with To Order value from this current month
-      temp_curr += this.to_order[month_no][1];
-
+      temp_curr += this.to_order[month_no][1] + this.ordered_count[month_no];
 
       this.back_order[month_no] = [month_no, temp_curr];
     }
