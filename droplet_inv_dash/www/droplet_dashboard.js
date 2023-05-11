@@ -320,6 +320,23 @@ function getWeekView(itemIndex, weekView) {
     ordered.innerText = "Ordered";
     orderedStockInfo.appendChild(ordered);
 
+    for (let j = currentMonth; j < 12; ++j) {
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].ordered[j]);
+        cell.innerHTML = jsonArray[itemIndex].ordered[j];
+        orderedStockInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        let cell = document.createElement("td");
+        cell.setAttribute("class", jsonArray[itemIndex].ordered[j]);
+        cell.innerHTML = jsonArray[itemIndex].ordered[j];
+        // cell.setAttribute("class", jsonArray[itemIndex].to_order);
+        // cell.innerHTML = jsonArray[itemIndex].to_order;
+        orderedStockInfo.appendChild(cell);
+    }
+
+    // Creating the row for forecast stock (back order)
     let backOrderInfo = tableToAdd.insertRow(8);
     let backOrder = document.createElement("th");
     backOrder.setAttribute("class", "gray");

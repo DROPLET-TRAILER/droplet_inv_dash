@@ -39,6 +39,7 @@ class Item_report {
     this.received = new Array(12);
     this.to_order = new Array(12);
     this.minimum_order_qty = 0;
+    this.ordered_count = new Array(12);
   }
 
   fill_item_report = async function () {
@@ -82,6 +83,9 @@ class Item_report {
 
     //get last PO for order, limit to 1 and only get PO's that have not been received
     let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&limit=1`)
+    
+    let po_list = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
+    
     if (last_po.length > 0) {
       this.last_PO = last_po[0].name;
     } else {
@@ -112,6 +116,25 @@ class Item_report {
       }
     }
 
+    for (let i = 0; i < this.ordered_count.length; i++) {
+      this.ordered_count[i] = 0
+    }
+    // Purchase Order List
+    if (po_list.length > 0) {
+      for (let i = 0; i < po_list.length; i++) {
+        let po_order = await getFrappeJson(`resource/Purchase Order/${po_list[i].name}`)
+        let date = new Date(po_order.transaction_date)
+        date.setHours(date.getHours() + 7)
+        date.setDate(date.getDate() + this.lead_time)
+        for (let j = 0; j < po_order.items.length; j++) {
+          if (po_order.items[j].item_code == this.item_code) {
+            this.ordered_count[date.getMonth()] += po_order.items[j].qty;
+          }
+        }
+      }
+    }
+    console.log(this.ordered_count)
+    
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
       
@@ -289,6 +312,7 @@ class Item_report {
     newJson.safety_stock = this.safety_stock
     newJson.received = this.received
     newJson.to_order = this.to_order
+    newJson.ordered = this.ordered_count
     return newJson;
   }
 
