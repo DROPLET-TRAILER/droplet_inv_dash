@@ -259,32 +259,8 @@ function getWeekView(itemIndex, weekView) {
         safetyStockInfo.appendChild(cell);
     }
 
-    // Creating the row for received stock
-    let currentStockInfo = tableToAdd.insertRow(4);
-    let currentStock = document.createElement("th");
-    currentStock.setAttribute("class", "gray");
-    currentStock.innerText = "Received";
-    currentStockInfo.appendChild(currentStock);
-
-
-    for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].received[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].received[j][1];
-        currentStockInfo.appendChild(cell);
-    }
-
-    for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
-        let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].received[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].received[j][1];
-        currentStockInfo.appendChild(cell);
-    }
-
     // Creating the row for "To Order"
-    let toOrderInfo = tableToAdd.insertRow(5);
+    let toOrderInfo = tableToAdd.insertRow(4);
     let toOrder = document.createElement("th");
     toOrder.setAttribute("class", "gray");
     toOrder.innerText = "To Order";
@@ -307,14 +283,14 @@ function getWeekView(itemIndex, weekView) {
     }
 
     // Creating the row for "To Order Date"
-    let toOrderDateInfo = tableToAdd.insertRow(6);
+    let toOrderDateInfo = tableToAdd.insertRow(5);
     let toOrderDate = document.createElement("th");
     toOrderDate.setAttribute("class", "gray");
     toOrderDate.innerText = "To Order Date";
     toOrderDateInfo.appendChild(toOrderDate);
 
     // Creating the row for ordered stock
-    let orderedStockInfo = tableToAdd.insertRow(7);
+    let orderedStockInfo = tableToAdd.insertRow(6);
     let ordered = document.createElement("th");
     ordered.setAttribute("class", "gray");
     ordered.innerText = "Ordered";
@@ -337,7 +313,7 @@ function getWeekView(itemIndex, weekView) {
     }
 
     // Creating the row for forecast stock (back order)
-    let backOrderInfo = tableToAdd.insertRow(8);
+    let backOrderInfo = tableToAdd.insertRow(7);
     let backOrder = document.createElement("th");
     backOrder.setAttribute("class", "gray");
     backOrder.innerText = "Forecast Inventory";

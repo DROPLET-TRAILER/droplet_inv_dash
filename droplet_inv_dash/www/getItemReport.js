@@ -36,7 +36,6 @@ class Item_report {
     this.parts_calendar = null;
     this.initial_inventory = new Array(12);
     this.safety_stock = 0;
-    this.received = new Array(12);
     this.to_order = new Array(12);
     this.minimum_order_qty = 0;
     this.ordered_count = new Array(12);
@@ -247,7 +246,6 @@ class Item_report {
     for (let i = 0; i < this.current_stock.length; i++) {
       let month_no = (i + month) % 12;
       this.current_stock[month_no] = [month_no, temp_curr];
-      this.received[month_no] = [month_no, temp_curr];
       temp_curr -= parts_per_month[month_no];
 
       // To Order Logic
@@ -300,7 +298,6 @@ class Item_report {
     newJson.back_order = this.back_order
     newJson.initial_inventory = this.initial_inventory
     newJson.safety_stock = this.safety_stock
-    newJson.received = this.received
     newJson.to_order = this.to_order
     newJson.ordered = this.ordered_count
     return newJson;
