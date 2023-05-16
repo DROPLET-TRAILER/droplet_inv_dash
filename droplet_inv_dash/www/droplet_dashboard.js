@@ -604,11 +604,6 @@ async function fillTableDriver() {
     let sorted_report = bubbleSort(current_report, orderDateDesc);
     clearTable(table);
     fillTable(sorted_report);
-    console.log("##### OBJECT #####");
-    console.log(sorted_report);
-    console.log("##### String #####");
-    console.log(JSON.stringify(sorted_report));
-
 
     // create drop down menu for items
     set_ID_drop_down();

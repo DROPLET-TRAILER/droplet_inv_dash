@@ -39,6 +39,7 @@ class Item_report {
     this.to_order = new Array(12);
     this.minimum_order_qty = 0;
     this.ordered_count = new Array(12);
+    this.order_by_date = new Array(12);
   }
 
   fill_item_report = async function () {
@@ -78,7 +79,34 @@ class Item_report {
       this.incoming_qty = "N/A"
     }
     
+    //get work_order_list
+    let work_order_list = await getFrappeJson(`resource/Work Order?filters=[["Work Order Item","item_code","=","${this.item_code}"], ["Work Order","status","not in", ["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
+    //get planned_start_date
+    let date_list = new Array(work_order_list.length);
+    let earliest_date = null
 
+    for (let i = 0; i < work_order_list.length; i++) {
+      let current_work_order = work_order_list[i]
+      let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order.name}`);
+      date_list[i] = new Date(wo_json.planned_start_date)
+      if (this.order_by_date[date_list[i].getMonth()] == undefined) {
+        this.order_by_date[date_list[i].getMonth()] = [(date_list[i])];
+      } else {
+        this.order_by_date[date_list[i].getMonth()].push(date_list[i]);
+      }
+      // console.log(this.order_by_date[date_list[i].getMonth()])
+      // if (date_list[i] < earliest_date || earliest_date == null) {
+      //   earliest_date = date_list[i]
+      // }
+    }
+   
+    for(let i = 0; i < this.order_by_date.length; i++) {
+      if (this.order_by_date[i] && this.order_by_date[i].length > 1) {
+        this.order_by_date[i].sort(function(a,b){return a.getTime() - b.getTime()});
+      }
+    }
+    console.log("order_by_date")
+    console.log(this.order_by_date)
 
     //get last PO for order, limit to 1 and only get PO's that have not been received
     let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&limit=1`)
@@ -132,7 +160,6 @@ class Item_report {
         }
       }
     }
-    console.log(this.ordered_count)
     
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
@@ -222,7 +249,6 @@ class Item_report {
     // Colour for each Month
     for (let i = 0; i < parts_per_month.length; i++) {
       let month_no = (i + month) % 12;
-      //console.log(month_no);
       if(!inv_months_finished) {
         this.parts_calendar[month_no] = [month_no, parts_per_month[month_no], "green"];
       } else if (!lead_months_finished) {
@@ -372,108 +398,33 @@ class Item_report_list {l_item
 
 // *********************** FASTEST ONE ***********************
 
-async function getItemReportFromDatabase() {
-    console.time("getItemReportFromDatabase");
-  
-    async function batchProcess(arr, batchSize, callback) {
-        for (let i = 0; i < arr.length; i += batchSize) {
-          const batch = arr.slice(i, i + batchSize);
-          await Promise.all(batch.map(callback));
-        }
-      }
-
-    // Helper function to fetch BOM items recursively
-    async function fetchBOMItems(itemCode, itemQty, needByDate, cache) {
-        const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
-        if (!itemData.hasOwnProperty("default_bom")) {
-          item_report_list.pushCount(itemCode, itemQty, needByDate);
-        } else {
-          const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
-          await batchProcess(bomDetails.items, 5, async (subItem) => {
-            await fetchBOMItems(
-              subItem.item_code,
-              itemQty * parseInt(subItem.qty),
-              needByDate,
-              cache
-            );
-          });
-        }
-      }
-  
-    let frappe_server_date = await getFrappeJson(
-      "method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date"
-    );
-    if (frappe_server_date == null) {
-      console.log("not signed in");
-      return;
-    }
-    let server_date = convertFrappeDateToDate(frappe_server_date);
-  
-    let item_report_list = new Item_report_list(server_date);
-  
-    let progressBarSize = 0;
-  
-    const sales_orders = await getFrappeJson(
-      `resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`
-    );
-    for (const key in sales_orders) {
-      const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
-      console.log("Sales order");
-      console.log(sales_order);
-      progressBarSize += sales_orders.length * sales_order.items.length;
-  
-      const salesOrderItemsPromises = sales_order.items.map(async (sales_order_item) => {
-        setProgressBarCount(progressBarSize);
-  
-        let item_lead_time = document.getElementById("item_lead_time").value;
-        let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
-        let need_by_date = new Date(delivery_date);
-        let todays_date = server_date;
-        need_by_date.setDate(need_by_date.getDate() - item_lead_time);
-        if (todays_date > need_by_date) {
-          need_by_date = todays_date;
-        }
-  
-        await fetchBOMItems(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date, cache);
-      });
-  
-      await Promise.all(salesOrderItemsPromises);
-    }
-  
-    itemsLoaded = 0;
-    await item_report_list.fill_all();
-  
-    item_report_list.remove_items_not_included();
-  
-    console.timeEnd("getItemReportFromDatabase");
-  
-    return item_report_list.getJSONArray();
-  }
-  
-
-// *********************** fetch one item for testing purpose ***********************
-  
 // async function getItemReportFromDatabase() {
 //     console.time("getItemReportFromDatabase");
   
+//     async function batchProcess(arr, batchSize, callback) {
+//         for (let i = 0; i < arr.length; i += batchSize) {
+//           const batch = arr.slice(i, i + batchSize);
+//           await Promise.all(batch.map(callback));
+//         }
+//       }
+
 //     // Helper function to fetch BOM items recursively
 //     async function fetchBOMItems(itemCode, itemQty, needByDate, cache) {
-//       const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
-//       if (!itemData.hasOwnProperty("default_bom")) {
-//         item_report_list.pushCount(itemCode, itemQty, needByDate);
-//       } else {
-//         const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
-//         const bomItemsPromises = bomDetails.items.map(async (subItem) => {
-//           await fetchBOMItems(
-//             subItem.item_code,
-//             itemQty * parseInt(subItem.qty),
-//             needByDate,
-//             cache
-//           );
-//         });
-//         await Promise.all(bomItemsPromises);
+//         const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
+//         if (!itemData.hasOwnProperty("default_bom")) {
+//           item_report_list.pushCount(itemCode, itemQty, needByDate);
+//         } else {
+//           const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
+//           await batchProcess(bomDetails.items, 5, async (subItem) => {
+//             await fetchBOMItems(
+//               subItem.item_code,
+//               itemQty * parseInt(subItem.qty),
+//               needByDate,
+//               cache
+//             );
+//           });
+//         }
 //       }
-//     }
   
 //     let frappe_server_date = await getFrappeJson(
 //       "method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date"
@@ -508,13 +459,9 @@ async function getItemReportFromDatabase() {
 //         }
   
 //         await fetchBOMItems(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date, cache);
-  
-//         // Break after processing the first item
-//         return false;
 //       });
   
 //       await Promise.all(salesOrderItemsPromises);
-//       break; // Break after processing the first sales order
 //     }
   
 //     itemsLoaded = 0;
@@ -526,6 +473,81 @@ async function getItemReportFromDatabase() {
   
 //     return item_report_list.getJSONArray();
 //   }
+  
+
+// *********************** fetch one item for testing purpose ***********************
+  
+async function getItemReportFromDatabase() {
+    console.time("getItemReportFromDatabase");
+  
+    // Helper function to fetch BOM items recursively
+    async function fetchBOMItems(itemCode, itemQty, needByDate, cache) {
+      const itemData = await cache.request(`resource/Item/${itemCode}`, getFrappeJson);
+      if (!itemData.hasOwnProperty("default_bom")) {
+        item_report_list.pushCount(itemCode, itemQty, needByDate);
+      } else {
+        const bomDetails = await cache.request(`resource/BOM/${itemData.default_bom}`, getFrappeJson);
+        const bomItemsPromises = bomDetails.items.map(async (subItem) => {
+          await fetchBOMItems(
+            subItem.item_code,
+            itemQty * parseInt(subItem.qty),
+            needByDate,
+            cache
+          );
+        });
+        await Promise.all(bomItemsPromises);
+      }
+    }
+  
+    let frappe_server_date = await getFrappeJson(
+      "method/droplet_inv_dash.droplet_inv_dash.doctype.servertime.server_date"
+    );
+    if (frappe_server_date == null) {
+      console.log("not signed in");
+      return;
+    }
+    let server_date = convertFrappeDateToDate(frappe_server_date);
+  
+    let item_report_list = new Item_report_list(server_date);
+  
+    let progressBarSize = 0;
+  
+    const sales_orders = await getFrappeJson(
+      `resource/Sales Order?filters=[["Sales Order","delivery_status","=","Not Delivered"], ["Sales Order","status","!=","Closed"], ["Sales Order","docstatus","!=", "2"]]`
+    );
+    for (const key in sales_orders) {
+      const sales_order = await getFrappeJson(`resource/Sales Order/${sales_orders[key].name}`);
+      progressBarSize += sales_orders.length * sales_order.items.length;
+  
+      const salesOrderItemsPromises = sales_order.items.map(async (sales_order_item) => {
+        setProgressBarCount(progressBarSize);
+  
+        let item_lead_time = document.getElementById("item_lead_time").value;
+        let delivery_date = convertFrappeDateToDate(sales_order_item.delivery_date);
+        let need_by_date = new Date(delivery_date);
+        let todays_date = server_date;
+        need_by_date.setDate(need_by_date.getDate() - item_lead_time);
+        if (todays_date > need_by_date) {
+          need_by_date = todays_date;
+        }
+  
+        await fetchBOMItems(sales_order_item.item_code, parseInt(sales_order_item.qty), need_by_date, cache);
+  
+        // Break after processing the first item
+        return false;
+      });
+  
+      await Promise.all(salesOrderItemsPromises);
+      break; // Break after processing the first sales order
+    }
+  
+    itemsLoaded = 0;
+    await item_report_list.fill_all();
+  
+    item_report_list.remove_items_not_included();
+    
+    return item_report_list.getJSONArray();
+  }
   
   //***************************************** */
 
