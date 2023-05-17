@@ -214,8 +214,9 @@ class Item_report {
         this.order_qty = this.total_req - this.lead_time_qty
 
       } else {
-        this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
+        // this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
 
+        this.order_qty = this.ordered_count[new Date().getMonth()]
       }
     } else {
       this.lead_time_qty = 0;
