@@ -298,7 +298,7 @@ function getWeekView(itemIndex, weekView) {
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
             cell.setAttribute("class", displayed_date);
-            displayed_date.setDate(displayed_date.getDate() - 14);
+            displayed_date.setDate(displayed_date.getDate() - 14 - jsonArray[itemIndex].lead_time);
             cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
         }
         toOrderDateInfo.appendChild(cell);
@@ -312,7 +312,7 @@ function getWeekView(itemIndex, weekView) {
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
             cell.setAttribute("class", displayed_date);
-            displayed_date.setDate(displayed_date.getDate() - 14);
+            displayed_date.setDate(displayed_date.getDate() - 14 - jsonArray[itemIndex].lead_time);
             cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
         }
         toOrderDateInfo.appendChild(cell);
