@@ -319,40 +319,33 @@ function getWeekView(itemIndex, weekView) {
     }
 
     // Create a row for work order lists to be ordered
-    // Creating the row for "To Order Date"
-    // let workOrderInfo = tableToAdd.insertRow(5);
-    // let workOrders = document.createElement("th");
-    // workOrders.setAttribute("class", "gray");
-    // workOrders.innerText = "Work Orders";
-    // workOrderInfo.appendChild(workOrders);
+    let workOrderInfo = tableToAdd.insertRow(5);
+    let workOrders = document.createElement("th");
+    workOrders.setAttribute("class", "gray");
+    workOrders.innerText = "Work Orders"
+    workOrderInfo.appendChild(workOrders);
 
-    // for (let j = currentMonth; j < 12; ++j) {
-    //     let cell = document.createElement("td");
-    //     if (!jsonArray[itemIndex].order_by_date[j]) {
-    //         cell.setAttribute("class", "n/a")
-    //         cell.innerHTML = "N/A"
-    //     } else {
-    //         let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
-    //         cell.setAttribute("class", displayed_date);
-    //         displayed_date.setDate(displayed_date.getDate() - 14);
-    //         cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
-    //     }
-    //     workOrderInfo.appendChild(cell);
-    // }
+    // Populate work orders into table data
+    for (let j = currentMonth; j < 12; ++j) {
+        let cell = document.createElement("td");
+        cell.setAttribute("class", "gray")
+        if (jsonArray[itemIndex].work_order_list[j]) {
+            for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
+                let work_order_link = document.createElement("button");
+                work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
+                work_order_link.innerHTML = 
+                cell.appendChild(work_order_link);
+            }
+        }
+        workOrderInfo.appendChild(cell);
+    }
 
-    // for (let j = 0; j < currentMonth; ++j) {
-    //     let cell = document.createElement("td");
-    //     if (!jsonArray[itemIndex].order_by_date[j]) {
-    //         cell.setAttribute("class", "n/a")
-    //         cell.innerHTML = "N/A"
-    //     } else {
-    //         let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
-    //         cell.setAttribute("class", displayed_date);
-    //         displayed_date.setDate(displayed_date.getDate() - 14);
-    //         cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
-    //     }
-    //     workOrderInfo.appendChild(cell);
-    // }
+    for (let j = 0; j < currentMonth; ++j) {
+        let cell = document.createElement("td");
+        cell.setAttribute("class", "gray")
+        cell.innerHTML = jsonArray[itemIndex].work_order_list[j] ? jsonArray[itemIndex].work_order_list[j] : "N/A";
+        workOrderInfo.appendChild(cell);
+    }
 
     // Creating the row for ordered stock
     let orderedStockInfo = tableToAdd.insertRow(6);

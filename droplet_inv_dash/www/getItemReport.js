@@ -40,6 +40,7 @@ class Item_report {
     this.minimum_order_qty = 0;
     this.ordered_count = new Array(12);
     this.order_by_date = new Array(12);
+    this.work_order_list = new Array(12);
   }
 
   fill_item_report = async function () {
@@ -81,20 +82,25 @@ class Item_report {
     
     //get work_order_list
     let work_order_list = await getFrappeJson(`resource/Work Order?filters=[["Work Order Item","item_code","=","${this.item_code}"], ["Work Order","status","not in", ["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
-    console.log
-    //get planned_start_date
+    console.log(work_order_list)
+    
+    // Array of Date objects representing planned start dates of the work orders found
     let date_list = new Array(work_order_list.length);
-
+    //get planned_start_date
     for (let i = 0; i < work_order_list.length; i++) {
-      let current_work_order = work_order_list[i]
-      let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order.name}`);
+      let current_work_order = work_order_list[i].name
+      let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order}`);
+      
       date_list[i] = new Date(wo_json.planned_start_date)
-      date_list[i].setDate(date_list[i].getDate())
+      // date_list[i].setDate(date_list[i].getDate()) // Do we need this? sets the date to itself?
 
+      
       if (this.order_by_date[date_list[i].getMonth()] == null) {
         this.order_by_date[date_list[i].getMonth()] = [(date_list[i])];
+        this.work_order_list[date_list[i].getMonth()] = [current_work_order]
       } else {
         this.order_by_date[date_list[i].getMonth()].push(date_list[i]);
+        this.work_order_list[date_list[i].getMonth()].push([current_work_order]);
       }
       // console.log(this.order_by_date[date_list[i].getMonth()])
       // if (date_list[i] < earliest_date || earliest_date == null) {
@@ -102,6 +108,7 @@ class Item_report {
       // }
     }
    
+    // for each month in the order_by_date Array(12), sort the list of orders by time/date
     for(let i = 0; i < this.order_by_date.length; i++) {
       if (this.order_by_date[i] && this.order_by_date[i].length > 1) {
         this.order_by_date[i].sort(function(a,b){return a.getTime() - b.getTime()});
@@ -327,6 +334,7 @@ class Item_report {
     newJson.to_order = this.to_order
     newJson.ordered = this.ordered_count
     newJson.order_by_date = this.order_by_date
+    newJson.work_order_list = this.work_order_list
     return newJson;
   }
 
