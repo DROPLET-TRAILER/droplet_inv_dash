@@ -81,6 +81,7 @@ class Item_report {
     
     //get work_order_list
     let work_order_list = await getFrappeJson(`resource/Work Order?filters=[["Work Order Item","item_code","=","${this.item_code}"], ["Work Order","status","not in", ["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
+    console.log
     //get planned_start_date
     let date_list = new Array(work_order_list.length);
 
