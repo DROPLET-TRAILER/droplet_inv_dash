@@ -333,7 +333,6 @@ function getWeekView(itemIndex, weekView) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
                 let work_order_link = document.createElement("button");
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
-                work_order_link.innerHTML = 
                 cell.appendChild(work_order_link);
             }
         }
