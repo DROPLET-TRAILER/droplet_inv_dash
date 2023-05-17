@@ -288,6 +288,39 @@ function getWeekView(itemIndex, weekView) {
     toOrderDate.setAttribute("class", "gray");
     toOrderDate.innerText = "To Order Date";
     toOrderDateInfo.appendChild(toOrderDate);
+    var options = { year: 'numeric', month: 'short', day: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
+
+    console.log("order_by_date")
+    console.log(jsonArray[itemIndex].order_by_date)
+
+    for (let j = currentMonth; j < 12; ++j) {
+        let cell = document.createElement("td");
+        if (!jsonArray[itemIndex].order_by_date[j]) {
+            cell.setAttribute("class", "n/a")
+            cell.innerHTML = "N/A"
+        } else {
+            let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
+            cell.setAttribute("class", displayed_date);
+            displayed_date.setDate(displayed_date.getDate() - 14);
+            cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
+        }
+        toOrderDateInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < currentMonth; ++j) {
+        let cell = document.createElement("td");
+        if (!jsonArray[itemIndex].order_by_date[j]) {
+            cell.setAttribute("class", "n/a")
+            cell.innerHTML = "N/A"
+        } else {
+            let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
+            cell.setAttribute("class", displayed_date);
+            displayed_date.setDate(displayed_date.getDate() - 14);
+            cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
+        }
+        toOrderDateInfo.appendChild(cell);
+    }
+
 
     // Creating the row for ordered stock
     let orderedStockInfo = tableToAdd.insertRow(6);
