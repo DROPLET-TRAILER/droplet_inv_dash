@@ -135,7 +135,7 @@ function fillTable() {
             current_inv.innerHTML = jsonArray[i].current_inv;
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
-            incomming_qty.innerHTML = jsonArray[i].incomming_qty;
+            incomming_qty.innerHTML = jsonArray[i].incoming_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
             future_order_qty.innerHTML = jsonArray[i].order_qty
