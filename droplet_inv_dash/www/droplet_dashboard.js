@@ -135,7 +135,7 @@ function fillTable() {
             current_inv.innerHTML = jsonArray[i].current_inv;
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
-            incomming_qty.innerHTML = jsonArray[i].incoming_qty;
+            incomming_qty.innerHTML = jsonArray[i].incomming_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
             future_order_qty.innerHTML = jsonArray[i].order_qty
@@ -334,7 +334,9 @@ function getWeekView(itemIndex, weekView) {
                 let work_order_link = document.createElement("button");
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 cell.appendChild(work_order_link);
-            }
+            } 
+        } else {
+            cell.innerHTML = "N/A"
         }
         workOrderInfo.appendChild(cell);
     }
@@ -342,7 +344,15 @@ function getWeekView(itemIndex, weekView) {
     for (let j = 0; j < currentMonth; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", "gray")
-        cell.innerHTML = jsonArray[itemIndex].work_order_list[j] ? jsonArray[itemIndex].work_order_list[j] : "N/A";
+        if (jsonArray[itemIndex].work_order_list[j]) {
+            for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
+                let work_order_link = document.createElement("button");
+                work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
+                cell.appendChild(work_order_link);
+            }
+        } else {
+            cell.innerHTML = "N/A"
+        }
         workOrderInfo.appendChild(cell);
     }
 
