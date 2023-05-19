@@ -4,6 +4,9 @@ let calendar = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
+const currentDate = new Date();
+let currentMonth = currentDate.getMonth();
+
 setInterval(update_timer_since_last_update, 60000);
 let minElapsed = 0;
 
@@ -131,8 +134,8 @@ function fillTable() {
             let PO = row.insertCell(8);
 
             item.innerText = jsonArray[i].item;
-            total_req.innerHTML = jsonArray[i].total_req;
-            current_inv.innerHTML = jsonArray[i].current_inv;
+            total_req.innerHTML = jsonArray[i].required_list[currentMonth];
+            current_inv.innerHTML = jsonArray[i].current_stock[currentMonth][1];
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
             incoming_qty.innerHTML = jsonArray[i].incoming_qty;
@@ -162,8 +165,6 @@ function getWeekView(itemIndex, weekView) {
     // Creating the row for month headers
     //Set the Monthly Header
     let monthHeader = tableToAdd.insertRow(0);
-    const currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
     let displayMonth = currentDate.getMonth();
     if (currentMonth == 1) {
         displayMonth = 12;
