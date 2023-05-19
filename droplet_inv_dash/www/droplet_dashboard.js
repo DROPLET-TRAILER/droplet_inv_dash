@@ -90,8 +90,8 @@ function fillTable() {
         let item = row.insertCell(0);
         let total_req = row.insertCell(1);
         let current_inv = row.insertCell(2);
-        let lead_time = row.insertCell(3);
-        let lead_time_qty = row.insertCell(4);
+        let lead_time_qty = row.insertCell(3);
+        let lead_time = row.insertCell(4);
         let order_qty = row.insertCell(5);
         let order_date = row.insertCell(6);
         let PO = row.insertCell(7);
@@ -121,10 +121,10 @@ function fillTable() {
             row.setAttribute("style", "cursor: pointer; cursor: hand;");
 
             let item = row.insertCell(0);
-            let total_req = row.insertCell(1);
-            let current_inv = row.insertCell(2);
-            let lead_time = row.insertCell(3);
-            let lead_time_qty = row.insertCell(4);
+            let current_inv = row.insertCell(1);
+            let total_req = row.insertCell(2);
+            let lead_time_qty = row.insertCell(3);
+            let lead_time = row.insertCell(4);
             let order_date = row.insertCell(5);
             let future_order_qty = row.insertCell(6);
             let incoming_qty = row.insertCell(7);
@@ -166,9 +166,9 @@ function getWeekView(itemIndex, weekView) {
     let currentMonth = currentDate.getMonth();
     let displayMonth = currentDate.getMonth();
     if (currentMonth == 1) {
-        displayMonth = 11;
-    } else if (currentMonth == 0) {
         displayMonth = 12;
+    } else if (currentMonth == 0) {
+        displayMonth = 11;
     } else {
         displayMonth = currentDate.getMonth() - 2;
     }
@@ -205,7 +205,7 @@ function getWeekView(itemIndex, weekView) {
     initial_inventory.setAttribute("class", "gray");
     initial_inventory.innerText = "Current Inventory";
     initial_inventory_info.appendChild(initial_inventory);
-    
+
     // for (let j = 0; j < currentMonth; ++j) {
     //     let cell = document.createElement("td");
     //     cell.setAttribute("class", jsonArray[itemIndex].initial_inventory[j][1]);
