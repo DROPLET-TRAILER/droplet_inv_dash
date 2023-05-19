@@ -345,7 +345,7 @@ function getWeekView(itemIndex, weekView) {
     toOrderDate.setAttribute("class", "gray");
     toOrderDate.innerText = "Order By Date";
     toOrderDateInfo.appendChild(toOrderDate);
-    var options = { month: 'short', day: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
+    var options = { month: 'short', day: 'numeric', year: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
 
     for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
