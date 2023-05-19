@@ -313,10 +313,10 @@ class Item_report {
     for (let i = 0; i < this.current_stock.length; i++) {
       let month_no = (i + month) % 12;
       this.current_stock[month_no] = [month_no, temp_curr];
-      temp_curr -= parts_per_month[month_no];
+      temp_curr -= this.required_list[month_no];
 
       // To Order Logic
-      var to_order = this.parts_calendar[month_no][1] - this.current_stock[month_no][1];
+      var to_order = this.required_list[month_no] - this.current_stock[month_no][1];
       // If an order needs to be placed
       if (to_order > 0) {
         // If there is a minimum order quantity, calculate the amount to be ordered
@@ -331,9 +331,15 @@ class Item_report {
       }
 
       // Update future months with To Order value from this current month
-      temp_curr += this.to_order[month_no][1] + this.ordered_count[month_no];
+      temp_curr += this.ordered_count[month_no];
 
       this.back_order[month_no] = [month_no, temp_curr];
+
+      console.log("this.current_stock[month_no][1]: " + this.current_stock[month_no][1])
+      console.log("this.required_list[month_no]: " + this.required_list[month_no])
+      console.log("this.ordered_count[month_no]: " + this.ordered_count[month_no])
+      // TODO
+      // this.back_order[month_no] = [month_no, this.current_stock[month_no][1] - this.required_list[month_no] + this.ordered_count[month_no]];
     }
   };
 

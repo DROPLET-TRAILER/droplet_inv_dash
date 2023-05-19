@@ -188,7 +188,7 @@ function getWeekView(itemIndex, weekView) {
 
     let initial_inventory = document.createElement("th");
     initial_inventory.setAttribute("class", "gray");
-    initial_inventory.innerText = "Initial Inventory";
+    initial_inventory.innerText = "Current Inventory";
     initial_inventory_info.appendChild(initial_inventory);
     
     // for (let j = 0; j < currentMonth; ++j) {
@@ -219,7 +219,7 @@ function getWeekView(itemIndex, weekView) {
 
     let required = document.createElement("th");
     required.setAttribute("class", "gray");
-    required.innerText = "Required";
+    required.innerText = "Total Req";
     calendarInfo.appendChild(required);
 
     // Old code from the previous group. Doesn't count calendar based on the month, counts based on ALL months.
@@ -303,7 +303,7 @@ function getWeekView(itemIndex, weekView) {
     let toOrderDateInfo = tableToAdd.insertRow(5);
     let toOrderDate = document.createElement("th");
     toOrderDate.setAttribute("class", "gray");
-    toOrderDate.innerText = "To Order Date";
+    toOrderDate.innerText = "Order By Date";
     toOrderDateInfo.appendChild(toOrderDate);
     var options = { month: 'short', day: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
 
@@ -345,6 +345,7 @@ function getWeekView(itemIndex, weekView) {
     // Populate work orders into table data
     for (let j = currentMonth; j < 12; ++j) {
         let cell = document.createElement("td");
+        let br = document.createElement("br");
         cell.setAttribute("class", "gray")
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
@@ -353,6 +354,7 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button")
                 cell.appendChild(work_order_link);
+                workOrderInfo.appendChild(br);
             } 
         } else {
             cell.innerHTML = ""
@@ -381,7 +383,7 @@ function getWeekView(itemIndex, weekView) {
     let orderedStockInfo = tableToAdd.insertRow(6);
     let ordered = document.createElement("th");
     ordered.setAttribute("class", "gray");
-    ordered.innerText = "Ordered";
+    ordered.innerText = "Qty on the Way";
     orderedStockInfo.appendChild(ordered);
 
     for (let j = currentMonth; j < 12; ++j) {
@@ -404,7 +406,7 @@ function getWeekView(itemIndex, weekView) {
     let backOrderInfo = tableToAdd.insertRow(7);
     let backOrder = document.createElement("th");
     backOrder.setAttribute("class", "gray");
-    backOrder.innerText = "Forecast Inventory";
+    backOrder.innerText = "EOM Forecast";
     backOrderInfo.appendChild(backOrder);
 
     // console.log(jsonArray);
