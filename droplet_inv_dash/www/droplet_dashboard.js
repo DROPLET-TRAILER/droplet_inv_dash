@@ -348,7 +348,7 @@ function getWeekView(itemIndex, weekView) {
     var options = { month: 'short', day: 'numeric', year: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
 
     for (let j = displayMonth; j < 12; ++j) {
-        let cell = document.createElement("td");
+        let cell = document.createElement("td"); 
         if (j == currentMonth) {
             cell.setAttribute("class", "gray")
         }

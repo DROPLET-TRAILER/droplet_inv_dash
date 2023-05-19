@@ -420,7 +420,7 @@ class Item_report {
     newJson.back_order = this.back_order
     newJson.initial_inventory = this.initial_inventory
     newJson.safety_stock = this.safety_stock
-    newJson.to_order = this.to_order
+    newJson.to_order = this.to_order 
     newJson.ordered = this.ordered_count
     newJson.order_by_date = this.order_by_date
     newJson.work_order_list = this.work_order_list
