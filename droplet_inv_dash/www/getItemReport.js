@@ -42,6 +42,7 @@ class Item_report {
     this.order_by_date = new Array(12);
     this.work_order_list = new Array(12);
     this.required_list = new Array(12);
+    this.po_list = new Array(12);
     for (let n = 0; n < 12; n++) {
       this.required_list[n] = 0;
     }
@@ -57,12 +58,9 @@ class Item_report {
     }
 
     this.minimum_order_qty = item.min_order_qty;
-
     this.safety_stock = item.safety_stock;
-
     this.item_name = item.item_name;
     this.lead_time = item.lead_time_days;
-
 
     let inventory_info_accumulated = {
       actual_qty: 0,
@@ -423,6 +421,7 @@ class Item_report {
     newJson.order_by_date = this.order_by_date
     newJson.work_order_list = this.work_order_list
     newJson.required_list = this.required_list
+    newJson.po_list = this.po_list
     return newJson;
   }
 

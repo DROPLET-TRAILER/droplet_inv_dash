@@ -164,23 +164,38 @@ function getWeekView(itemIndex, weekView) {
     let monthHeader = tableToAdd.insertRow(0);
     const currentDate = new Date();
     let currentMonth = currentDate.getMonth();
+    let displayMonth = currentDate.getMonth();
+    if (currentMonth == 1) {
+        displayMonth = 11;
+    } else if (currentMonth == 0) {
+        displayMonth = 12;
+    } else {
+        displayMonth = currentDate.getMonth() - 2;
+    }
+    
 
     // Creating calender table with the given Item Array
     let empty = document.createElement('th');
     empty.setAttribute("class", "gray");
     monthHeader.appendChild(empty);
-    for (let i = currentMonth; i < 12; ++i) {
+    for (let i = displayMonth; i < 12; ++i) {
         let cell = document.createElement('th');
         cell.setAttribute("class", "gray");
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
+        if (i == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
-    for (let i = 0; i < currentMonth; ++i) {
+    for (let i = 0; i < displayMonth; ++i) {
         let cell = document.createElement('th');
         cell.setAttribute("class", "gray");
         cell.innerText = calendar[i];
         monthHeader.appendChild(cell);
+        if (i == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
     // Creating the row for initial inventory stock
@@ -197,20 +212,26 @@ function getWeekView(itemIndex, weekView) {
     //     cell.innerHTML = jsonArray[itemIndex].initial_inventory[j][0];
     //     calendarInfo.appendChild(cell);
     // }
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
         cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
         initial_inventory_info.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
         cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
         initial_inventory_info.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
     // Get the data and set the calendar
@@ -240,18 +261,24 @@ function getWeekView(itemIndex, weekView) {
     // }
 
     // Code to display the required qty's of each item. Counts from all work orders that include that item
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].required_list[j]);
         cell.innerHTML = jsonArray[itemIndex].required_list[j];
         calendarInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].required_list[j]);
         cell.innerHTML = jsonArray[itemIndex].required_list[j];
         calendarInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
     // Creating the row for stock
@@ -260,20 +287,26 @@ function getWeekView(itemIndex, weekView) {
     safetyStock.setAttribute("class", "gray");
     safetyStock.innerText = "Safety Stock";
     safetyStockInfo.appendChild(safetyStock);
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
         cell.innerHTML = jsonArray[itemIndex].safety_stock;
         safetyStockInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
         cell.innerHTML = jsonArray[itemIndex].safety_stock;
         safetyStockInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
     // Creating the row for "To Order"
@@ -283,20 +316,26 @@ function getWeekView(itemIndex, weekView) {
     toOrder.innerText = "To Order";
     toOrderInfo.appendChild(toOrder);
 
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].to_order[j][2]);
         cell.innerHTML = jsonArray[itemIndex].to_order[j][1];
         toOrderInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].to_order[j][2]);
         cell.innerHTML = jsonArray[itemIndex].to_order[j][1];
         // cell.setAttribute("class", jsonArray[itemIndex].to_order);
         // cell.innerHTML = jsonArray[itemIndex].to_order;
         toOrderInfo.appendChild(cell);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
     }
 
     // Creating the row for "To Order Date"
@@ -307,28 +346,33 @@ function getWeekView(itemIndex, weekView) {
     toOrderDateInfo.appendChild(toOrderDate);
     var options = { month: 'short', day: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
 
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
         if (!jsonArray[itemIndex].order_by_date[j]) {
-            cell.setAttribute("class", "n/a")
             cell.innerHTML = ""
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
-            cell.setAttribute("class", displayed_date);
+            // cell.setAttribute("class", displayed_date);
             displayed_date.setDate(displayed_date.getDate() - 14 - jsonArray[itemIndex].lead_time);
             cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
         }
         toOrderDateInfo.appendChild(cell);
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
         if (!jsonArray[itemIndex].order_by_date[j]) {
-            cell.setAttribute("class", "n/a")
+            // cell.setAttribute("class", "n/a")
             cell.innerHTML = ""
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
-            cell.setAttribute("class", displayed_date);
+            // cell.setAttribute("class", displayed_date);
             displayed_date.setDate(displayed_date.getDate() - 14 - jsonArray[itemIndex].lead_time);
             cell.innerHTML = displayed_date.toLocaleDateString("en-US", options);
         }
@@ -343,9 +387,9 @@ function getWeekView(itemIndex, weekView) {
     workOrderInfo.appendChild(workOrders);
 
     // Populate work orders into table data
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
-        let br = document.createElement("br");
+        // let br = document.createElement("br");
         cell.setAttribute("class", "gray")
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
@@ -354,7 +398,7 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button")
                 cell.appendChild(work_order_link);
-                workOrderInfo.appendChild(br);
+                // workOrderInfo.appendChild(br);
             } 
         } else {
             cell.innerHTML = ""
@@ -362,7 +406,7 @@ function getWeekView(itemIndex, weekView) {
         workOrderInfo.appendChild(cell);
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
         cell.setAttribute("class", "gray")
         if (jsonArray[itemIndex].work_order_list[j]) {
@@ -383,18 +427,24 @@ function getWeekView(itemIndex, weekView) {
     let orderedStockInfo = tableToAdd.insertRow(6);
     let ordered = document.createElement("th");
     ordered.setAttribute("class", "gray");
-    ordered.innerText = "Qty on the Way";
+    ordered.innerText = "Ordered";
     orderedStockInfo.appendChild(ordered);
 
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].ordered[j]);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
+        // cell.setAttribute("class", jsonArray[itemIndex].ordered[j]);
         cell.innerHTML = jsonArray[itemIndex].ordered[j];
         orderedStockInfo.appendChild(cell);
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
         cell.setAttribute("class", jsonArray[itemIndex].ordered[j]);
         cell.innerHTML = jsonArray[itemIndex].ordered[j];
         // cell.setAttribute("class", jsonArray[itemIndex].to_order);
@@ -411,18 +461,24 @@ function getWeekView(itemIndex, weekView) {
 
     // console.log(jsonArray);
     // Create table data for back order row
-    for (let j = currentMonth; j < 12; ++j) {
+    for (let j = displayMonth; j < 12; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
+        // cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
         cell.innerHTML = jsonArray[itemIndex].back_order[j][1];
         backOrderInfo.appendChild(cell);
     }
 
-    for (let j = 0; j < currentMonth; ++j) {
+    for (let j = 0; j < displayMonth; ++j) {
         //console.log("Arrived here3");
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
+        // cell.setAttribute("class", jsonArray[itemIndex].back_order[j][1]);
         cell.innerHTML = jsonArray[itemIndex].back_order[j][1];
         backOrderInfo.appendChild(cell);
     }
