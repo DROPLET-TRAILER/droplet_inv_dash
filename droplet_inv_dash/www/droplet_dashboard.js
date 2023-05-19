@@ -354,7 +354,7 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button")
                 cell.appendChild(work_order_link);
-                workOrderInfo.appendChild(br);
+                // workOrderInfo.appendChild(br);
             } 
         } else {
             cell.innerHTML = ""
@@ -371,7 +371,7 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button");
-                cell.appendChild(work_order_link);
+                // cell.appendChild(work_order_link);
             }
         } else {
             cell.innerHTML = ""
