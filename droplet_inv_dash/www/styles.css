@@ -122,6 +122,10 @@ td {
   top: 13.75vh;
 }
 
+#info_button {
+  font-size: x-small;
+}
+
 .gray {
   background: #b3b3b3;
 }
