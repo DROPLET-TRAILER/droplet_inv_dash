@@ -127,7 +127,7 @@ function fillTable() {
             let lead_time_qty = row.insertCell(4);
             let order_date = row.insertCell(5);
             let future_order_qty = row.insertCell(6);
-            let incomming_qty = row.insertCell(7);
+            let incoming_qty = row.insertCell(7);
             let PO = row.insertCell(8);
 
             item.innerText = jsonArray[i].item;
@@ -135,7 +135,7 @@ function fillTable() {
             current_inv.innerHTML = jsonArray[i].current_inv;
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
-            incomming_qty.innerHTML = jsonArray[i].incomming_qty;
+            incoming_qty.innerHTML = jsonArray[i].incoming_qty;
             order_date.innerHTML = jsonArray[i].order_date;
             PO.innerHTML = jsonArray[i].PO;
             future_order_qty.innerHTML = jsonArray[i].order_qty
@@ -221,19 +221,36 @@ function getWeekView(itemIndex, weekView) {
     required.setAttribute("class", "gray");
     required.innerText = "Required";
     calendarInfo.appendChild(required);
+
+    // Old code from the previous group. Doesn't count calendar based on the month, counts based on ALL months.
+    // for (let j = currentMonth; j < 12; ++j) {
+    //     //console.log("Arrived here3");
+    //     let cell = document.createElement("td");
+    //     cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
+    //     cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
+    //     calendarInfo.appendChild(cell);
+    // }
+
+    // for (let j = 0; j < currentMonth; ++j) {
+    //     //console.log("Arrived here3");
+    //     let cell = document.createElement("td");
+    //     cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
+    //     cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
+    //     calendarInfo.appendChild(cell);
+    // }
+
+    // Code to display the required qty's of each item. Counts from all work orders that include that item
     for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
+        cell.setAttribute("class", jsonArray[itemIndex].required_list[j]);
+        cell.innerHTML = jsonArray[itemIndex].required_list[j];
         calendarInfo.appendChild(cell);
     }
 
     for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
-        cell.setAttribute("class", jsonArray[itemIndex].parts_calendar[j][2]);
-        cell.innerHTML = jsonArray[itemIndex].parts_calendar[j][1];
+        cell.setAttribute("class", jsonArray[itemIndex].required_list[j]);
+        cell.innerHTML = jsonArray[itemIndex].required_list[j];
         calendarInfo.appendChild(cell);
     }
 
@@ -651,7 +668,7 @@ function lowestFutureOrder(jsonObjectOne, jsonObjectTwo) {
 }
 
 function lowestIncomingQty(jsonObjectOne, jsonObjectTwo) {
-    return jsonObjectOne.incomming_qty < jsonObjectTwo.incomming_qty;
+    return jsonObjectOne.incoming_qty < jsonObjectTwo.incoming_qty;
 }
 
 async function sortAndRefreshTable(sortingFunction) {

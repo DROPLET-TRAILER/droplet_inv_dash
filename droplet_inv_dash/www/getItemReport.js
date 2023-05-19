@@ -41,6 +41,10 @@ class Item_report {
     this.ordered_count = new Array(12);
     this.order_by_date = new Array(12);
     this.work_order_list = new Array(12);
+    this.required_list = new Array(12);
+    for (let n = 0; n < 12; n++) {
+      this.required_list[n] = 0;
+    }
   }
 
   fill_item_report = async function () {
@@ -73,7 +77,7 @@ class Item_report {
 
     if (hasInventory) {
       this.current_inv = inventory_info_accumulated.actual_qty;
-      this.incmming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
+      this.incoming_qty = (inventory_info_accumulated.projected_qty + inventory_info_accumulated.reserved_qty + inventory_info_accumulated.reserved_qty_for_production) - this.current_inv;
     } else {
       // if item is not stored in database, it will be assumed there is 0 for calculations
       this.current_inv = "N/A"
@@ -88,8 +92,8 @@ class Item_report {
     let date_list = new Array(work_order_list.length);
     //get planned_start_date
     for (let i = 0; i < work_order_list.length; i++) {
-      let current_work_order = work_order_list[i].name
-      let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order}`);
+      let current_work_order = work_order_list[i]
+      let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order.name}`);
       
       date_list[i] = new Date(wo_json.planned_start_date)
       // date_list[i].setDate(date_list[i].getDate()) // Do we need this? sets the date to itself?
@@ -97,17 +101,30 @@ class Item_report {
       
       if (this.order_by_date[date_list[i].getMonth()] == null) {
         this.order_by_date[date_list[i].getMonth()] = [(date_list[i])];
-        this.work_order_list[date_list[i].getMonth()] = [current_work_order]
+        this.work_order_list[date_list[i].getMonth()] = [current_work_order.name]
       } else {
         this.order_by_date[date_list[i].getMonth()].push(date_list[i]);
-        this.work_order_list[date_list[i].getMonth()].push([current_work_order]);
+        this.work_order_list[date_list[i].getMonth()].push([current_work_order.name]);
       }
       // console.log(this.order_by_date[date_list[i].getMonth()])
       // if (date_list[i] < earliest_date || earliest_date == null) {
       //   this.order_by_date[date_list[i].getMonth()] = date_list[i]
       // }
+
+      // loop through items in the work order and if item name matches, 
+      // add required_qty of that item to the required_list array for that month's index
+
+      if (wo_json.required_items) {
+        for (let j = 0; j < wo_json.required_items.length; j++) {
+
+          if (this.item_code == wo_json.required_items[j].item_code) {
+            this.required_list[date_list[i].getMonth()] += wo_json.required_items[j].required_qty
+            console.log(this.required_list[date_list[i].getMonth()])
+          }
+        }
+      }
     }
-   
+
     // for each month in the order_by_date Array(12), sort the list of orders by time/date
     for(let i = 0; i < this.order_by_date.length; i++) {
       if (this.order_by_date[i] && this.order_by_date[i].length > 1) {
@@ -215,7 +232,6 @@ class Item_report {
 
       } else {
         this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
-
       }
     } else {
       this.lead_time_qty = 0;
@@ -353,6 +369,7 @@ class Item_report {
     newJson.ordered = this.ordered_count
     newJson.order_by_date = this.order_by_date
     newJson.work_order_list = this.work_order_list
+    newJson.required_list = this.required_list
     return newJson;
   }
 
@@ -417,10 +434,6 @@ class Item_report_list {l_item
     return newJSONArray
   }
 }
-
-// // *********************** TESTING ***********************
-
-
  
 
 // *********************** FASTEST ONE ***********************
