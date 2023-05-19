@@ -91,6 +91,7 @@ class Item_report {
     // Array of Date objects representing planned start dates of the work orders found
     let date_list = new Array(work_order_list.length);
     //get planned_start_date
+    console.log("Date Index")
     for (let i = 0; i < work_order_list.length; i++) {
       let current_work_order = work_order_list[i]
       let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order.name}`);
@@ -98,7 +99,6 @@ class Item_report {
       date_list[i] = new Date(wo_json.planned_start_date)
       // date_list[i].setDate(date_list[i].getDate()) // Do we need this? sets the date to itself?
 
-      
       if (this.order_by_date[date_list[i].getMonth()] == null) {
         this.order_by_date[date_list[i].getMonth()] = [(date_list[i])];
         this.work_order_list[date_list[i].getMonth()] = [current_work_order.name]
@@ -119,7 +119,6 @@ class Item_report {
 
           if (this.item_code == wo_json.required_items[j].item_code) {
             this.required_list[date_list[i].getMonth()] += wo_json.required_items[j].required_qty
-            console.log(this.required_list[date_list[i].getMonth()])
           }
         }
       }
@@ -131,9 +130,8 @@ class Item_report {
         this.order_by_date[i].sort(function(a,b){return a.getTime() - b.getTime()});
       }
     }
-
     //get last PO for order, limit to 1 and only get PO's that have not been received
-    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&limit=1`)
+    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&order_by=name%20asc&limit=1`)
     
     let po_list = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
     
@@ -188,32 +186,32 @@ class Item_report {
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
       
-      // Sets the "Order By Date"
-      let order_date = null
-      // console.log("Date")
-      for (let a of this.order_by_date) {
-        if (a != null) {
-          order_date = new Date(a);
-          order_date.setDate(order_date.getDate() - 14 - this.lead_time)
-          order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
-          break;
-        }
-        // console.log(a)
-      }
-      console.log(order_date)
-      if (order_date != null) {
-        let daysUntilOrder = days_of_inv - this.lead_time;
-        if (daysUntilOrder < 0) {
-          daysUntilOrder = 0;
-        }
-        // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
-        this.order_date = order_date;
-        this.order_date_formatted = order_date.toISOString().slice(0, 10);
-        console.log("Final Date")
-        console.log(this.order_date)
-      } else {
-        this.order_date = "N/A"
-      }
+      // // Sets the "Order By Date"
+      // let order_date = null
+      // // console.log("Date")
+      // for (let a of this.order_by_date) {
+      //   if (a != null) {
+      //     order_date = new Date(a);
+      //     order_date.setDate(order_date.getDate() - 14 - this.lead_time)
+      //     order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
+      //     break;
+      //   }
+      //   // console.log(a)
+      // }
+      // console.log(order_date)
+      // if (order_date != null) {
+      //   let daysUntilOrder = days_of_inv - this.lead_time;
+      //   if (daysUntilOrder < 0) {
+      //     daysUntilOrder = 0;
+      //   }
+      //   // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
+      //   this.order_date = order_date;
+      //   this.order_date_formatted = order_date.toISOString().slice(0, 10);
+      //   console.log("Final Date")
+      //   console.log(this.order_date)
+      // } else {
+      //   this.order_date = "N/A"
+      // }
 
       // add 1 to every lead time to ignore the present day
       let lead_time_index = days_of_inv + this.lead_time + 1;
@@ -235,9 +233,58 @@ class Item_report {
       }
     } else {
       this.lead_time_qty = 0;
-      this.order_qty = 0;
+      // this.order_qty = 0;
       this.order_date_formatted = "N/A";
     }
+
+    // Sets the "Order By Date"
+    let order_date = null
+    for (let a of this.order_by_date) {
+      if (a != null) {
+        order_date = new Date(a);
+        order_date.setDate(order_date.getDate() - 14 - this.lead_time)
+        order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
+        break;
+      }
+      // console.log(a)
+    }
+    // console.log(order_date)
+    if (order_date != null) {
+      let daysUntilOrder = days_of_inv - this.lead_time;
+      if (daysUntilOrder < 0) {
+        daysUntilOrder = 0;
+      }
+      // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
+      this.order_date = order_date;
+      this.order_date_formatted = order_date.toISOString().slice(0, 10);
+      console.log("Final Date")
+      console.log(this.order_date)
+    } else {
+      this.order_date = "N/A"
+    }
+
+    let curr = new Date().getMonth()
+
+    // Future Orders
+    if (this.current_inv == "N/A") {
+      // this.order_qty = this.total_req - this.lead_time_qty
+      this.order_qty = 0
+    } else {
+      // this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
+
+      // this.order_qty = this.ordered_count[new Date().getMonth()]
+
+      for (let i = 0; i < 12; i++) {
+        if (this.ordered_count[i] != null && i != curr && this.ordered_count[i] != 0) {
+          this.order_qty = this.ordered_count[i];
+          break;
+        }
+      }
+
+    }
+
+    // Qty on the way
+    this.incoming_qty = this.ordered_count[curr]
 
     // set flag based off of distance to order date from current date
     if (this.order_date_formatted == "N/A") {
