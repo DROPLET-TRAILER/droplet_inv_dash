@@ -311,7 +311,7 @@ function getWeekView(itemIndex, weekView) {
         let cell = document.createElement("td");
         if (!jsonArray[itemIndex].order_by_date[j]) {
             cell.setAttribute("class", "n/a")
-            cell.innerHTML = "N/A"
+            cell.innerHTML = ""
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
             cell.setAttribute("class", displayed_date);
@@ -325,7 +325,7 @@ function getWeekView(itemIndex, weekView) {
         let cell = document.createElement("td");
         if (!jsonArray[itemIndex].order_by_date[j]) {
             cell.setAttribute("class", "n/a")
-            cell.innerHTML = "N/A"
+            cell.innerHTML = ""
         } else {
             let displayed_date = jsonArray[itemIndex].order_by_date[j][0];
             cell.setAttribute("class", displayed_date);
@@ -355,7 +355,7 @@ function getWeekView(itemIndex, weekView) {
                 cell.appendChild(work_order_link);
             } 
         } else {
-            cell.innerHTML = "N/A"
+            cell.innerHTML = ""
         }
         workOrderInfo.appendChild(cell);
     }
@@ -372,7 +372,7 @@ function getWeekView(itemIndex, weekView) {
                 cell.appendChild(work_order_link);
             }
         } else {
-            cell.innerHTML = "N/A"
+            cell.innerHTML = ""
         }
         workOrderInfo.appendChild(cell);
     }
