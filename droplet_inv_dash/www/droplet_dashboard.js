@@ -389,7 +389,7 @@ function getWeekView(itemIndex, weekView) {
     // Populate work orders into table data
     for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
-        // let br = document.createElement("br");
+        let br = document.createElement("br");
         cell.setAttribute("class", "gray")
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
@@ -397,8 +397,8 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button")
+                cell.appendChild(br);
                 cell.appendChild(work_order_link);
-                // workOrderInfo.appendChild(br);
             } 
         } else {
             cell.innerHTML = ""
@@ -408,6 +408,7 @@ function getWeekView(itemIndex, weekView) {
 
     for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
+        let br = document.createElement("br");
         cell.setAttribute("class", "gray")
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
@@ -415,6 +416,7 @@ function getWeekView(itemIndex, weekView) {
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button");
+                cell.appendChild(br);
                 cell.appendChild(work_order_link);
             }
         } else {
