@@ -15,6 +15,8 @@ class Cache_api {
 
 let cache = new Cache_api();
 
+let curr = new Date().getMonth()
+
 class Item_report {
   constructor(item_code, date_from_server) {
     this.flag = null;
@@ -166,16 +168,25 @@ class Item_report {
     for (let i = 0; i < this.ordered_count.length; i++) {
       this.ordered_count[i] = 0
     }
+
+    let temp_po = null
     // Purchase Order List
     if (po_list.length > 0) {
       for (let i = 0; i < po_list.length; i++) {
         let po_order = await getFrappeJson(`resource/Purchase Order/${po_list[i].name}`)
-        let date = new Date(po_order.transaction_date)
-        date.setHours(date.getHours() + 7)
-        date.setDate(date.getDate() + this.lead_time)
-        for (let j = 0; j < po_order.items.length; j++) {
-          if (po_order.items[j].item_code == this.item_code) {
-            this.ordered_count[date.getMonth()] += po_order.items[j].qty;
+        if (temp_po == null || temp_po != po_list[i].name) {
+          temp_po = po_list[i].name
+          for (let j = 0; j < po_order.items.length; j++) {
+            if (po_order.items[j].item_code == this.item_code) {
+              console.log("Transaction Date")
+              console.log(po_order.items[j].schedule_date)
+              let required_by_date = new Date(po_order.items[j].schedule_date)
+              console.log("Date")
+              console.log(required_by_date)
+              required_by_date.setHours(required_by_date.getHours() + 7)
+              required_by_date.setDate(required_by_date.getDate() + this.lead_time)
+              this.ordered_count[required_by_date.getMonth()] += po_order.items[j].qty;
+            }
           }
         }
       }
@@ -224,10 +235,10 @@ class Item_report {
       }
 
       if (this.current_inv == "N/A") {
-        this.order_qty = this.total_req - this.lead_time_qty
+        this.order_qty = this.required_list[curr] - this.lead_time_qty
 
       } else {
-        this.order_qty = this.total_req - this.incoming_qty - this.current_inv - this.lead_time_qty
+        this.order_qty = this.required_list[curr] - this.incoming_qty - this.current_inv - this.lead_time_qty
       }
     } else {
       this.lead_time_qty = 0;
@@ -255,13 +266,9 @@ class Item_report {
       // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
       this.order_date = order_date;
       this.order_date_formatted = order_date.toISOString().slice(0, 10);
-      console.log("Final Date")
-      console.log(this.order_date)
     } else {
       this.order_date = "N/A"
     }
-
-    let curr = new Date().getMonth()
 
     // Future Orders
     if (this.current_inv == "N/A") {
@@ -380,9 +387,6 @@ class Item_report {
 
       this.back_order[month_no] = [month_no, temp_curr];
 
-      console.log("this.current_stock[month_no][1]: " + this.current_stock[month_no][1])
-      console.log("this.required_list[month_no]: " + this.required_list[month_no])
-      console.log("this.ordered_count[month_no]: " + this.ordered_count[month_no])
       // TODO
       // this.back_order[month_no] = [month_no, this.current_stock[month_no][1] - this.required_list[month_no] + this.ordered_count[month_no]];
     }
