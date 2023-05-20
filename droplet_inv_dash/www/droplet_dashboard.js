@@ -380,6 +380,57 @@ function getWeekView(itemIndex, weekView) {
         toOrderDateInfo.appendChild(cell);
     }
 
+
+    // Creating the row for Purchase Orders
+    let purchaseOrderInfo = tableToAdd.insertRow(3);
+    let purchaseOrder = document.createElement("th");
+    purchaseOrder.setAttribute("class", "gray");
+    purchaseOrder.innerText = "Purchase Orders";
+    purchaseOrderInfo.appendChild(purchaseOrder);
+    for (let j = displayMonth; j < 12; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        let br = document.createElement("br");
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
+        if (jsonArray[itemIndex].po_list[j]) {
+            for (let k = 0; k < jsonArray[itemIndex].po_list[j].length; k++) {
+                let purchase_order_link = document.createElement("button");
+                purchase_order_link.innerText = jsonArray[itemIndex].po_list[j][k];
+                purchase_order_link.setAttribute("onclick", `location.href = '/app/purchase-order/${jsonArray[itemIndex].po_list[j][k]}'`)
+                purchase_order_link.setAttribute("id", "info_button")
+                if (k > 1) { cell.appendChild(br); }
+                cell.appendChild(purchase_order_link);
+            } 
+        } else {
+            cell.innerHTML = ""
+        }
+        purchaseOrderInfo.appendChild(cell);
+    }
+
+    for (let j = 0; j < displayMonth; ++j) {
+        //console.log("Arrived here3");
+        let cell = document.createElement("td");
+        let br = document.createElement("br");
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
+        if (jsonArray[itemIndex].po_list[j]) {
+            for (let k = 0; k < jsonArray[itemIndex].po_list[j].length; k++) {
+                let purchase_order_link = document.createElement("button");
+                purchase_order_link.innerText = jsonArray[itemIndex].po_list[j][k];
+                purchase_order_link.setAttribute("onclick", `location.href = '/app/purchase-order/${jsonArray[itemIndex].po_list[j][k]}'`)
+                purchase_order_link.setAttribute("id", "info_button")
+                if (k > 1) { cell.appendChild(br); }
+                cell.appendChild(purchase_order_link);
+            } 
+        } else {
+            cell.innerHTML = ""
+        }
+        purchaseOrderInfo.appendChild(cell);
+    }
+
     // Create a row for work order lists to be ordered
     let workOrderInfo = tableToAdd.insertRow(5);
     let workOrders = document.createElement("th");
@@ -391,14 +442,16 @@ function getWeekView(itemIndex, weekView) {
     for (let j = displayMonth; j < 12; ++j) {
         let cell = document.createElement("td");
         let br = document.createElement("br");
-        cell.setAttribute("class", "gray")
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
                 let work_order_link = document.createElement("button");
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button")
-                cell.appendChild(br);
+                if (k > 1) { cell.appendChild(br); }
                 cell.appendChild(work_order_link);
             } 
         } else {
@@ -410,14 +463,16 @@ function getWeekView(itemIndex, weekView) {
     for (let j = 0; j < displayMonth; ++j) {
         let cell = document.createElement("td");
         let br = document.createElement("br");
-        cell.setAttribute("class", "gray")
+        if (j == currentMonth) {
+            cell.setAttribute("class", "gray")
+        }
         if (jsonArray[itemIndex].work_order_list[j]) {
             for (let k = 0; k < jsonArray[itemIndex].work_order_list[j].length; k++) {
                 let work_order_link = document.createElement("button");
                 work_order_link.innerText = jsonArray[itemIndex].work_order_list[j][k];
                 work_order_link.setAttribute("onclick", `location.href = '/app/work-order/${jsonArray[itemIndex].work_order_list[j][k]}'`)
                 work_order_link.setAttribute("id", "info_button");
-                cell.appendChild(br);
+                if (k > 1) { cell.appendChild(br); }
                 cell.appendChild(work_order_link);
             }
         } else {

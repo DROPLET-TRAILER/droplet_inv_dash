@@ -91,7 +91,6 @@ class Item_report {
     // Array of Date objects representing planned start dates of the work orders found
     let date_list = new Array(work_order_list.length);
     //get planned_start_date
-    console.log("Date Index")
     for (let i = 0; i < work_order_list.length; i++) {
       let current_work_order = work_order_list[i]
       let wo_json = await getFrappeJson(`resource/Work Order/${current_work_order.name}`);
@@ -175,17 +174,24 @@ class Item_report {
       for (let i = 0; i < po_list.length; i++) {
         let po_order = await getFrappeJson(`resource/Purchase Order/${po_list[i].name}`)
         if (temp_po == null || temp_po != po_list[i].name) {
-          temp_po = po_list[i].name
+          temp_po = po_list[i].name         
           for (let j = 0; j < po_order.items.length; j++) {
+            
             if (po_order.items[j].item_code == this.item_code) {
-              console.log("Transaction Date")
-              console.log(po_order.items[j].schedule_date)
+              // console.log("Transaction Date")
+              // console.log(po_order.items[j].schedule_date)
               let required_by_date = new Date(po_order.items[j].schedule_date)
-              console.log("Date")
-              console.log(required_by_date)
               required_by_date.setHours(required_by_date.getHours() + 7)
               required_by_date.setDate(required_by_date.getDate() + this.lead_time)
               this.ordered_count[required_by_date.getMonth()] += po_order.items[j].qty;
+
+              console.log(po_list[i].name)
+              if (this.po_list[required_by_date.getMonth()] == null) {
+                this.po_list[required_by_date.getMonth()] = [po_list[i].name]
+              } else {
+                this.po_list[required_by_date.getMonth()].push([po_list[i].name]);
+              }
+              console.log(this.po_list[required_by_date.getMonth()])
             }
           }
         }
