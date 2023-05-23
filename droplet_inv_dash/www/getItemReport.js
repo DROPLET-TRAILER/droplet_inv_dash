@@ -83,9 +83,20 @@ class Item_report {
       this.current_inv = "N/A"
       this.incoming_qty = "N/A"
     }
+
+    let future = new Date();
+    future.setMonth(future.getMonth() + 11)
+    let future_year = future.toLocaleString("default", { year: "numeric" });
+    let future_month = future.toLocaleString("default", { month: "2-digit" });
+    let future_date = future_year + "-" + future_month;
+
+    let curr_year = this.server_date.toLocaleString("default", { year: "numeric" });
+    let curr_month = this.server_date.toLocaleString("default", { month: "2-digit" });
+    let curr_date = curr_year + "-" + curr_month;
+
     
     //get work_order_list
-    let work_order_list = await getFrappeJson(`resource/Work Order?filters=[["Work Order Item","item_code","=","${this.item_code}"], ["Work Order","status","not in", ["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
+    let work_order_list = await getFrappeJson(`resource/Work Order?filters=[["Work Order Item","item_code","=","${this.item_code}"], ["Work Order","status","not in", ["Draft","On Hold","Cancelled","Closed","Completed"]], ["Work Order","planned_start_date",">=","${curr_date}"], ["Work Order","planned_start_date","<=","${future_date}"]]`)
     //get planned_start_date
     
     // Array of Date objects representing planned start dates of the work orders found
@@ -122,6 +133,7 @@ class Item_report {
         }
       }
     }
+    
 
     // for each month in the order_by_date Array(12), sort the list of orders by time/date
     for(let i = 0; i < this.order_by_date.length; i++) {
@@ -130,17 +142,17 @@ class Item_report {
       }
     }
     //get last PO for order, limit to 1 and only get PO's that have not been received
-    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]&order_by=name%20asc&limit=1`)
+    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]], ["Purchase Order Item","schedule_date",">=","${curr_date}"], ["Purchase Order Item","schedule_date","<=","${future_date}"]]&order_by=name%20asc&limit=1`)
     
-    let po_list = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]]]`)
-    
-    if (last_po.length > 0) {
-      this.last_PO = last_po[0].name;
-    } else {
-      this.last_PO = "N/A";
-      // if there are no PO then there is no incoming orders
-      this.incoming_qty = 0
-    }
+    let po_list = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]], ["Purchase Order Item","schedule_date",">=","${curr_date}"], ["Purchase Order Item","schedule_date","<=","${future_date}"]]`)
+
+    // if (last_po.length > 0 && last_po != null) {
+    //   this.last_PO = last_po[0].name;
+    // } else {
+    //   this.last_PO = "N/A";
+    //   // if there are no PO then there is no incoming orders
+    //   this.incoming_qty = 0
+    // }
 
     let remaining_parts_on_day = 0
     
@@ -170,7 +182,7 @@ class Item_report {
 
     let temp_po = null
     // Purchase Order List
-    if (po_list.length > 0) {
+    if (po_list != null && po_list.length > 0) {
       for (let i = 0; i < po_list.length; i++) {
         let po_order = await getFrappeJson(`resource/Purchase Order/${po_list[i].name}`)
         if (temp_po == null || temp_po != po_list[i].name) {
@@ -185,17 +197,41 @@ class Item_report {
               required_by_date.setDate(required_by_date.getDate() + this.lead_time)
               this.ordered_count[required_by_date.getMonth()] += po_order.items[j].qty;
 
-              console.log(po_list[i].name)
+              // console.log(po_list[i].name)
               if (this.po_list[required_by_date.getMonth()] == null) {
                 this.po_list[required_by_date.getMonth()] = [po_list[i].name]
               } else {
                 this.po_list[required_by_date.getMonth()].push([po_list[i].name]);
               }
-              console.log(this.po_list[required_by_date.getMonth()])
+              // console.log(this.po_list[required_by_date.getMonth()])
             }
           }
         }
       }
+    }
+
+    if (this.po_list.length > 0 && this.po_list != null) {
+      for (let i = curr; i < this.po_list.length; i++) {
+        if (this.po_list[i] != null) {
+          this.last_PO = this.po_list[i][0];
+          break;
+        }
+      }
+      for (let i = 0; i < curr; i++) {
+        if (this.po_list[i] != null) {
+          this.last_PO = this.po_list[i][0];
+          break;
+        }
+      }
+      if (this.last_PO == null) {
+        this.last_PO = "N/A";
+      }
+
+      // TODO: Fix Order each month by their dates then select the first index.
+    } else {
+      this.last_PO = "N/A";
+      // if there are no PO then there is no incoming orders
+      this.incoming_qty = 0
     }
     
     //calculate number of items that are not in inventory
