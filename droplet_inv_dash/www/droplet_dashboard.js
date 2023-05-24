@@ -139,7 +139,24 @@ function fillTable() {
             lead_time.innerHTML = jsonArray[i].lead_time;
             lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
             incoming_qty.innerHTML = jsonArray[i].incoming_qty;
-            order_date.innerHTML = jsonArray[i].order_date;
+
+            if (jsonArray[i].current_stock[currentMonth][1] < jsonArray[i].required_list[currentMonth]) {
+                var options = { month: 'short', day: 'numeric', year: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
+                let current_formatted_date = new Date(jsonArray[i].order_date);
+                current_formatted_date.setHours(current_formatted_date.getHours() + 7);
+                console.log(current_formatted_date.getFullYear())
+                order_date.innerHTML = current_formatted_date.toLocaleDateString("en-US", options)
+            } else {
+                order_date.innerHTML = "None"
+            }
+            
+            // if (jsonArray[i].order_by_date[i]) {
+            //     console.log("TEST")
+            //     console.log(jsonArray[i].order_by_date[i][0])
+            // } else {
+            //     order_date.innerHTML = jsonArray[i].order_date;
+            // }
+            
             PO.innerHTML = jsonArray[i].PO;
             future_order_qty.innerHTML = jsonArray[i].order_qty
 
@@ -172,10 +189,7 @@ function getWeekView(itemIndex, weekView) {
     //     displayMonth = 11;
     // } else {
     //     displayMonth = currentDate.getMonth() - 2;
-    // }
-
-    console.log(currentMonth)
-    
+    // }    
 
     // Creating calender table with the given Item Array
     let empty = document.createElement('th');
@@ -216,7 +230,6 @@ function getWeekView(itemIndex, weekView) {
     //     calendarInfo.appendChild(cell);
     // }
     for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
         cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
@@ -227,7 +240,6 @@ function getWeekView(itemIndex, weekView) {
     }
 
     for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].current_stock[j][2]);
         cell.innerHTML = jsonArray[itemIndex].current_stock[j][1];
@@ -291,7 +303,6 @@ function getWeekView(itemIndex, weekView) {
     safetyStock.innerText = "Safety Stock";
     safetyStockInfo.appendChild(safetyStock);
     for (let j = currentMonth; j < 12; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
         cell.innerHTML = jsonArray[itemIndex].safety_stock;
@@ -302,7 +313,6 @@ function getWeekView(itemIndex, weekView) {
     }
 
     for (let j = 0; j < currentMonth; ++j) {
-        //console.log("Arrived here3");
         let cell = document.createElement("td");
         cell.setAttribute("class", jsonArray[itemIndex].safetyStock);
         cell.innerHTML = jsonArray[itemIndex].safety_stock;
