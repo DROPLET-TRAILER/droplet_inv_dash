@@ -428,9 +428,6 @@ class Item_report {
       temp_curr += this.ordered_count[month_no];
 
       this.back_order[month_no] = [month_no, temp_curr];
-
-      // TODO
-      // this.back_order[month_no] = [month_no, this.current_stock[month_no][1] - this.required_list[month_no] + this.ordered_count[month_no]];
     }
   };
 

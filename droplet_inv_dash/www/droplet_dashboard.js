@@ -149,16 +149,6 @@ function fillTable() {
             } else {
                 order_date.innerHTML = "None"
             }
-            
-            // if (jsonArray[i].order_by_date[i]) {
-            //     console.log("TEST")
-            //     console.log(jsonArray[i].order_by_date[i][0])
-            // } else {
-            //     order_date.innerHTML = jsonArray[i].order_date;
-            // }
-            
-            // PO.innerHTML = jsonArray[i].PO;
-            // future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
             weekView.setAttribute("id", "weekView" + current_report[i].item_code);
