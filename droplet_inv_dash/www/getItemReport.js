@@ -142,17 +142,17 @@ class Item_report {
       }
     }
     //get last PO for order, limit to 1 and only get PO's that have not been received
-    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]], ["Purchase Order Item","schedule_date",">=","${curr_date}"], ["Purchase Order Item","schedule_date","<=","${future_date}"]]&order_by=name%20asc&limit=1`)
+    let last_po = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]], ["Purchase Order Item","schedule_date",">=","${curr_date}"], ["Purchase Order Item","schedule_date","<=","${future_date}"]]&order_by=name%20desc&limit=1`)
     
     let po_list = await getFrappeJson(`resource/Purchase Order?filters=[["Purchase Order Item","item_code","=","${this.item_code}"], ["Purchase Order","docstatus","=","1"], ["Purchase Order","per_received","!=",100], ["Purchase Order","status","not in",["Draft","On Hold","Cancelled","Closed","Completed"]], ["Purchase Order Item","schedule_date",">=","${curr_date}"], ["Purchase Order Item","schedule_date","<=","${future_date}"]]`)
 
-    // if (last_po.length > 0 && last_po != null) {
-    //   this.last_PO = last_po[0].name;
-    // } else {
-    //   this.last_PO = "N/A";
-    //   // if there are no PO then there is no incoming orders
-    //   this.incoming_qty = 0
-    // }
+    if (last_po.length > 0 && last_po != null) {
+      this.last_PO = last_po[0].name;
+    } else {
+      this.last_PO = "N/A";
+      // if there are no PO then there is no incoming orders
+      this.incoming_qty = 0
+    }
 
     let remaining_parts_on_day = 0
     
@@ -210,29 +210,29 @@ class Item_report {
       }
     }
 
-    if (this.po_list.length > 0 && this.po_list != null) {
-      for (let i = curr; i < this.po_list.length; i++) {
-        if (this.po_list[i] != null) {
-          this.last_PO = this.po_list[i][0];
-          break;
-        }
-      }
-      for (let i = 0; i < curr; i++) {
-        if (this.po_list[i] != null) {
-          this.last_PO = this.po_list[i][0];
-          break;
-        }
-      }
-      if (this.last_PO == null) {
-        this.last_PO = "N/A";
-      }
+    // if (this.po_list.length > 0 && this.po_list != null) {
+    //   for (let i = curr; i < this.po_list.length; i++) {
+    //     if (this.po_list[i] != null) {
+    //       this.last_PO = this.po_list[i][0];
+    //       break;
+    //     }
+    //   }
+    //   for (let i = 0; i < curr; i++) {
+    //     if (this.po_list[i] != null) {
+    //       this.last_PO = this.po_list[i][0];
+    //       break;
+    //     }
+    //   }
+    //   if (this.last_PO == null) {
+    //     this.last_PO = "N/A";
+    //   }
 
-      // TODO: Fix Order each month by their dates then select the first index.
-    } else {
-      this.last_PO = "N/A";
-      // if there are no PO then there is no incoming orders
-      this.incoming_qty = 0
-    }
+    //   // TODO: Fix Order each month by their dates then select the first index.
+    // } else {
+    //   this.last_PO = "N/A";
+    //   // if there are no PO then there is no incoming orders
+    //   this.incoming_qty = 0
+    // }
     
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
