@@ -95,18 +95,18 @@ function fillTable() {
         let current_inv = row.insertCell(2);
         let lead_time_qty = row.insertCell(3);
         let lead_time = row.insertCell(4);
-        let order_qty = row.insertCell(5);
+        // let order_qty = row.insertCell(5);
         let order_date = row.insertCell(6);
-        let PO = row.insertCell(7);
+        // let PO = row.insertCell(7);
 
         item.innerHTML = "N/A";
         total_req.innerHTML = "N/A";
         current_inv.innerHTML = "N/A";
         lead_time.innerHTML = "N/A";
         lead_time_qty.innerHTML = "N/A";
-        order_qty.innerHTML = "N/A";
+        // order_qty.innerHTML = "N/A";
         order_date.innerHTML = "N/A";
-        PO.innerHTML = "N/A";
+        // PO.innerHTML = "N/A";
     } else {
 
         for (let i = 0; i < numOfJsonOb; ++i) {
@@ -129,15 +129,15 @@ function fillTable() {
             let lead_time_qty = row.insertCell(3);
             let lead_time = row.insertCell(4);
             let order_date = row.insertCell(5);
-            let future_order_qty = row.insertCell(6);
-            let incoming_qty = row.insertCell(7);
-            let PO = row.insertCell(8);
+            // let future_order_qty = row.insertCell(6);
+            let incoming_qty = row.insertCell(6);
+            // let PO = row.insertCell(8);
 
             item.innerText = jsonArray[i].item;
             total_req.innerHTML = jsonArray[i].required_list[currentMonth];
             current_inv.innerHTML = jsonArray[i].current_stock[currentMonth][1];
             lead_time.innerHTML = jsonArray[i].lead_time;
-            lead_time_qty.innerHTML = jsonArray[i].lead_time_qty;
+            lead_time_qty.innerHTML = jsonArray[i].to_order[currentMonth][1];
             incoming_qty.innerHTML = jsonArray[i].incoming_qty;
 
             if (jsonArray[i].current_stock[currentMonth][1] < jsonArray[i].required_list[currentMonth]) {
@@ -157,8 +157,8 @@ function fillTable() {
             //     order_date.innerHTML = jsonArray[i].order_date;
             // }
             
-            PO.innerHTML = jsonArray[i].PO;
-            future_order_qty.innerHTML = jsonArray[i].order_qty
+            // PO.innerHTML = jsonArray[i].PO;
+            // future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
             weekView.setAttribute("id", "weekView" + current_report[i].item_code);
