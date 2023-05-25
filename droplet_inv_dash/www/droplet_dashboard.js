@@ -144,21 +144,10 @@ function fillTable() {
                 var options = { month: 'short', day: 'numeric', year: 'numeric' }; // To Format Date as "May 16". Add year: 'numeric', if required
                 let current_formatted_date = new Date(jsonArray[i].order_date);
                 current_formatted_date.setHours(current_formatted_date.getHours() + 7);
-                console.log(current_formatted_date.getFullYear())
                 order_date.innerHTML = current_formatted_date.toLocaleDateString("en-US", options)
             } else {
                 order_date.innerHTML = "None"
             }
-            
-            // if (jsonArray[i].order_by_date[i]) {
-            //     console.log("TEST")
-            //     console.log(jsonArray[i].order_by_date[i][0])
-            // } else {
-            //     order_date.innerHTML = jsonArray[i].order_date;
-            // }
-            
-            // PO.innerHTML = jsonArray[i].PO;
-            // future_order_qty.innerHTML = jsonArray[i].order_qty
 
             let weekView = document.createElement("td");
             weekView.setAttribute("id", "weekView" + current_report[i].item_code);

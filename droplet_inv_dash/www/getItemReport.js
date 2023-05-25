@@ -403,7 +403,7 @@ class Item_report {
     }
   
     let temp_curr = this.current_inv;
-    console.log(this.item_name)
+    // console.log(this.item_name)
     for (let i = 0; i < this.current_stock.length; i++) {
       let month_no = (i + month) % 12;
       this.current_stock[month_no] = [month_no, temp_curr];
@@ -488,7 +488,7 @@ class Item_report {
   }
 }
 
-class Item_report_list {l_item
+class Item_report_list {
   constructor(date_from_server) {
     this.server_time = date_from_server;
     this.list = new Map();
