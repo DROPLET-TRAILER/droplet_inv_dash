@@ -233,6 +233,8 @@ class Item_report {
     //   // if there are no PO then there is no incoming orders
     //   this.incoming_qty = 0
     // }
+
+    let to_order_month = null
     
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
@@ -292,6 +294,7 @@ class Item_report {
     let order_date = null
     for (let i = curr; i < this.order_by_date.length; i++) {
       if (this.order_by_date[i] != null) {
+        to_order_month = i;
         order_date = new Date(this.order_by_date[i][0]);
         order_date.setDate(order_date.getDate() - 14 - this.lead_time)
         order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
@@ -301,6 +304,7 @@ class Item_report {
     }
     for (let i = 0; i < curr; i++) {
       if (this.order_by_date[i] != null) {
+        to_order_month = i;
         order_date = new Date(this.order_by_date[i][0]);
         order_date.setDate(order_date.getDate() - 14 - this.lead_time)
         order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
@@ -423,11 +427,11 @@ class Item_report {
     }
 
     // set flag based off of distance to order date from current date
-    if (this.order_date_formatted == "N/A" || this.to_order[this.order_date.getMonth()] == 0 ) {
+    if (this.order_date_formatted == "N/A" || this.to_order[to_order_month][1] == 0 || this.order_date == null) {
       this.flag = "green";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-
+      // console.log(this.to_order[this.order_date.getMonth()][1])
       if (daysUntilOrder <= 1) {
         this.flag = "red";
       } else if (daysUntilOrder < 7) {
