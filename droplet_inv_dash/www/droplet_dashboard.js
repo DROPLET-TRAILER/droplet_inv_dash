@@ -706,23 +706,23 @@ frappe.ready(async function () {
     });
 
     //For Future Quantity
-    let numOfFutureQtyButtonClicked = 0;
-    document.getElementById('sortByFutureOrder').addEventListener('click', function (e) {
-        let table = document.getElementById("MainTable");
-        clearTable(table);
-        current_report = bubbleSort(current_report, lowestFutureOrder);
+    // let numOfFutureQtyButtonClicked = 0;
+    // document.getElementById('sortByFutureOrder').addEventListener('click', function (e) {
+    //     let table = document.getElementById("MainTable");
+    //     clearTable(table);
+    //     current_report = bubbleSort(current_report, lowestFutureOrder);
 
-        if (numOfFutureQtyButtonClicked % 2 === 0) {
-            fillTable();
-            numOfFutureQtyButtonClicked++;
-        } else {
-            //Reverse the current_report
-            current_report.reverse();
-            fillTable();
-            numOfFutureQtyButtonClicked++;
-        }
+    //     if (numOfFutureQtyButtonClicked % 2 === 0) {
+    //         fillTable();
+    //         numOfFutureQtyButtonClicked++;
+    //     } else {
+    //         //Reverse the current_report
+    //         current_report.reverse();
+    //         fillTable();
+    //         numOfFutureQtyButtonClicked++;
+    //     }
 
-    });
+    // });
 
     //For Incoming Quantity
     let numOfIncomingQtyButtonClicked = 0;

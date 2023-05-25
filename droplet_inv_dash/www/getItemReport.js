@@ -410,7 +410,7 @@ class Item_report {
       temp_curr -= this.required_list[month_no];
 
       // To Order Logic
-      var to_order = this.required_list[month_no] - this.current_stock[month_no][1];
+      var to_order = this.required_list[month_no] - this.current_stock[month_no][1] - this.ordered_count[month_no];
       // If an order needs to be placed
       if (to_order > 0) {
         // If there is a minimum order quantity, calculate the amount to be ordered
