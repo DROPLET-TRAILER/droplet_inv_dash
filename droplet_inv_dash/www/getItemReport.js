@@ -299,6 +299,15 @@ class Item_report {
       }
       // console.log(a)
     }
+    for (let i = 0; i < curr; i++) {
+      if (this.order_by_date[i] != null) {
+        order_date = new Date(this.order_by_date[i][0]);
+        order_date.setDate(order_date.getDate() - 14 - this.lead_time)
+        order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
+        break;
+      }
+      // console.log(a)
+    }
     // console.log(order_date)
     if (order_date != null) {
       let daysUntilOrder = days_of_inv - this.lead_time;
