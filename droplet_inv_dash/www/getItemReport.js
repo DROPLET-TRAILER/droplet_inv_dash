@@ -423,8 +423,8 @@ class Item_report {
     }
 
     // set flag based off of distance to order date from current date
-    if (this.order_date_formatted == "N/A") {
-      this.flag = "white";
+    if (this.order_date_formatted == "N/A" || this.to_order[this.order_date.getMonth()] == 0 ) {
+      this.flag = "green";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
 
