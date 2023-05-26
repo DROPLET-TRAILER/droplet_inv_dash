@@ -194,7 +194,6 @@ class Item_report {
               // console.log(po_order.items[j].schedule_date)
               let required_by_date = new Date(po_order.items[j].schedule_date)
               required_by_date.setHours(required_by_date.getHours() + 7)
-              required_by_date.setDate(required_by_date.getDate() + this.lead_time)
               this.ordered_count[required_by_date.getMonth()] += po_order.items[j].qty;
 
               // console.log(po_list[i].name)
