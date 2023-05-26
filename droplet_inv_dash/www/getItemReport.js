@@ -208,7 +208,7 @@ class Item_report {
         }
       }
     }
-
+    
     // if (this.po_list.length > 0 && this.po_list != null) {
     //   for (let i = curr; i < this.po_list.length; i++) {
     //     if (this.po_list[i] != null) {
@@ -358,7 +358,6 @@ class Item_report {
       if (this.order_by_date[i] != null) {
         if (this.to_order[i][1] != 0) {
           to_order_month = i;
-          console.log(this.to_order[i][1])
           to_order_month = i;
           order_date = new Date(this.order_by_date[i][0]);
           order_date.setDate(order_date.getDate() - 14 - this.lead_time)
@@ -439,22 +438,18 @@ class Item_report {
       this.flag = "green";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-      console.log(this.item_code)
-      // console.log(to_order_month)
-      // console.log(this.to_order[to_order_month])
-      // console.log(this.to_order)
-      if (daysUntilOrder <= 1 && this.to_order[to_order_month][1] != 0) {
+      if (daysUntilOrder <= 7 && this.to_order[to_order_month][1] != 0) {
         this.flag = "red";
-      } else if (daysUntilOrder < 7 && this.to_order[to_order_month][1] != 0) {
-        this.flag = "orange";
       } else if (daysUntilOrder < 14 && this.to_order[to_order_month][1] != 0) {
-        this.flag = "yellow";
+        this.flag = "orange";
       } else if (daysUntilOrder < 21 && this.to_order[to_order_month][1] != 0) {
+        this.flag = "yellow";
+      } else if (daysUntilOrder < 28 && this.to_order[to_order_month][1] != 0) {
         this.flag = "lightgreen";
-      } else if (daysUntilOrder < 35 && this.to_order[to_order_month][1] == 0) {
+      } else if (daysUntilOrder >= 28 || this.to_order[to_order_month][1] == 0) {
         this.flag = "green";
       } else {
-        this.flag = "green";
+        this.flag = "white";
       }
     }
   };
