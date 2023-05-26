@@ -423,21 +423,20 @@ class Item_report {
     }
 
     // set flag based off of distance to order date from current date
-    if (this.order_date_formatted == "N/A" || this.to_order[this.order_date.getMonth()] == 0 ) {
+
+    if (this.order_date_formatted == "N/A" || this.to_order[this.order_date.getMonth()][1] == 0 || this.order_date == null) {
       this.flag = "green";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
 
-      if (daysUntilOrder <= 1) {
+      if (daysUntilOrder <= 7) {
         this.flag = "red";
-      } else if (daysUntilOrder < 7) {
-        this.flag = "orange";
       } else if (daysUntilOrder < 14) {
-        this.flag = "yellow";
+        this.flag = "orange";
       } else if (daysUntilOrder < 21) {
+        this.flag = "yellow";
+      } else if (daysUntilOrder < 28) {
         this.flag = "lightgreen";
-      } else if (daysUntilOrder < 35) {
-        this.flag = "green";
       } else {
         this.flag = "green";
       }
