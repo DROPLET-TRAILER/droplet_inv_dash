@@ -233,6 +233,8 @@ class Item_report {
     //   // if there are no PO then there is no incoming orders
     //   this.incoming_qty = 0
     // }
+
+    let to_order_month = null
     
     //calculate number of items that are not in inventory
     if (this.total_req > (this.current_inv + this.incoming_qty)) {
@@ -288,39 +290,6 @@ class Item_report {
       this.order_date_formatted = "N/A";
     }
 
-    // Sets the "Order By Date"
-    let order_date = null
-    for (let i = curr; i < this.order_by_date.length; i++) {
-      if (this.order_by_date[i] != null) {
-        order_date = new Date(this.order_by_date[i][0]);
-        order_date.setDate(order_date.getDate() - 14 - this.lead_time)
-        order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
-        break;
-      }
-      // console.log(a)
-    }
-    for (let i = 0; i < curr; i++) {
-      if (this.order_by_date[i] != null) {
-        order_date = new Date(this.order_by_date[i][0]);
-        order_date.setDate(order_date.getDate() - 14 - this.lead_time)
-        order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
-        break;
-      }
-      // console.log(a)
-    }
-    // console.log(order_date)
-    if (order_date != null) {
-      let daysUntilOrder = days_of_inv - this.lead_time;
-      if (daysUntilOrder < 0) {
-        daysUntilOrder = 0;
-      }
-      // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
-      this.order_date = order_date;
-      this.order_date_formatted = order_date.toISOString().slice(0, 10);
-    } else {
-      this.order_date = "N/A"
-    }
-
     // Future Orders
     if (this.current_inv == "N/A") {
       // this.order_qty = this.total_req - this.lead_time_qty
@@ -337,6 +306,79 @@ class Item_report {
         }
       }
 
+    }
+
+    let temp_curr = this.current_inv;
+    // console.log(this.item_name)
+    for (let i = 0; i < this.current_stock.length; i++) {
+      let month_no = (i + curr) % 12;
+      this.current_stock[month_no] = [month_no, temp_curr];
+      temp_curr -= this.required_list[month_no];
+
+      // To Order Logic
+      var to_order = this.required_list[month_no] - this.current_stock[month_no][1] - this.ordered_count[month_no];
+      // If an order needs to be placed
+      if (to_order > 0) {
+        // If there is a minimum order quantity, calculate the amount to be ordered
+        if (this.minimum_order_qty) {
+            this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
+        } else {
+          this.to_order[month_no] = [month_no, to_order];
+        }
+        // Otherwise, none need to be ordered
+      } else {
+        this.to_order[month_no] = [month_no, 0];
+      }
+
+      // Update future months with To Order value from this current month
+      temp_curr += this.ordered_count[month_no];
+
+      this.back_order[month_no] = [month_no, temp_curr];
+
+      // TODO
+      // this.back_order[month_no] = [month_no, this.current_stock[month_no][1] - this.required_list[month_no] + this.ordered_count[month_no]];
+    }
+
+    // Sets the "Order By Date"
+    let order_date = null
+    for (let i = curr; i < this.order_by_date.length; i++) {
+      if (this.order_by_date[i] != null) {
+        if (this.to_order[i][1] != 0) {
+          to_order_month = i;
+          console.log(this.to_order[i][1])
+          to_order_month = i;
+          order_date = new Date(this.order_by_date[i][0]);
+          order_date.setDate(order_date.getDate() - 14 - this.lead_time)
+          order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
+          break;
+        }
+      }
+      // console.log(a)
+    }
+    for (let i = 0; i < curr; i++) {
+      if (this.order_by_date[i] != null) {
+        if (this.to_order[i][1] != 0) {
+          to_order_month = i;
+          to_order_month = i;
+          order_date = new Date(this.order_by_date[i][0]);
+          order_date.setDate(order_date.getDate() - 14 - this.lead_time)
+          order_date.setHours(order_date.getHours() - order_date.getTimezoneOffset()/60)
+          break;
+        }
+      }
+      // console.log(a)
+    }
+    // console.log(order_date)
+    if (order_date != null) {
+      let daysUntilOrder = days_of_inv - this.lead_time;
+      if (daysUntilOrder < 0) {
+        daysUntilOrder = 0;
+      }
+      // order_date.setDate(this.server_date.getDate() + daysUntilOrder);
+      this.order_date = order_date;
+      this.order_date_formatted = order_date.toISOString().slice(0, 10);
+    } else {
+      this.order_date = "N/A"
     }
 
     // Qty on the way
@@ -390,55 +432,25 @@ class Item_report {
         lead_months_finished = true;
       }
     }
-  
-    let temp_curr = this.current_inv;
-    // console.log(this.item_name)
-    for (let i = 0; i < this.current_stock.length; i++) {
-      let month_no = (i + month) % 12;
-      this.current_stock[month_no] = [month_no, temp_curr];
-      temp_curr -= this.required_list[month_no];
 
-      // To Order Logic
-      var to_order = this.required_list[month_no] - this.current_stock[month_no][1] - this.ordered_count[month_no];
-      // If an order needs to be placed
-      if (to_order > 0) {
-        // If there is a minimum order quantity, calculate the amount to be ordered
-        if (this.minimum_order_qty) {
-            this.to_order[month_no] = [month_no, (Math.ceil(this.parts_calendar[month_no][1] / this.minimum_order_qty) * this.minimum_order_qty)];
-        } else {
-          this.to_order[month_no] = [month_no, to_order];
-        }
-        // Otherwise, none need to be ordered
-      } else {
-        this.to_order[month_no] = [month_no, 0];
-      }
-
-      // Update future months with To Order value from this current month
-      temp_curr += this.ordered_count[month_no];
-
-      this.back_order[month_no] = [month_no, temp_curr];
-
-      // TODO
-      // this.back_order[month_no] = [month_no, this.current_stock[month_no][1] - this.required_list[month_no] + this.ordered_count[month_no]];
-    }
 
     // set flag based off of distance to order date from current date
-
-    if (this.order_date_formatted == "N/A" || this.to_order[this.order_date.getMonth()][1] == 0 || this.order_date == null) {
+    if (this.order_date_formatted == "N/A" || this.order_date == null) {
       this.flag = "green";
     } else {
       let daysUntilOrder = getDaysBetweenDates(this.server_date, this.order_date);
-
-      if (daysUntilOrder <= 7) {
+      if (daysUntilOrder <= 7 && this.to_order[to_order_month][1] != 0) {
         this.flag = "red";
-      } else if (daysUntilOrder < 14) {
+      } else if (daysUntilOrder < 14 && this.to_order[to_order_month][1] != 0) {
         this.flag = "orange";
-      } else if (daysUntilOrder < 21) {
+      } else if (daysUntilOrder < 21 && this.to_order[to_order_month][1] != 0) {
         this.flag = "yellow";
-      } else if (daysUntilOrder < 28) {
+      } else if (daysUntilOrder < 28 && this.to_order[to_order_month][1] != 0) {
         this.flag = "lightgreen";
-      } else {
+      } else if (daysUntilOrder >= 28 || this.to_order[to_order_month][1] == 0) {
         this.flag = "green";
+      } else {
+        this.flag = "white";
       }
     }
   };
